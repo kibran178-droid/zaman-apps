@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView style="@style/FieldLabel" android:text="Mains Fail" />
+    <Spinner android:id="@+id/spMainsFail" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="Recty Fail" />
+    <Spinner android:id="@+id/spRectyFail" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="Stolen" />
+    <Spinner android:id="@+id/spStolen" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="Low Batt" />
+    <Spinner android:id="@+id/spLowBatt" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="Eng Run" />
+    <Spinner android:id="@+id/spEngRun" style="@style/SpinnerField" />
+
+</LinearLayout>

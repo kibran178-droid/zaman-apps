@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/section_bg"
+    tools:context=".input_form.InputanActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_gradient"
+        app:elevation="4dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:paddingVertical="8dp"
+            app:contentInsetStart="16dp"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="Input Data Baru"
+            app:titleTextAppearance="@style/ToolbarTitle"
+            app:titleTextColor="@color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvStepIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Langkah 1 dari 8"
+                android:textColor="@color/brand_primary_lightest"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <ProgressBar
+                android:id="@+id/progressStep"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_marginTop="8dp"
+                android:max="8"
+                android:progress="1"
+                android:progressTint="@color/white"
+                android:progressBackgroundTint="#40FFFFFF" />
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="120dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:id="@+id/stepContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <!-- STEP 1: Informasi Site & 10 Foto Dokumentasi -->
+            <LinearLayout
+                android:id="@+id/step1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <!-- CARD 1: Identitas Site -->
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:text="Lokasi &amp; Identitas Site"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/siteIdLayout"
+                            style="@style/ZamanTextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Site ID"
+                            app:startIconDrawable="@drawable/ic_site_id">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSiteId"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/siteNameLayout"
+                            style="@style/ZamanTextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:hint="Nama Site"
+                            app:startIconDrawable="@drawable/ic_site_name">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSiteName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- CARD 2: Dokumentasi Foto (10 Foto Wajib) -->
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Foto Dokumentasi (10 Foto)"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvCountFoto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_badge"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="4dp"
+                                android:text="0 / 10"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="16dp"
+                            android:text="Pilih foto dokumentasi site (opsional untuk testing)."
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+
+                        <!-- Action Buttons -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnPilihFotoMulti"
+                                style="@style/ZamanButton"
+                                android:layout_width="0dp"
+                                android:layout_height="54dp"
+                                android:layout_marginEnd="6dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:paddingTop="0dp"
+                                android:paddingBottom="0dp"
+                                android:text="Pilih Foto"
+                                android:textSize="13sp"
+                                app:icon="@android:drawable/ic_menu_gallery"
+                                app:iconGravity="textStart"
+                                app:iconPadding="8dp"
+                                app:iconSize="18dp"
+                                app:iconTint="@color/white" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnAmbilFotoKamera"
+                                style="@style/ZamanButtonOutlined"
+                                android:layout_width="0dp"
+                                android:layout_height="54dp"
+                                android:layout_marginStart="6dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:paddingTop="0dp"
+                                android:paddingBottom="0dp"
+                                android:text="Ambil Kamera"
+                                android:textSize="13sp"
+                                app:icon="@android:drawable/ic_menu_camera"
+                                app:iconGravity="textStart"
+                                app:iconPadding="8dp"
+                                app:iconSize="18dp"
+                                app:iconTint="@color/brand_primary" />
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnResetFoto"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="4dp"
+                            android:text="Hapus Semua Foto"
+                            android:textColor="@color/error"
+                            android:textSize="12sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="12dp"
+                            android:background="@color/divider" />
+
+                        <!-- Container untuk 10 Slot Foto -->
+                        <LinearLayout
+                            android:id="@+id/containerSlotsFoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- STEP 2: Status Perangkat -->
+            <LinearLayout
+                android:id="@+id/step3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="EAS"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView style="@style/FieldLabel" android:text="Mains Fail" />
+                        <Spinner android:id="@+id/spMainsFail" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Recty Fail" />
+                        <Spinner android:id="@+id/spRectyFail" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Stolen" />
+                        <Spinner android:id="@+id/spStolen" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Low Batt" />
+                        <Spinner android:id="@+id/spLowBatt" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Eng Run" />
+                        <Spinner android:id="@+id/spEngRun" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- STEP 3: Tegangan & Arus -->
+            <LinearLayout
+                android:id="@+id/step4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="Parameter Listrik"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView style="@style/GroupLabelModern" android:text="Voltage" />
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="6dp" android:layout_weight="1" android:hint="R">
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRV" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp" android:layout_weight="1" android:hint="S">
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etSV" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1" android:hint="T">
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etTV" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <TextView style="@style/GroupLabelModern" android:layout_marginTop="24dp" android:text="Arus" />
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="6dp" android:layout_weight="1" android:hint="R">
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRA" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp" android:layout_weight="1" android:hint="S">
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etSA" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1" android:hint="T">
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etTA" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- STEP 4: Genset -->
+            <LinearLayout
+                android:id="@+id/stepGenset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="Data Genset"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:text="GENSET 1"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView style="@style/FieldLabel" android:text="Merk Genset" />
+                        <Spinner android:id="@+id/spMerkGenset1" style="@style/SpinnerFieldModern" android:entries="@array/merk_genset_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Kapasitas (kVA)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etCapacityGenset1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Status" />
+                        <Spinner android:id="@+id/spStatusGenset1" style="@style/SpinnerFieldModern" android:entries="@array/status_genset_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Catatan / Remark">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemarkGenset1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textMultiLine" android:minLines="2" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchAdaGenset2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Ada Genset Kedua?"
+                            android:textColor="@color/text_primary" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutGenset2Container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="20dp" android:background="@color/divider" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="12dp" android:text="GENSET 2" android:textColor="@color/brand_primary" android:textSize="14sp" android:textStyle="bold" />
+                            <Spinner android:id="@+id/spMerkGenset2" style="@style/SpinnerFieldModern" android:entries="@array/merk_genset_options" />
+                            <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Kapasitas (kVA)">
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etCapacityGenset2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                            <Spinner android:id="@+id/spStatusGenset2" style="@style/SpinnerFieldModern" android:layout_marginTop="16dp" android:entries="@array/status_genset_options" />
+                            <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Catatan">
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemarkGenset2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textMultiLine" android:minLines="2" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- STEP 5: Rectifier 1 -->
+            <LinearLayout
+                android:id="@+id/step5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="Recti 1"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView style="@style/FieldLabel" android:text="Type Rectifier #1" />
+                        <Spinner android:id="@+id/spTypeRectifier1" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="horizontal">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #1" />
+                                <Spinner android:id="@+id/spJumlahModul1" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Modul Rusak #1" />
+                                <Spinner android:id="@+id/spJumlahModulRusak1" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jenis Baterai #1" />
+                        <Spinner android:id="@+id/spJenisBaterai1" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Merk Baterai #1" />
+                        <Spinner android:id="@+id/spMerkBaterai1" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #1" />
+                        <Spinner android:id="@+id/spJumlahBattery1" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #1" />
+                        <Spinner android:id="@+id/spBatteryRecti1" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="Bus Voltage (V)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Load (A)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Perangkat Terhubung">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Catatan">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemark1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textMultiLine" android:minLines="2" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchAdaRecti2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Tambah Rectifier 2?"
+                            android:textColor="@color/text_primary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- STEP 6: Rectifier 2 -->
+            <LinearLayout
+                android:id="@+id/step6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="Recti 2"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView style="@style/FieldLabel" android:text="Type Rectifier #2" />
+                        <Spinner android:id="@+id/spTypeRectifier2" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="horizontal">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #2" />
+                                <Spinner android:id="@+id/spJumlahModul2" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Modul Rusak #2" />
+                                <Spinner android:id="@+id/spJumlahModulRusak2" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jenis Baterai #2" />
+                        <Spinner android:id="@+id/spJenisBaterai2" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Merk Baterai #2" />
+                        <Spinner android:id="@+id/spMerkBaterai2" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #2" />
+                        <Spinner android:id="@+id/spJumlahBattery2" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #2" />
+                        <Spinner android:id="@+id/spBatteryRecti2" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="Bus Voltage (V)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Load (A)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Perangkat Terhubung">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Catatan">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemark2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textMultiLine" android:minLines="2" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchAdaRecti3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Tambah Rectifier 3?"
+                            android:textColor="@color/text_primary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- STEP 7: Rectifier 3 -->
+            <LinearLayout
+                android:id="@+id/step7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="Recti 3"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView style="@style/FieldLabel" android:text="Type Rectifier #3" />
+                        <Spinner android:id="@+id/spTypeRectifier3" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="horizontal">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #3" />
+                                <Spinner android:id="@+id/spJumlahModul3" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Modul Rusak #3" />
+                                <Spinner android:id="@+id/spJumlahModulRusak3" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #3" />
+                        <Spinner android:id="@+id/spJumlahBattery3" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #3" />
+                        <Spinner android:id="@+id/spBatteryRecti3" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="Bus Voltage (V)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage3" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Load (A)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA3" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Perangkat">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat3" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- STEP 8: Ringkasan / Confirmation -->
+            <LinearLayout
+                android:id="@+id/step8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="Konfirmasi Data"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvRingkasan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="6dp"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:alpha="0.8"
+                            android:text="Pastikan data di atas sudah benar sebelum menyimpan ke server."
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-medium" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+        </FrameLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Navigation Buttons -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="@color/white">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBack"
+                style="@style/ZamanButtonOutlined"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingVertical="0dp"
+                android:text="SEBELUMNYA"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNext"
+                style="@style/ZamanButton"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingVertical="0dp"
+                android:text="LANJUTKAN"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- LOADING OVERLAY -->
+    <FrameLayout
+        android:id="@+id/overlayLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/overlay_dark"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/ZamanCard"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardElevation="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="32dp">
+
+                <ProgressBar
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:indeterminateTint="@color/brand_primary" />
+
+                <TextView
+                    android:id="@+id/tvLoadingMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Memproses..."
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Colors - Company Logo Green Palette (PT Zaman Teknindo) -->
+    <color name="brand_primary">#006837</color>
+    <color name="brand_primary_dark">#004D25</color>
+    <color name="brand_primary_light">#00A859</color>
+    <color name="brand_primary_lightest">#E7F6EC</color>
+    <color name="brand_bg_light">#F8FAFC</color>
+
+    <color name="brand_accent">#00A859</color>
+    <color name="brand_accent_light">#E7F6EC</color>
+    <color name="brand_accent_dark">#006837</color>
+
+    <color name="brand_gradient_start">#004D25</color>
+    <color name="brand_gradient_end">#006837</color>
+
+    <!-- UI Surface & Background -->
+    <color name="section_bg">#F8FAFC</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="input_border">#E2E8F0</color>
+
+    <!-- Divider -->
+    <color name="divider">#F1F5F9</color>
+    <color name="divider_color">@color/divider</color>
+
+    <!-- Functional Colors -->
+    <color name="success">#006837</color>
+    <color name="success_soft">#E7F6EC</color>
+    <color name="error">#EF4444</color>
+    <color name="error_soft">#FEE2E2</color>
+    <color name="warning">#F59E0B</color>
+    <color name="warning_soft">#FEF3C7</color>
+    <color name="info">#3B82F6</color>
+    <color name="info_soft">#DBEAFE</color>
+
+    <!-- Basic -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="overlay_dark">#99000000</color>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <style name="Theme.ZamanApps" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorPrimaryVariant">@color/brand_primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/brand_accent</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:statusBarColor">@color/brand_primary_dark</item>
+        <item name="android:windowBackground">@color/section_bg</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:fontFamily">sans-serif</item>
+
+        <!-- Custom Component Styles -->
+        <item name="materialButtonStyle">@style/ZamanButton</item>
+        <item name="materialCardViewStyle">@style/ZamanCard</item>
+        <item name="textInputStyle">@style/ZamanTextInputLayout</item>
+    </style>
+
+    <!-- Splash Theme -->
+    <style name="Theme.ZamanApps.Splash" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@color/brand_primary_dark</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+    </style>
+</resources>

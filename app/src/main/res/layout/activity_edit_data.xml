@@ -1,0 +1,1562 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/section_bg"
+    tools:context=".input_form.EditDataActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_gradient"
+        app:elevation="4dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:paddingVertical="8dp"
+            app:contentInsetStart="16dp"
+            app:navigationIcon="@drawable/ic_back"
+            app:titleTextAppearance="@style/ToolbarTitle"
+            app:titleTextColor="@color/white">
+
+            <ImageButton
+                android:id="@+id/btnRefresh"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_popup_sync"
+                android:contentDescription="Refresh Data"
+                android:tooltipText="Refresh Data"
+                app:tint="@color/white" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- SECTION: PILIH SITE ID dengan AutoComplete -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/card_bg"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                app:strokeColor="@color/brand_primary"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            app:cardCornerRadius="10dp"
+                            app:cardBackgroundColor="@color/brand_accent_light">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:src="@android:drawable/ic_menu_search"
+                                app:tint="@color/brand_primary" />
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="Cari Site ID"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/FieldLabel"
+                        android:text="Ketik atau pilih Site ID dari daftar"
+                        android:textColor="@color/text_secondary" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:theme="@style/ThemeOverlay.AppCompat.Light"
+                        app:boxStrokeColor="@color/brand_primary"
+                        app:boxBackgroundColor="@color/white"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:hintTextColor="@color/text_secondary"
+                        app:startIconDrawable="@drawable/ic_site_id"
+                        app:startIconTint="@color/brand_primary">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/actvSiteIdList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Masukkan atau pilih Site ID"
+                            android:inputType="text"
+                            android:padding="14dp"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:completionThreshold="1"
+                            android:textColor="@color/text_primary"
+                            android:textColorHint="@color/text_secondary"
+                            android:background="@android:color/transparent"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:cursorVisible="true"
+                            android:clickable="true"
+                            android:popupBackground="@android:color/white" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressLoadIds"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="12dp"
+                        android:indeterminateTint="@color/brand_primary"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- FORM EDIT — tersembunyi sampai Site ID dipilih -->
+            <LinearLayout
+                android:id="@+id/layoutFormEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- ========================================== -->
+                <!-- SECTION: INFORMASI SITE (Collapsible)      -->
+                <!-- ========================================== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/card_bg"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- HEADER dengan tombol toggle -->
+                        <LinearLayout
+                            android:id="@+id/headerInformasiSite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="18dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardCornerRadius="10dp"
+                                app:cardBackgroundColor="@color/brand_accent_light">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_mylocation"
+                                    app:tint="@color/brand_primary" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:text="Informasi Site"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <!-- Ikon toggle expand/collapse -->
+                            <ImageView
+                                android:id="@+id/icToggleInformasiSite"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
+                        </LinearLayout>
+
+                        <!-- CONTENT yang bisa di-collapse -->
+                        <LinearLayout
+                            android:id="@+id/contentInformasiSite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:hintTextColor="@color/text_secondary"
+                                app:startIconDrawable="@drawable/ic_site_name"
+                                app:startIconTint="@color/brand_primary">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etSiteName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Site Name"
+                                    android:inputType="text"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- ========================================== -->
+                            <!-- FOTO SITE                                   -->
+                            <!-- ========================================== -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Foto Dokumentasi Site (Sampai 10 Foto)"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvCountFotoEdit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_badge"
+                                    android:paddingHorizontal="10dp"
+                                    android:paddingVertical="4dp"
+                                    android:text="0 / 10"
+                                    android:textColor="@color/brand_primary"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnKelolaFotoEdit"
+                                style="@style/ZamanButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="52dp"
+                                android:layout_marginTop="10dp"
+                                android:text="Lihat &amp; Kelola Foto Dokumentasi"
+                                android:textSize="14sp"
+                                app:icon="@android:drawable/ic_menu_gallery"
+                                app:iconGravity="textStart"
+                                app:iconTint="@color/white" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ========================================== -->
+                <!-- SECTION: STATUS PERANGKAT (Collapsible)    -->
+                <!-- ========================================== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/card_bg"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- HEADER -->
+                        <LinearLayout
+                            android:id="@+id/headerStatusPerangkat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="18dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardCornerRadius="10dp"
+                                app:cardBackgroundColor="@color/brand_accent_light">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_dialog_alert"
+                                    app:tint="@color/brand_primary" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:text="Status Perangkat"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/icToggleStatusPerangkat"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
+                        </LinearLayout>
+
+                        <!-- CONTENT -->
+                        <LinearLayout
+                            android:id="@+id/contentStatusPerangkat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
+                            <androidx.gridlayout.widget.GridLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:columnCount="2">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    android:orientation="vertical"
+                                    app:layout_columnWeight="1">
+                                    <TextView style="@style/FieldLabel" android:text="Mains Fail" />
+                                    <Spinner android:id="@+id/spMainsFail" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:orientation="vertical"
+                                    app:layout_columnWeight="1">
+                                    <TextView style="@style/FieldLabel" android:text="Recty Fail" />
+                                    <Spinner android:id="@+id/spRectyFail" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:orientation="vertical"
+                                    app:layout_columnWeight="1">
+                                    <TextView style="@style/FieldLabel" android:text="Stolen" />
+                                    <Spinner android:id="@+id/spStolen" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:orientation="vertical"
+                                    app:layout_columnWeight="1">
+                                    <TextView style="@style/FieldLabel" android:text="Low Batt" />
+                                    <Spinner android:id="@+id/spLowBatt" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:orientation="vertical"
+                                    app:layout_columnWeight="1">
+                                    <TextView style="@style/FieldLabel" android:text="Eng Run" />
+                                    <Spinner android:id="@+id/spEngRun" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
+                                </LinearLayout>
+
+                            </androidx.gridlayout.widget.GridLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ========================================== -->
+                <!-- SECTION: TEGANGAN & ARUS (Collapsible)     -->
+                <!-- ========================================== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/card_bg"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- HEADER -->
+                        <LinearLayout
+                            android:id="@+id/headerTeganganArus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="18dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardCornerRadius="10dp"
+                                app:cardBackgroundColor="@color/brand_accent_light">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_compass"
+                                    app:tint="@color/brand_primary" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:text="Tegangan dan Arus"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/icToggleTeganganArus"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
+                        </LinearLayout>
+
+                        <!-- CONTENT -->
+                        <LinearLayout
+                            android:id="@+id/contentTeganganArus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
+                            <TextView style="@style/GroupLabelModern" android:text="Tegangan (V)" />
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_weight="1"
+                                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    app:boxStrokeColor="@color/brand_primary"
+                                    app:boxBackgroundColor="@color/white"
+                                    app:boxBackgroundMode="outline"
+                                    app:boxCornerRadiusBottomEnd="10dp"
+                                    app:boxCornerRadiusBottomStart="10dp"
+                                    app:boxCornerRadiusTopEnd="10dp"
+                                    app:boxCornerRadiusTopStart="10dp">
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/etRV"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="R"
+                                        android:inputType="numberDecimal"
+                                        android:textColor="@color/text_primary"
+                                        android:textColorHint="@color/text_secondary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="4dp"
+                                    android:layout_weight="1"
+                                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    app:boxStrokeColor="@color/brand_primary"
+                                    app:boxBackgroundColor="@color/white"
+                                    app:boxBackgroundMode="outline"
+                                    app:boxCornerRadiusBottomEnd="10dp"
+                                    app:boxCornerRadiusBottomStart="10dp"
+                                    app:boxCornerRadiusTopEnd="10dp"
+                                    app:boxCornerRadiusTopStart="10dp">
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/etSV"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="S"
+                                        android:inputType="numberDecimal"
+                                        android:textColor="@color/text_primary"
+                                        android:textColorHint="@color/text_secondary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_weight="1"
+                                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    app:boxStrokeColor="@color/brand_primary"
+                                    app:boxBackgroundColor="@color/white"
+                                    app:boxBackgroundMode="outline"
+                                    app:boxCornerRadiusBottomEnd="10dp"
+                                    app:boxCornerRadiusBottomStart="10dp"
+                                    app:boxCornerRadiusTopEnd="10dp"
+                                    app:boxCornerRadiusTopStart="10dp">
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/etTV"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="T"
+                                        android:inputType="numberDecimal"
+                                        android:textColor="@color/text_primary"
+                                        android:textColorHint="@color/text_secondary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                            </LinearLayout>
+
+                            <TextView style="@style/GroupLabelModern" android:layout_marginTop="12dp" android:text="Arus (A)" />
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_weight="1"
+                                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    app:boxStrokeColor="@color/brand_primary"
+                                    app:boxBackgroundColor="@color/white"
+                                    app:boxBackgroundMode="outline"
+                                    app:boxCornerRadiusBottomEnd="10dp"
+                                    app:boxCornerRadiusBottomStart="10dp"
+                                    app:boxCornerRadiusTopEnd="10dp"
+                                    app:boxCornerRadiusTopStart="10dp">
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/etRA"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="R"
+                                        android:inputType="numberDecimal"
+                                        android:textColor="@color/text_primary"
+                                        android:textColorHint="@color/text_secondary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="4dp"
+                                    android:layout_weight="1"
+                                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    app:boxStrokeColor="@color/brand_primary"
+                                    app:boxBackgroundColor="@color/white"
+                                    app:boxBackgroundMode="outline"
+                                    app:boxCornerRadiusBottomEnd="10dp"
+                                    app:boxCornerRadiusBottomStart="10dp"
+                                    app:boxCornerRadiusTopEnd="10dp"
+                                    app:boxCornerRadiusTopStart="10dp">
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/etSA"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="S"
+                                        android:inputType="numberDecimal"
+                                        android:textColor="@color/text_primary"
+                                        android:textColorHint="@color/text_secondary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_weight="1"
+                                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    app:boxStrokeColor="@color/brand_primary"
+                                    app:boxBackgroundColor="@color/white"
+                                    app:boxBackgroundMode="outline"
+                                    app:boxCornerRadiusBottomEnd="10dp"
+                                    app:boxCornerRadiusBottomStart="10dp"
+                                    app:boxCornerRadiusTopEnd="10dp"
+                                    app:boxCornerRadiusTopStart="10dp">
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/etTA"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="T"
+                                        android:inputType="numberDecimal"
+                                        android:textColor="@color/text_primary"
+                                        android:textColorHint="@color/text_secondary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ========================================== -->
+                <!-- SECTION: GENSET 1 & GENSET 2 (Collapsible) -->
+                <!-- ========================================== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/card_bg"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- HEADER -->
+                        <LinearLayout
+                            android:id="@+id/headerGenset"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="18dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardCornerRadius="10dp"
+                                app:cardBackgroundColor="@color/brand_accent_light">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_manage"
+                                    app:tint="@color/brand_primary" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:text="GENSET"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/icToggleGenset"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
+                        </LinearLayout>
+
+                        <!-- CONTENT -->
+                        <LinearLayout
+                            android:id="@+id/contentGenset"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
+                            <!-- ========================================== -->
+                            <!-- GENSET 1                                   -->
+                            <!-- ========================================== -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginTop="4dp"
+                                android:text="GENSET 1"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView style="@style/FieldLabel" android:text="Merk Genset 1" />
+                            <Spinner
+                                android:id="@+id/spMerkGenset1"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/merk_genset_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Capacity 1" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etCapacityGenset1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Capacity (kVA)"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Status Genset 1" />
+                            <Spinner
+                                android:id="@+id/spStatusGenset1"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/status_genset_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Remark Genset 1" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etRemarkGenset1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Catatan Genset 1"
+                                    android:inputType="textMultiLine"
+                                    android:minLines="2"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- Divider -->
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginVertical="16dp"
+                                android:background="@color/divider" />
+
+                            <!-- ========================================== -->
+                            <!-- GENSET 2                                   -->
+                            <!-- ========================================== -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:text="GENSET 2"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView style="@style/FieldLabel" android:text="Merk Genset 2" />
+                            <Spinner
+                                android:id="@+id/spMerkGenset2"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/merk_genset_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Capacity 2" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etCapacityGenset2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Capacity (kVA)"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Status Genset 2" />
+                            <Spinner
+                                android:id="@+id/spStatusGenset2"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/status_genset_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Remark Genset 2" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etRemarkGenset2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Catatan Genset 2"
+                                    android:inputType="textMultiLine"
+                                    android:minLines="2"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ========================================== -->
+                <!-- SECTION: RECTI 1 (Collapsible)            -->
+                <!-- ========================================== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/card_bg"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- HEADER -->
+                        <LinearLayout
+                            android:id="@+id/headerRecti1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="18dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardCornerRadius="10dp"
+                                app:cardBackgroundColor="@color/brand_accent_light">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_manage"
+                                    app:tint="@color/brand_primary" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:text="RECTI 1"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/icToggleRecti1"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
+                        </LinearLayout>
+
+                        <!-- CONTENT -->
+                        <LinearLayout
+                            android:id="@+id/contentRecti1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
+                            <TextView style="@style/FieldLabel" android:text="Type Rectifier #1" />
+                            <Spinner android:id="@+id/spTypeRectifier1" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
+                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
+                                    <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
+                                    <Spinner android:id="@+id/spJumlahModul1" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                                </LinearLayout>
+                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1" android:orientation="vertical">
+                                    <TextView style="@style/FieldLabel" android:text="Modul Rusak" />
+                                    <Spinner android:id="@+id/spJumlahModulRusak1" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Jenis Baterai #1" />
+                            <Spinner android:id="@+id/spJenisBaterai1" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Merk Baterai #1" />
+                            <Spinner
+                                android:id="@+id/spMerkBaterai1"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/merk_baterai_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
+                            <Spinner android:id="@+id/spJumlahBattery1" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Battery Recti 1" />
+                            <Spinner
+                                android:id="@+id/spBatteryRecti1"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/balting_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBusVoltage1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Bus Voltage"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Load A" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etLoadA1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Load A"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPerangkatTerhubung1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Perangkat Terhubung"
+                                    android:inputType="text"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Remark" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etRemark1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Remark"
+                                    android:inputType="text"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ========================================== -->
+                <!-- SECTION: RECTI 2 (Collapsible)            -->
+                <!-- ========================================== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/card_bg"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- HEADER -->
+                        <LinearLayout
+                            android:id="@+id/headerRecti2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="18dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardCornerRadius="10dp"
+                                app:cardBackgroundColor="@color/brand_accent_light">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_manage"
+                                    app:tint="@color/brand_primary" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:text="RECTI 2"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/icToggleRecti2"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
+                        </LinearLayout>
+
+                        <!-- CONTENT -->
+                        <LinearLayout
+                            android:id="@+id/contentRecti2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
+                            <TextView style="@style/FieldLabel" android:text="Type Rectifier #2" />
+                            <Spinner android:id="@+id/spTypeRectifier2" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
+                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
+                                    <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
+                                    <Spinner android:id="@+id/spJumlahModul2" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                                </LinearLayout>
+                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1" android:orientation="vertical">
+                                    <TextView style="@style/FieldLabel" android:text="Modul Rusak" />
+                                    <Spinner android:id="@+id/spJumlahModulRusak2" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Jenis Baterai #2" />
+                            <Spinner android:id="@+id/spJenisBaterai2" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Merk Baterai #2" />
+                            <Spinner
+                                android:id="@+id/spMerkBaterai2"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/merk_baterai_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
+                            <Spinner android:id="@+id/spJumlahBattery2" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Battery Recti 2" />
+                            <Spinner
+                                android:id="@+id/spBatteryRecti2"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/balting_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBusVoltage2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Bus Voltage"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Load A" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etLoadA2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Load A"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPerangkatTerhubung2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Perangkat Terhubung"
+                                    android:inputType="text"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Remark" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etRemark2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Remark"
+                                    android:inputType="text"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ========================================== -->
+                <!-- SECTION: RECTI 3 (Collapsible)            -->
+                <!-- ========================================== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/card_bg"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- HEADER -->
+                        <LinearLayout
+                            android:id="@+id/headerRecti3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="18dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardCornerRadius="10dp"
+                                app:cardBackgroundColor="@color/brand_accent_light">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_manage"
+                                    app:tint="@color/brand_primary" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="12dp"
+                                android:text="RECTI 3"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/icToggleRecti3"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
+                        </LinearLayout>
+
+                        <!-- CONTENT -->
+                        <LinearLayout
+                            android:id="@+id/contentRecti3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
+                            <TextView style="@style/FieldLabel" android:text="Type Rectifier #3" />
+                            <Spinner android:id="@+id/spTypeRectifier3" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
+                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
+                                    <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
+                                    <Spinner android:id="@+id/spJumlahModul3" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                                </LinearLayout>
+                                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1" android:orientation="vertical">
+                                    <TextView style="@style/FieldLabel" android:text="Modul Rusak" />
+                                    <Spinner android:id="@+id/spJumlahModulRusak3" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
+                            <Spinner android:id="@+id/spJumlahBattery3" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Battery Recti 3" />
+                            <Spinner
+                                android:id="@+id/spBatteryRecti3"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/balting_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBusVoltage3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Bus Voltage"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Load A" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etLoadA3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Load A"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPerangkatTerhubung3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Perangkat Terhubung"
+                                    android:inputType="text"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <ProgressBar
+                    android:id="@+id/progressBarSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:indeterminateTint="@color/brand_primary"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- OVERLAY LOADING -->
+    <FrameLayout
+        android:id="@+id/overlayLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CC000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="32dp"
+            app:cardBackgroundColor="@color/card_bg"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:gravity="center">
+
+                <ProgressBar
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:indeterminateTint="@color/brand_primary" />
+
+                <TextView
+                    android:id="@+id/tvLoadingMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Menyimpan data..."
+                    android:textColor="@color/text_primary"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Mohon tunggu sebentar..."
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="•••"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="18sp"
+                    android:letterSpacing="0.3" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/brand_primary"
+        android:elevation="6dp"
+        android:enabled="false"
+        android:paddingVertical="16dp"
+        android:text="UPDATE DATA"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="14dp"
+        app:icon="@android:drawable/ic_menu_save"
+        app:iconGravity="textStart"
+        app:iconTint="@color/white" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- EAS Options (OK, NOK, Kosong) -->
+    <string-array name="status_options">
+        <item></item>
+        <item>OK</item>
+        <item>NOK</item>
+    </string-array>
+
+    <!-- Type Rectifier Options -->
+    <string-array name="type_rectifier_options">
+        <item></item>
+        <item>VERTIV_R48-2000e3</item>
+        <item>ZTE _R4850</item>
+        <item>Emerson R482000E3</item>
+        <item>EATON_APR48 3G</item>
+        <item>EATON_R48</item>
+        <item>Emerson R482000E2</item>
+        <item>ZTE_ZXD3000</item>
+        <item>ZTE_CSU603</item>
+        <item>VERTIV_R48-3000e3</item>
+    </string-array>
+
+    <!-- Jenis Baterai Options -->
+    <string-array name="jenis_baterai_options">
+        <item></item>
+        <item>STOLEN</item>
+        <item>FLOATING</item>
+        <item>LITHIUM</item>
+        <item>ZTE</item>
+        <item>TUBULAR</item>
+        <item>SACREDSUN</item>
+        <item>SONNENSCHEIN SOLAR</item>
+        <item>SACREDSUN + ZTE</item>
+        <item>NO BATTERY</item>
+        <item>LITHIUM + FLOATING</item>
+        <item>DI GEMBOK</item>
+        <item>DALAM KERANGKENG</item>
+        <item>-</item>
+        <item>SPS</item>
+    </string-array>
+
+    <!-- Merk Baterai Options -->
+    <string-array name="merk_baterai_options">
+        <item></item>
+        <item>ZTE</item>
+        <item>SACREDSUN</item>
+        <item>MAXLIFE</item>
+        <item>SONNENSCHEIN</item>
+        <item>DI GEMBOK</item>
+        <item>DALAM KERANGKENG</item>
+        <item>-</item>
+        <item>SACREDSUN + ZTE</item>
+        <item>STOLEN</item>
+        <item>NO BATTERY</item>
+        <item>SPS</item>
+    </string-array>
+
+    <!-- Jumlah Battery Options -->
+    <string-array name="jumlah_battery_options">
+        <item></item>
+        <item>STOLEN</item>
+        <item>NO BATTERY</item>
+        <item>0 Pack</item>
+        <item>1 Pack</item>
+        <item>2 Pack</item>
+        <item>3 Pack</item>
+        <item>4 Pack</item>
+        <item>5 Pack</item>
+        <item>6 Pack</item>
+        <item>7 Pack</item>
+        <item>8 Pack</item>
+        <item>9 Pack</item>
+        <item>10 Pack</item>
+        <item>1 Blok</item>
+        <item>2 Blok</item>
+        <item>3 Blok</item>
+        <item>4 Blok</item>
+        <item>5 Blok</item>
+        <item>6 Blok</item>
+        <item>7 Blok</item>
+        <item>8 Blok</item>
+        <item>9 Blok</item>
+        <item>10 Blok</item>
+        <item>11 Blok</item>
+        <item>12 Blok</item>
+        <item>13 Blok</item>
+        <item>14 Blok</item>
+        <item>15 Blok</item>
+        <item>16 Blok</item>
+        <item>17 Blok</item>
+        <item>18 Blok</item>
+        <item>19 Blok</item>
+        <item>20 Blok</item>
+        <item>21 Blok</item>
+        <item>22 Blok</item>
+        <item>23 Blok</item>
+        <item>24 Blok</item>
+        <item>25 Blok</item>
+        <item>26 Blok</item>
+        <item>27 Blok</item>
+        <item>28 Blok</item>
+        <item>SPS</item>
+    </string-array>
+
+    <!-- Merk Genset Options -->
+    <string-array name="merk_genset_options">
+        <item></item>
+        <item>DEUTZ</item>
+        <item>KUBOTA</item>
+        <item>AKSA</item>
+        <item>BAUDOUIN</item>
+        <item>CUMMINS</item>
+        <item>DENYO</item>
+        <item>FAWDE</item>
+        <item>FG WILSON</item>
+        <item>HARGEN</item>
+        <item>HIDIER</item>
+        <item>HIMOINSA</item>
+        <item>JHON DEERE</item>
+        <item>KOHLER</item>
+        <item>KOMATSU</item>
+        <item>MITSUBISHI</item>
+        <item>OLYMPIAN</item>
+        <item>PERKINS</item>
+        <item>POTISE</item>
+        <item>SDMO</item>
+        <item>V-GEN</item>
+        <item>YAMAGEN</item>
+        <item>YANMAR</item>
+    </string-array>
+
+    <!-- Status Genset Options -->
+    <string-array name="status_genset_options">
+        <item></item>
+        <item>aktif (bagus)</item>
+        <item>aktif (rusak)</item>
+        <item>non aktif (bagus)</item>
+        <item>non aktif (rusak)</item>
+        <item>Power Off</item>
+    </string-array>
+
+    <string-array name="jumlah_modul_options">
+        <item></item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>SPS</item>
+    </string-array>
+
+    <string-array name="balting_options">
+        <item></item>
+        <item>Balting</item>
+        <item>Belum Balting</item>
+    </string-array>
+</resources>
