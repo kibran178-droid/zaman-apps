@@ -500,6 +500,13 @@
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #1" />
                         <Spinner android:id="@+id/spBatteryRecti1" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Kondisi Arester #1" />
+                        <Spinner android:id="@+id/spKondisiArester1" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="Bus Voltage (V)">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -581,6 +588,13 @@
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #2" />
                         <Spinner android:id="@+id/spBatteryRecti2" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Kondisi Arester #2" />
+                        <Spinner android:id="@+id/spKondisiArester2" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="Bus Voltage (V)">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -653,6 +667,13 @@
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #3" />
                         <Spinner android:id="@+id/spBatteryRecti3" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti3" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Kondisi Arester #3" />
+                        <Spinner android:id="@+id/spKondisiArester3" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="Bus Voltage (V)">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage3" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -661,6 +682,310 @@
                         </com.google.android.material.textfield.TextInputLayout>
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Perangkat">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat3" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchAdaRecti4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Tambah Rectifier 4?"
+                            android:textColor="@color/text_primary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- STEP 8: Rectifier 4 -->
+            <LinearLayout
+                android:id="@+id/step8_recti4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="Recti 4"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView style="@style/FieldLabel" android:text="Type Rectifier #4" />
+                        <Spinner android:id="@+id/spTypeRectifier4" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="horizontal">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #4" />
+                                <Spinner android:id="@+id/spJumlahModul4" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Modul Rusak #4" />
+                                <Spinner android:id="@+id/spJumlahModulRusak4" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #4" />
+                        <Spinner android:id="@+id/spJumlahBattery4" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #4" />
+                        <Spinner android:id="@+id/spBatteryRecti4" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti4" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Kondisi Arester #4" />
+                        <Spinner android:id="@+id/spKondisiArester4" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="Bus Voltage (V)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage4" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Load (A)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA4" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Perangkat">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat4" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchAdaRecti5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Tambah Rectifier 5?"
+                            android:textColor="@color/text_primary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- STEP 9: Rectifier 5 -->
+            <LinearLayout
+                android:id="@+id/step9_recti5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="Recti 5"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView style="@style/FieldLabel" android:text="Type Rectifier #5" />
+                        <Spinner android:id="@+id/spTypeRectifier5" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="horizontal">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #5" />
+                                <Spinner android:id="@+id/spJumlahModul5" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Modul Rusak #5" />
+                                <Spinner android:id="@+id/spJumlahModulRusak5" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #5" />
+                        <Spinner android:id="@+id/spJumlahBattery5" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #5" />
+                        <Spinner android:id="@+id/spBatteryRecti5" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti5" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Kondisi Arester #5" />
+                        <Spinner android:id="@+id/spKondisiArester5" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="Bus Voltage (V)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage5" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Load (A)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA5" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Perangkat">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat5" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchAdaRecti6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Tambah Rectifier 6?"
+                            android:textColor="@color/text_primary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- STEP 10: Rectifier 6 -->
+            <LinearLayout
+                android:id="@+id/step10_recti6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="Recti 6"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView style="@style/FieldLabel" android:text="Type Rectifier #6" />
+                        <Spinner android:id="@+id/spTypeRectifier6" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="horizontal">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #6" />
+                                <Spinner android:id="@+id/spJumlahModul6" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Modul Rusak #6" />
+                                <Spinner android:id="@+id/spJumlahModulRusak6" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #6" />
+                        <Spinner android:id="@+id/spJumlahBattery6" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #6" />
+                        <Spinner android:id="@+id/spBatteryRecti6" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti6" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Kondisi Arester #6" />
+                        <Spinner android:id="@+id/spKondisiArester6" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="Bus Voltage (V)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage6" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Load (A)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA6" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Perangkat">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat6" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchAdaRecti7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Tambah Rectifier 7?"
+                            android:textColor="@color/text_primary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- STEP 11: Rectifier 7 -->
+            <LinearLayout
+                android:id="@+id/step11_recti7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/ZamanCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:text="Recti 7"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView style="@style/FieldLabel" android:text="Type Rectifier #7" />
+                        <Spinner android:id="@+id/spTypeRectifier7" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="horizontal">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #7" />
+                                <Spinner android:id="@+id/spJumlahModul7" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1" android:orientation="vertical">
+                                <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Modul Rusak #7" />
+                                <Spinner android:id="@+id/spJumlahModulRusak7" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #7" />
+                        <Spinner android:id="@+id/spJumlahBattery7" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #7" />
+                        <Spinner android:id="@+id/spBatteryRecti7" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti7" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Kondisi Arester #7" />
+                        <Spinner android:id="@+id/spKondisiArester7" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="Bus Voltage (V)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage7" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Load (A)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA7" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Perangkat">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat7" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

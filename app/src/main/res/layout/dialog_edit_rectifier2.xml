@@ -90,6 +90,34 @@
         android:id="@+id/spBatteryRecti2"
         style="@style/SpinnerField" />
 
+    <!-- MCB Battery Recty -->
+    <TextView
+        style="@style/FieldLabel"
+        android:text="MCB Battery Recty #2" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/ZamanTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editMcbBatteryRecti2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="MCB Battery Recty"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Kondisi Arester -->
+    <TextView
+        style="@style/FieldLabel"
+        android:text="Kondisi Arester #2" />
+
+    <Spinner
+        android:id="@+id/spKondisiArester2"
+        style="@style/SpinnerField" />
+
     <!-- Bus Voltage -->
     <TextView
         style="@style/FieldLabel"

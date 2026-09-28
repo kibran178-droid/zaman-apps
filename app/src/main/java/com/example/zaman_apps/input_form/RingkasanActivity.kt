@@ -213,7 +213,6 @@ class RingkasanActivity : AppCompatActivity() {
         tvTitle.setPadding(0, 0, 0, 16)
         root.addView(tvTitle)
 
-        // Tombol Tambah Foto Baru di Pop Up
         val btnTambahFotoPop = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle)
         btnTambahFotoPop.text = "Tambah Foto Dokumentasi Baru"
         btnTambahFotoPop.textSize = 14f
@@ -559,38 +558,48 @@ class RingkasanActivity : AppCompatActivity() {
             section = "genset"
         )
 
-        val recti1Text = StringBuilder()
-        recti1Text.append("Type: ${valOrDash(data.typeRectifier1)}\n")
-        recti1Text.append("Modul: ${valOrDash(data.jumlahModul1)} (Rusak: ${valOrDash(data.jumlahModulRusak1)})\n")
-        recti1Text.append("Jenis Baterai: ${valOrDash(data.jenisBaterai1)}\n")
-        recti1Text.append("Merk Baterai: ${valOrDash(data.merkBaterai1)}\n")
-        recti1Text.append("Jumlah Battery: ${valOrDash(data.jumlahBatteryP1)}\n")
-        recti1Text.append("Battery Status: ${valOrDash(data.batteryRecti1)}\n")
-        recti1Text.append("Voltage: ${valOrDash(data.busVoltage1)} V | Load: ${valOrDash(data.loadA1)} A\n")
-        recti1Text.append("Perangkat: ${valOrDash(data.perangkatTerhubung1)}\n")
-        recti1Text.append("Catatan: ${valOrDash(data.remark1)}")
+        fun buildRectiText(
+            type: String, modul: String, modulRusak: String,
+            jenisBat: String? = null, merkBat: String? = null,
+            jmlBat: String, statusBat: String, mcbBat: String,
+            arester: String, voltage: String, load: String,
+            perangkat: String, remark: String? = null
+        ): String {
+            val sb = StringBuilder()
+            sb.append("Type: ${valOrDash(type)}\n")
+            sb.append("Modul: ${valOrDash(modul)} (Rusak: ${valOrDash(modulRusak)})\n")
+            if (jenisBat != null) sb.append("Jenis Baterai: ${valOrDash(jenisBat)}\n")
+            if (merkBat != null) sb.append("Merk Baterai: ${valOrDash(merkBat)}\n")
+            sb.append("Jumlah Battery: ${valOrDash(jmlBat)}\n")
+            sb.append("Battery Status: ${valOrDash(statusBat)}\n")
+            sb.append("MCB Battery Recty: ${valOrDash(mcbBat)}\n")
+            sb.append("Kondisi Arester: ${valOrDash(arester)}\n")
+            sb.append("Voltage: ${valOrDash(voltage)} V | Load: ${valOrDash(load)} A\n")
+            sb.append("Perangkat: ${valOrDash(perangkat)}")
+            if (remark != null) sb.append("\nCatatan: ${valOrDash(remark)}")
+            return sb.toString()
+        }
 
         tambahCard(
             judul = "Rectifier Unit 1",
-            isi = recti1Text.toString(),
+            isi = buildRectiText(
+                data.typeRectifier1, data.jumlahModul1, data.jumlahModulRusak1,
+                data.jenisBaterai1, data.merkBaterai1, data.jumlahBatteryP1, data.batteryRecti1,
+                data.mcbBatteryRecti1, data.kondisiArester1, data.busVoltage1, data.loadA1,
+                data.perangkatTerhubung1, data.remark1
+            ),
             section = "rectifier1"
         )
 
         if (data.adaRecti2) {
-            val recti2Text = StringBuilder()
-            recti2Text.append("Type: ${valOrDash(data.typeRectifier2)}\n")
-            recti2Text.append("Modul: ${valOrDash(data.jumlahModul2)} (Rusak: ${valOrDash(data.jumlahModulRusak2)})\n")
-            recti2Text.append("Jenis Baterai: ${valOrDash(data.jenisBaterai2)}\n")
-            recti2Text.append("Merk Baterai: ${valOrDash(data.merkBaterai2)}\n")
-            recti2Text.append("Jumlah Battery: ${valOrDash(data.jumlahBatteryP2)}\n")
-            recti2Text.append("Battery Status: ${valOrDash(data.batteryRecti2)}\n")
-            recti2Text.append("Voltage: ${valOrDash(data.busVoltage2)} V | Load: ${valOrDash(data.loadA2)} A\n")
-            recti2Text.append("Perangkat: ${valOrDash(data.perangkatTerhubung2)}\n")
-            recti2Text.append("Catatan: ${valOrDash(data.remark2)}")
-
             tambahCard(
                 judul = "Rectifier Unit 2",
-                isi = recti2Text.toString(),
+                isi = buildRectiText(
+                    data.typeRectifier2, data.jumlahModul2, data.jumlahModulRusak2,
+                    data.jenisBaterai2, data.merkBaterai2, data.jumlahBatteryP2, data.batteryRecti2,
+                    data.mcbBatteryRecti2, data.kondisiArester2, data.busVoltage2, data.loadA2,
+                    data.perangkatTerhubung2, data.remark2
+                ),
                 section = "rectifier2"
             )
         } else {
@@ -601,23 +610,92 @@ class RingkasanActivity : AppCompatActivity() {
         }
 
         if (data.adaRecti3) {
-            val recti3Text = StringBuilder()
-            recti3Text.append("Type: ${valOrDash(data.typeRectifier3)}\n")
-            recti3Text.append("Modul: ${valOrDash(data.jumlahModul3)} (Rusak: ${valOrDash(data.jumlahModulRusak3)})\n")
-            recti3Text.append("Jumlah Battery: ${valOrDash(data.jumlahBatteryP3)}\n")
-            recti3Text.append("Battery Status: ${valOrDash(data.batteryRecti3)}\n")
-            recti3Text.append("Voltage: ${valOrDash(data.busVoltage3)} V | Load: ${valOrDash(data.loadA3)} A\n")
-            recti3Text.append("Perangkat: ${valOrDash(data.perangkatTerhubung3)}")
-
             tambahCard(
                 judul = "Rectifier Unit 3",
-                isi = recti3Text.toString(),
+                isi = buildRectiText(
+                    data.typeRectifier3, data.jumlahModul3, data.jumlahModulRusak3,
+                    null, null, data.jumlahBatteryP3, data.batteryRecti3,
+                    data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3,
+                    data.perangkatTerhubung3
+                ),
                 section = "rectifier3"
             )
         } else if (data.adaRecti2) {
             tambahCardTombol("➕ Tambah Rectifier Unit 3") {
                 data.adaRecti3 = true
                 showEditDialog("rectifier3")
+            }
+        }
+
+        if (data.adaRecti4) {
+            tambahCard(
+                judul = "Rectifier Unit 4",
+                isi = buildRectiText(
+                    data.typeRectifier4, data.jumlahModul4, data.jumlahModulRusak4,
+                    null, null, data.jumlahBatteryP4, data.batteryRecti4,
+                    data.mcbBatteryRecti4, data.kondisiArester4, data.busVoltage4, data.loadA4,
+                    data.perangkatTerhubung4
+                ),
+                section = "rectifier4"
+            )
+        } else if (data.adaRecti3) {
+            tambahCardTombol("➕ Tambah Rectifier Unit 4") {
+                data.adaRecti4 = true
+                showEditDialog("rectifier4")
+            }
+        }
+
+        if (data.adaRecti5) {
+            tambahCard(
+                judul = "Rectifier Unit 5",
+                isi = buildRectiText(
+                    data.typeRectifier5, data.jumlahModul5, data.jumlahModulRusak5,
+                    null, null, data.jumlahBatteryP5, data.batteryRecti5,
+                    data.mcbBatteryRecti5, data.kondisiArester5, data.busVoltage5, data.loadA5,
+                    data.perangkatTerhubung5
+                ),
+                section = "rectifier5"
+            )
+        } else if (data.adaRecti4) {
+            tambahCardTombol("➕ Tambah Rectifier Unit 5") {
+                data.adaRecti5 = true
+                showEditDialog("rectifier5")
+            }
+        }
+
+        if (data.adaRecti6) {
+            tambahCard(
+                judul = "Rectifier Unit 6",
+                isi = buildRectiText(
+                    data.typeRectifier6, data.jumlahModul6, data.jumlahModulRusak6,
+                    null, null, data.jumlahBatteryP6, data.batteryRecti6,
+                    data.mcbBatteryRecti6, data.kondisiArester6, data.busVoltage6, data.loadA6,
+                    data.perangkatTerhubung6
+                ),
+                section = "rectifier6"
+            )
+        } else if (data.adaRecti5) {
+            tambahCardTombol("➕ Tambah Rectifier Unit 6") {
+                data.adaRecti6 = true
+                showEditDialog("rectifier6")
+            }
+        }
+
+        if (data.adaRecti7) {
+            tambahCard(
+                judul = "Rectifier Unit 7",
+                isi = buildRectiText(
+                    data.typeRectifier7, data.jumlahModul7, data.jumlahModulRusak7,
+                    null, null, data.jumlahBatteryP7, data.batteryRecti7,
+                    data.mcbBatteryRecti7, data.kondisiArester7, data.busVoltage7, data.loadA7,
+                    data.perangkatTerhubung7
+                ),
+                section = "rectifier7"
+            )
+        } else if (data.adaRecti6) {
+            tambahCardTombol("➕ Tambah Rectifier Unit 7") {
+                data.adaRecti7 = true
+                showEditDialog("rectifier7")
             }
         }
     }
@@ -662,7 +740,7 @@ class RingkasanActivity : AppCompatActivity() {
             "status_perangkat" -> android.R.drawable.ic_dialog_alert
             "tegangan_arus" -> android.R.drawable.ic_menu_compass
             "genset" -> android.R.drawable.ic_menu_manage
-            "rectifier1", "rectifier2", "rectifier3" -> android.R.drawable.ic_menu_preferences
+            "rectifier1", "rectifier2", "rectifier3", "rectifier4", "rectifier5", "rectifier6", "rectifier7" -> android.R.drawable.ic_menu_preferences
             else -> android.R.drawable.ic_menu_info_details
         }
         cardBinding.ivIconCard.setImageResource(iconRes)
@@ -732,7 +810,7 @@ class RingkasanActivity : AppCompatActivity() {
 
                 if (value.equals("Normal", true) || value.equals("OK", true) || value.equals("Balting", true) || value.contains("Aktif", true)) {
                     tvVal.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
-                } else if (value.contains("Fail", true) || value.contains("Rusak", true) || value.contains("Alarm", true)) {
+                } else if (value.contains("Fail", true) || value.contains("Rusak", true) || value.contains("Alarm", true) || value.equals("NOK", true)) {
                     tvVal.setTextColor(ContextCompat.getColor(this, R.color.error))
                 } else {
                     tvVal.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
@@ -787,6 +865,10 @@ class RingkasanActivity : AppCompatActivity() {
                 "rectifier1" -> "Edit Rectifier Unit 1"
                 "rectifier2" -> "Edit Rectifier Unit 2"
                 "rectifier3" -> "Edit Rectifier Unit 3"
+                "rectifier4" -> "Edit Rectifier Unit 4"
+                "rectifier5" -> "Edit Rectifier Unit 5"
+                "rectifier6" -> "Edit Rectifier Unit 6"
+                "rectifier7" -> "Edit Rectifier Unit 7"
                 else -> "Edit Data"
             }
             dialogBinding.dialogTitle.text = title
@@ -799,6 +881,10 @@ class RingkasanActivity : AppCompatActivity() {
                 "rectifier1" -> R.layout.dialog_edit_rectifier1
                 "rectifier2" -> R.layout.dialog_edit_rectifier2
                 "rectifier3" -> R.layout.dialog_edit_rectifier3
+                "rectifier4" -> R.layout.dialog_edit_rectifier4
+                "rectifier5" -> R.layout.dialog_edit_rectifier5
+                "rectifier6" -> R.layout.dialog_edit_rectifier6
+                "rectifier7" -> R.layout.dialog_edit_rectifier7
                 else -> 0
             }
 
@@ -889,6 +975,7 @@ class RingkasanActivity : AppCompatActivity() {
                 setupSpinnerAdapter(view.findViewById(R.id.spMerkBaterai1), DropdownOptionsHelper.KEY_MERK_BATERAI)
                 setupSpinnerAdapter(view.findViewById(R.id.spJumlahBattery1), DropdownOptionsHelper.KEY_JUMLAH_BATTERAI)
                 setupSpinnerAdapter(view.findViewById(R.id.spBatteryRecti1), DropdownOptionsHelper.KEY_BALTING)
+                setupSpinnerAdapterFromRes(view.findViewById(R.id.spKondisiArester1), R.array.arester_options)
 
                 setSpinnerSelectionByValue(view.findViewById(R.id.spTypeRectifier1), data.typeRectifier1)
                 setSpinnerSelectionByValue(view.findViewById(R.id.spJumlahModul1), data.jumlahModul1)
@@ -897,7 +984,9 @@ class RingkasanActivity : AppCompatActivity() {
                 setSpinnerSelectionByValue(view.findViewById(R.id.spMerkBaterai1), data.merkBaterai1)
                 setSpinnerSelectionByValue(view.findViewById(R.id.spJumlahBattery1), data.jumlahBatteryP1)
                 setSpinnerSelectionByValue(view.findViewById(R.id.spBatteryRecti1), data.batteryRecti1)
+                setSpinnerSelectionByValue(view.findViewById(R.id.spKondisiArester1), data.kondisiArester1)
 
+                view.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti1)?.setText(data.mcbBatteryRecti1)
                 view.findViewById<TextInputEditText>(R.id.editBusVoltage1)?.setText(data.busVoltage1)
                 view.findViewById<TextInputEditText>(R.id.editLoadA1)?.setText(data.loadA1)
                 view.findViewById<TextInputEditText>(R.id.editPerangkat1)?.setText(data.perangkatTerhubung1)
@@ -911,6 +1000,7 @@ class RingkasanActivity : AppCompatActivity() {
                 setupSpinnerAdapter(view.findViewById(R.id.spMerkBaterai2), DropdownOptionsHelper.KEY_MERK_BATERAI)
                 setupSpinnerAdapter(view.findViewById(R.id.spJumlahBattery2), DropdownOptionsHelper.KEY_JUMLAH_BATTERAI)
                 setupSpinnerAdapter(view.findViewById(R.id.spBatteryRecti2), DropdownOptionsHelper.KEY_BALTING)
+                setupSpinnerAdapterFromRes(view.findViewById(R.id.spKondisiArester2), R.array.arester_options)
 
                 setSpinnerSelectionByValue(view.findViewById(R.id.spTypeRectifier2), data.typeRectifier2)
                 setSpinnerSelectionByValue(view.findViewById(R.id.spJumlahModul2), data.jumlahModul2)
@@ -919,30 +1009,55 @@ class RingkasanActivity : AppCompatActivity() {
                 setSpinnerSelectionByValue(view.findViewById(R.id.spMerkBaterai2), data.merkBaterai2)
                 setSpinnerSelectionByValue(view.findViewById(R.id.spJumlahBattery2), data.jumlahBatteryP2)
                 setSpinnerSelectionByValue(view.findViewById(R.id.spBatteryRecti2), data.batteryRecti2)
+                setSpinnerSelectionByValue(view.findViewById(R.id.spKondisiArester2), data.kondisiArester2)
 
+                view.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti2)?.setText(data.mcbBatteryRecti2)
                 view.findViewById<TextInputEditText>(R.id.editBusVoltage2)?.setText(data.busVoltage2)
                 view.findViewById<TextInputEditText>(R.id.editLoadA2)?.setText(data.loadA2)
                 view.findViewById<TextInputEditText>(R.id.editPerangkat2)?.setText(data.perangkatTerhubung2)
                 view.findViewById<TextInputEditText>(R.id.editRemark2)?.setText(data.remark2)
             }
             "rectifier3" -> {
-                setupSpinnerAdapter(view.findViewById(R.id.spTypeRectifier3), DropdownOptionsHelper.KEY_TYPE_RECTIFIER)
-                setupSpinnerAdapterFromRes(view.findViewById(R.id.spJumlahModul3), R.array.jumlah_modul_options)
-                setupSpinnerAdapterFromRes(view.findViewById(R.id.spJumlahModulRusak3), R.array.jumlah_modul_options)
-                setupSpinnerAdapter(view.findViewById(R.id.spJumlahBattery3), DropdownOptionsHelper.KEY_JUMLAH_BATTERAI)
-                setupSpinnerAdapter(view.findViewById(R.id.spBatteryRecti3), DropdownOptionsHelper.KEY_BALTING)
-
-                setSpinnerSelectionByValue(view.findViewById(R.id.spTypeRectifier3), data.typeRectifier3)
-                setSpinnerSelectionByValue(view.findViewById(R.id.spJumlahModul3), data.jumlahModul3)
-                setSpinnerSelectionByValue(view.findViewById(R.id.spJumlahModulRusak3), data.jumlahModulRusak3)
-                setSpinnerSelectionByValue(view.findViewById(R.id.spJumlahBattery3), data.jumlahBatteryP3)
-                setSpinnerSelectionByValue(view.findViewById(R.id.spBatteryRecti3), data.batteryRecti3)
-
-                view.findViewById<TextInputEditText>(R.id.editBusVoltage3)?.setText(data.busVoltage3)
-                view.findViewById<TextInputEditText>(R.id.editLoadA3)?.setText(data.loadA3)
-                view.findViewById<TextInputEditText>(R.id.editPerangkat3)?.setText(data.perangkatTerhubung3)
+                populateRectiGeneric(view, 3, data.typeRectifier3, data.jumlahModul3, data.jumlahModulRusak3, data.jumlahBatteryP3, data.batteryRecti3, data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3, data.perangkatTerhubung3)
+            }
+            "rectifier4" -> {
+                populateRectiGeneric(view, 4, data.typeRectifier4, data.jumlahModul4, data.jumlahModulRusak4, data.jumlahBatteryP4, data.batteryRecti4, data.mcbBatteryRecti4, data.kondisiArester4, data.busVoltage4, data.loadA4, data.perangkatTerhubung4)
+            }
+            "rectifier5" -> {
+                populateRectiGeneric(view, 5, data.typeRectifier5, data.jumlahModul5, data.jumlahModulRusak5, data.jumlahBatteryP5, data.batteryRecti5, data.mcbBatteryRecti5, data.kondisiArester5, data.busVoltage5, data.loadA5, data.perangkatTerhubung5)
+            }
+            "rectifier6" -> {
+                populateRectiGeneric(view, 6, data.typeRectifier6, data.jumlahModul6, data.jumlahModulRusak6, data.jumlahBatteryP6, data.batteryRecti6, data.mcbBatteryRecti6, data.kondisiArester6, data.busVoltage6, data.loadA6, data.perangkatTerhubung6)
+            }
+            "rectifier7" -> {
+                populateRectiGeneric(view, 7, data.typeRectifier7, data.jumlahModul7, data.jumlahModulRusak7, data.jumlahBatteryP7, data.batteryRecti7, data.mcbBatteryRecti7, data.kondisiArester7, data.busVoltage7, data.loadA7, data.perangkatTerhubung7)
             }
         }
+    }
+
+    private fun populateRectiGeneric(
+        view: View, idx: Int, type: String, modul: String, modulRusak: String,
+        jmlBat: String, statusBat: String, mcbBat: String, arester: String,
+        voltage: String, load: String, perangkat: String
+    ) {
+        setupSpinnerAdapter(view.findViewById(resources.getIdentifier("spTypeRectifier$idx", "id", packageName)), DropdownOptionsHelper.KEY_TYPE_RECTIFIER)
+        setupSpinnerAdapterFromRes(view.findViewById(resources.getIdentifier("spJumlahModul$idx", "id", packageName)), R.array.jumlah_modul_options)
+        setupSpinnerAdapterFromRes(view.findViewById(resources.getIdentifier("spJumlahModulRusak$idx", "id", packageName)), R.array.jumlah_modul_options)
+        setupSpinnerAdapter(view.findViewById(resources.getIdentifier("spJumlahBattery$idx", "id", packageName)), DropdownOptionsHelper.KEY_JUMLAH_BATTERAI)
+        setupSpinnerAdapter(view.findViewById(resources.getIdentifier("spBatteryRecti$idx", "id", packageName)), DropdownOptionsHelper.KEY_BALTING)
+        setupSpinnerAdapterFromRes(view.findViewById(resources.getIdentifier("spKondisiArester$idx", "id", packageName)), R.array.arester_options)
+
+        setSpinnerSelectionByValue(view.findViewById(resources.getIdentifier("spTypeRectifier$idx", "id", packageName)), type)
+        setSpinnerSelectionByValue(view.findViewById(resources.getIdentifier("spJumlahModul$idx", "id", packageName)), modul)
+        setSpinnerSelectionByValue(view.findViewById(resources.getIdentifier("spJumlahModulRusak$idx", "id", packageName)), modulRusak)
+        setSpinnerSelectionByValue(view.findViewById(resources.getIdentifier("spJumlahBattery$idx", "id", packageName)), jmlBat)
+        setSpinnerSelectionByValue(view.findViewById(resources.getIdentifier("spBatteryRecti$idx", "id", packageName)), statusBat)
+        setSpinnerSelectionByValue(view.findViewById(resources.getIdentifier("spKondisiArester$idx", "id", packageName)), arester)
+
+        view.findViewById<TextInputEditText>(resources.getIdentifier("editMcbBatteryRecti$idx", "id", packageName))?.setText(mcbBat)
+        view.findViewById<TextInputEditText>(resources.getIdentifier("editBusVoltage$idx", "id", packageName))?.setText(voltage)
+        view.findViewById<TextInputEditText>(resources.getIdentifier("editLoadA$idx", "id", packageName))?.setText(load)
+        view.findViewById<TextInputEditText>(resources.getIdentifier("editPerangkat$idx", "id", packageName))?.setText(perangkat)
     }
 
     private fun saveDialogFields(formView: View, section: String) {
@@ -988,6 +1103,8 @@ class RingkasanActivity : AppCompatActivity() {
                 data.merkBaterai1 = formView.findViewById<Spinner>(R.id.spMerkBaterai1)?.selectedItem?.toString() ?: ""
                 data.jumlahBatteryP1 = formView.findViewById<Spinner>(R.id.spJumlahBattery1)?.selectedItem?.toString() ?: ""
                 data.batteryRecti1 = formView.findViewById<Spinner>(R.id.spBatteryRecti1)?.selectedItem?.toString() ?: ""
+                data.mcbBatteryRecti1 = formView.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti1)?.text.toString().trim()
+                data.kondisiArester1 = formView.findViewById<Spinner>(R.id.spKondisiArester1)?.selectedItem?.toString() ?: ""
                 data.busVoltage1 = formView.findViewById<TextInputEditText>(R.id.editBusVoltage1)?.text.toString().trim()
                 data.loadA1 = formView.findViewById<TextInputEditText>(R.id.editLoadA1)?.text.toString().trim()
                 data.perangkatTerhubung1 = formView.findViewById<TextInputEditText>(R.id.editPerangkat1)?.text.toString().trim()
@@ -1001,6 +1118,8 @@ class RingkasanActivity : AppCompatActivity() {
                 data.merkBaterai2 = formView.findViewById<Spinner>(R.id.spMerkBaterai2)?.selectedItem?.toString() ?: ""
                 data.jumlahBatteryP2 = formView.findViewById<Spinner>(R.id.spJumlahBattery2)?.selectedItem?.toString() ?: ""
                 data.batteryRecti2 = formView.findViewById<Spinner>(R.id.spBatteryRecti2)?.selectedItem?.toString() ?: ""
+                data.mcbBatteryRecti2 = formView.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti2)?.text.toString().trim()
+                data.kondisiArester2 = formView.findViewById<Spinner>(R.id.spKondisiArester2)?.selectedItem?.toString() ?: ""
                 data.busVoltage2 = formView.findViewById<TextInputEditText>(R.id.editBusVoltage2)?.text.toString().trim()
                 data.loadA2 = formView.findViewById<TextInputEditText>(R.id.editLoadA2)?.text.toString().trim()
                 data.perangkatTerhubung2 = formView.findViewById<TextInputEditText>(R.id.editPerangkat2)?.text.toString().trim()
@@ -1012,9 +1131,59 @@ class RingkasanActivity : AppCompatActivity() {
                 data.jumlahModulRusak3 = formView.findViewById<Spinner>(R.id.spJumlahModulRusak3)?.selectedItem?.toString() ?: ""
                 data.jumlahBatteryP3 = formView.findViewById<Spinner>(R.id.spJumlahBattery3)?.selectedItem?.toString() ?: ""
                 data.batteryRecti3 = formView.findViewById<Spinner>(R.id.spBatteryRecti3)?.selectedItem?.toString() ?: ""
+                data.mcbBatteryRecti3 = formView.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti3)?.text.toString().trim()
+                data.kondisiArester3 = formView.findViewById<Spinner>(R.id.spKondisiArester3)?.selectedItem?.toString() ?: ""
                 data.busVoltage3 = formView.findViewById<TextInputEditText>(R.id.editBusVoltage3)?.text.toString().trim()
                 data.loadA3 = formView.findViewById<TextInputEditText>(R.id.editLoadA3)?.text.toString().trim()
                 data.perangkatTerhubung3 = formView.findViewById<TextInputEditText>(R.id.editPerangkat3)?.text.toString().trim()
+            }
+            "rectifier4" -> {
+                data.typeRectifier4 = formView.findViewById<Spinner>(R.id.spTypeRectifier4)?.selectedItem?.toString() ?: ""
+                data.jumlahModul4 = formView.findViewById<Spinner>(R.id.spJumlahModul4)?.selectedItem?.toString() ?: ""
+                data.jumlahModulRusak4 = formView.findViewById<Spinner>(R.id.spJumlahModulRusak4)?.selectedItem?.toString() ?: ""
+                data.jumlahBatteryP4 = formView.findViewById<Spinner>(R.id.spJumlahBattery4)?.selectedItem?.toString() ?: ""
+                data.batteryRecti4 = formView.findViewById<Spinner>(R.id.spBatteryRecti4)?.selectedItem?.toString() ?: ""
+                data.mcbBatteryRecti4 = formView.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti4)?.text.toString().trim()
+                data.kondisiArester4 = formView.findViewById<Spinner>(R.id.spKondisiArester4)?.selectedItem?.toString() ?: ""
+                data.busVoltage4 = formView.findViewById<TextInputEditText>(R.id.editBusVoltage4)?.text.toString().trim()
+                data.loadA4 = formView.findViewById<TextInputEditText>(R.id.editLoadA4)?.text.toString().trim()
+                data.perangkatTerhubung4 = formView.findViewById<TextInputEditText>(R.id.editPerangkat4)?.text.toString().trim()
+            }
+            "rectifier5" -> {
+                data.typeRectifier5 = formView.findViewById<Spinner>(R.id.spTypeRectifier5)?.selectedItem?.toString() ?: ""
+                data.jumlahModul5 = formView.findViewById<Spinner>(R.id.spJumlahModul5)?.selectedItem?.toString() ?: ""
+                data.jumlahModulRusak5 = formView.findViewById<Spinner>(R.id.spJumlahModulRusak5)?.selectedItem?.toString() ?: ""
+                data.jumlahBatteryP5 = formView.findViewById<Spinner>(R.id.spJumlahBattery5)?.selectedItem?.toString() ?: ""
+                data.batteryRecti5 = formView.findViewById<Spinner>(R.id.spBatteryRecti5)?.selectedItem?.toString() ?: ""
+                data.mcbBatteryRecti5 = formView.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti5)?.text.toString().trim()
+                data.kondisiArester5 = formView.findViewById<Spinner>(R.id.spKondisiArester5)?.selectedItem?.toString() ?: ""
+                data.busVoltage5 = formView.findViewById<TextInputEditText>(R.id.editBusVoltage5)?.text.toString().trim()
+                data.loadA5 = formView.findViewById<TextInputEditText>(R.id.editLoadA5)?.text.toString().trim()
+                data.perangkatTerhubung5 = formView.findViewById<TextInputEditText>(R.id.editPerangkat5)?.text.toString().trim()
+            }
+            "rectifier6" -> {
+                data.typeRectifier6 = formView.findViewById<Spinner>(R.id.spTypeRectifier6)?.selectedItem?.toString() ?: ""
+                data.jumlahModul6 = formView.findViewById<Spinner>(R.id.spJumlahModul6)?.selectedItem?.toString() ?: ""
+                data.jumlahModulRusak6 = formView.findViewById<Spinner>(R.id.spJumlahModulRusak6)?.selectedItem?.toString() ?: ""
+                data.jumlahBatteryP6 = formView.findViewById<Spinner>(R.id.spJumlahBattery6)?.selectedItem?.toString() ?: ""
+                data.batteryRecti6 = formView.findViewById<Spinner>(R.id.spBatteryRecti6)?.selectedItem?.toString() ?: ""
+                data.mcbBatteryRecti6 = formView.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti6)?.text.toString().trim()
+                data.kondisiArester6 = formView.findViewById<Spinner>(R.id.spKondisiArester6)?.selectedItem?.toString() ?: ""
+                data.busVoltage6 = formView.findViewById<TextInputEditText>(R.id.editBusVoltage6)?.text.toString().trim()
+                data.loadA6 = formView.findViewById<TextInputEditText>(R.id.editLoadA6)?.text.toString().trim()
+                data.perangkatTerhubung6 = formView.findViewById<TextInputEditText>(R.id.editPerangkat6)?.text.toString().trim()
+            }
+            "rectifier7" -> {
+                data.typeRectifier7 = formView.findViewById<Spinner>(R.id.spTypeRectifier7)?.selectedItem?.toString() ?: ""
+                data.jumlahModul7 = formView.findViewById<Spinner>(R.id.spJumlahModul7)?.selectedItem?.toString() ?: ""
+                data.jumlahModulRusak7 = formView.findViewById<Spinner>(R.id.spJumlahModulRusak7)?.selectedItem?.toString() ?: ""
+                data.jumlahBatteryP7 = formView.findViewById<Spinner>(R.id.spJumlahBattery7)?.selectedItem?.toString() ?: ""
+                data.batteryRecti7 = formView.findViewById<Spinner>(R.id.spBatteryRecti7)?.selectedItem?.toString() ?: ""
+                data.mcbBatteryRecti7 = formView.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti7)?.text.toString().trim()
+                data.kondisiArester7 = formView.findViewById<Spinner>(R.id.spKondisiArester7)?.selectedItem?.toString() ?: ""
+                data.busVoltage7 = formView.findViewById<TextInputEditText>(R.id.editBusVoltage7)?.text.toString().trim()
+                data.loadA7 = formView.findViewById<TextInputEditText>(R.id.editLoadA7)?.text.toString().trim()
+                data.perangkatTerhubung7 = formView.findViewById<TextInputEditText>(R.id.editPerangkat7)?.text.toString().trim()
             }
         }
     }
@@ -1273,10 +1442,13 @@ class RingkasanActivity : AppCompatActivity() {
         params["merk_baterai_1"] = data.merkBaterai1
         params["jumlah_battery_p"] = data.jumlahBatteryP1
         params["battery_recti_1"] = data.batteryRecti1
+        params["mcb_battery_recti_1"] = data.mcbBatteryRecti1
+        params["kondisi_arester_1"] = data.kondisiArester1
         params["bus_voltage_1"] = data.busVoltage1
         params["load_a_1"] = data.loadA1
         params["perangkat_terhubung_1"] = data.perangkatTerhubung1
         params["remark_1"] = data.remark1
+
         params["ada_recti_2"] = if (data.adaRecti2) "1" else "0"
         if (data.adaRecti2) {
             params["type_rectifier_2"] = data.typeRectifier2
@@ -1286,22 +1458,36 @@ class RingkasanActivity : AppCompatActivity() {
             params["merk_baterai_2"] = data.merkBaterai2
             params["jumlah_battery_p_2"] = data.jumlahBatteryP2
             params["battery_recti_2"] = data.batteryRecti2
+            params["mcb_battery_recti_2"] = data.mcbBatteryRecti2
+            params["kondisi_arester_2"] = data.kondisiArester2
             params["bus_voltage_2"] = data.busVoltage2
             params["load_a_2"] = data.loadA2
             params["perangkat_terhubung_2"] = data.perangkatTerhubung2
             params["remark_2"] = data.remark2
         }
-        params["ada_recti_3"] = if (data.adaRecti3) "1" else "0"
-        if (data.adaRecti3) {
-            params["type_rectifier_3"] = data.typeRectifier3
-            params["jumlah_modul_3"] = data.jumlahModul3
-            params["jumlah_modul_rusak_3"] = data.jumlahModulRusak3
-            params["jumlah_battery_p_3"] = data.jumlahBatteryP3
-            params["battery_recti_3"] = data.batteryRecti3
-            params["bus_voltage_3"] = data.busVoltage3
-            params["load_a_3"] = data.loadA3
-            params["perangkat_terhubung_3"] = data.perangkatTerhubung3
+
+        fun putRectiParams(idx: Int, enabled: Boolean, type: String, modul: String, modulRusak: String, jmlBat: String, statusBat: String, mcbBat: String, arester: String, voltage: String, load: String, perangkat: String) {
+            params["ada_recti_$idx"] = if (enabled) "1" else "0"
+            if (enabled) {
+                params["type_rectifier_$idx"] = type
+                params["jumlah_modul_$idx"] = modul
+                params["jumlah_modul_rusak_$idx"] = modulRusak
+                params["jumlah_battery_p_$idx"] = jmlBat
+                params["battery_recti_$idx"] = statusBat
+                params["mcb_battery_recti_$idx"] = mcbBat
+                params["kondisi_arester_$idx"] = arester
+                params["bus_voltage_$idx"] = voltage
+                params["load_a_$idx"] = load
+                params["perangkat_terhubung_$idx"] = perangkat
+            }
         }
+
+        putRectiParams(3, data.adaRecti3, data.typeRectifier3, data.jumlahModul3, data.jumlahModulRusak3, data.jumlahBatteryP3, data.batteryRecti3, data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3, data.perangkatTerhubung3)
+        putRectiParams(4, data.adaRecti4, data.typeRectifier4, data.jumlahModul4, data.jumlahModulRusak4, data.jumlahBatteryP4, data.batteryRecti4, data.mcbBatteryRecti4, data.kondisiArester4, data.busVoltage4, data.loadA4, data.perangkatTerhubung4)
+        putRectiParams(5, data.adaRecti5, data.typeRectifier5, data.jumlahModul5, data.jumlahModulRusak5, data.jumlahBatteryP5, data.batteryRecti5, data.mcbBatteryRecti5, data.kondisiArester5, data.busVoltage5, data.loadA5, data.perangkatTerhubung5)
+        putRectiParams(6, data.adaRecti6, data.typeRectifier6, data.jumlahModul6, data.jumlahModulRusak6, data.jumlahBatteryP6, data.batteryRecti6, data.mcbBatteryRecti6, data.kondisiArester6, data.busVoltage6, data.loadA6, data.perangkatTerhubung6)
+        putRectiParams(7, data.adaRecti7, data.typeRectifier7, data.jumlahModul7, data.jumlahModulRusak7, data.jumlahBatteryP7, data.batteryRecti7, data.mcbBatteryRecti7, data.kondisiArester7, data.busVoltage7, data.loadA7, data.perangkatTerhubung7)
+
         return params
     }
 

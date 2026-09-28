@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="8dp">
+
+    <TextView style="@style/FieldLabel" android:text="Type Rectifier #5" />
+    <Spinner android:id="@+id/spTypeRectifier5" style="@style/SpinnerField" />
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginEnd="4dp" android:orientation="vertical">
+            <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
+            <Spinner android:id="@+id/spJumlahModul5" style="@style/SpinnerField" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="4dp" android:orientation="vertical">
+            <TextView style="@style/FieldLabel" android:text="Modul Rusak" />
+            <Spinner android:id="@+id/spJumlahModulRusak5" style="@style/SpinnerField" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
+    <Spinner android:id="@+id/spJumlahBattery5" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="Battery Recti 5" />
+    <Spinner android:id="@+id/spBatteryRecti5" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="MCB Battery Recty #5" />
+    <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/editMcbBatteryRecti5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView style="@style/FieldLabel" android:text="Kondisi Arester #5" />
+    <Spinner android:id="@+id/spKondisiArester5" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="Bus Voltage #5" />
+    <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/editBusVoltage5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage" android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView style="@style/FieldLabel" android:text="Load (A) #5" />
+    <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/editLoadA5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Load (A)" android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung #5" />
+    <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/editPerangkat5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Perangkat" android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

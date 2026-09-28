@@ -44,6 +44,7 @@ import com.example.zaman_apps.utils.SessionHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.SocketTimeoutException
@@ -178,15 +179,20 @@ class EditDataActivity : AppCompatActivity() {
             Triple(R.id.headerGenset, R.id.contentGenset, R.id.icToggleGenset),
             Triple(R.id.headerRecti1, R.id.contentRecti1, R.id.icToggleRecti1),
             Triple(R.id.headerRecti2, R.id.contentRecti2, R.id.icToggleRecti2),
-            Triple(R.id.headerRecti3, R.id.contentRecti3, R.id.icToggleRecti3)
+            Triple(R.id.headerRecti3, R.id.contentRecti3, R.id.icToggleRecti3),
+            Triple(R.id.headerRecti4, R.id.contentRecti4, R.id.icToggleRecti4),
+            Triple(R.id.headerRecti5, R.id.contentRecti5, R.id.icToggleRecti5),
+            Triple(R.id.headerRecti6, R.id.contentRecti6, R.id.icToggleRecti6),
+            Triple(R.id.headerRecti7, R.id.contentRecti7, R.id.icToggleRecti7)
         )
 
         sections.forEach { (headerId, contentId, iconId) ->
-            toggleSection(
-                findViewById(headerId),
-                findViewById(contentId),
-                findViewById(iconId)
-            )
+            val header = findViewById<View>(headerId)
+            val content = findViewById<View>(contentId)
+            val icon = findViewById<ImageView>(iconId)
+            if (header != null && content != null && icon != null) {
+                toggleSection(header, content, icon)
+            }
         }
     }
 
@@ -898,7 +904,6 @@ class EditDataActivity : AppCompatActivity() {
                 }
             }
 
-            // Fallback untuk data lama (image_url_1 .. image_url_10) jika photo_urls kosong
             if (photoItemsEdit.isEmpty()) {
                 for (i in 1..10) {
                     val url = data.optString("image_url_$i", "")
@@ -923,48 +928,44 @@ class EditDataActivity : AppCompatActivity() {
             binding.etSA.setText(parseNumberFromSheet(data.optString("s_a", "")))
             binding.etTA.setText(parseNumberFromSheet(data.optString("t_a", "")))
 
-            setSpinnerValueSafe(binding.spMerkGenset1, data.optString("merk_genset_1", ""), "spMerkGenset1")
+            setSpinnerValueSafe(binding.spMerkGenset1, data.optString("merk_genset_1", ""))
             binding.etCapacityGenset1.setText(parseNumberFromSheet(data.optString("capacity_genset_1", "")))
-            setSpinnerValueSafe(binding.spStatusGenset1, data.optString("status_genset_1", ""), "spStatusGenset1")
+            setSpinnerValueSafe(binding.spStatusGenset1, data.optString("status_genset_1", ""))
             binding.etRemarkGenset1.setText(data.optString("remark_genset_1", ""))
 
-            setSpinnerValueSafe(binding.spMerkGenset2, data.optString("merk_genset_2", ""), "spMerkGenset2")
+            setSpinnerValueSafe(binding.spMerkGenset2, data.optString("merk_genset_2", ""))
             binding.etCapacityGenset2.setText(parseNumberFromSheet(data.optString("capacity_genset_2", "")))
-            setSpinnerValueSafe(binding.spStatusGenset2, data.optString("status_genset_2", ""), "spStatusGenset2")
+            setSpinnerValueSafe(binding.spStatusGenset2, data.optString("status_genset_2", ""))
             binding.etRemarkGenset2.setText(data.optString("remark_genset_2", ""))
 
-            setSpinnerValueSafe(binding.spTypeRectifier1, data.optString("type_rectifier_1", ""), "spTypeRectifier1")
-            setSpinnerValueSafe(binding.spJumlahModul1, data.optString("jumlah_modul_1", ""), "spJumlahModul1")
-            setSpinnerValueSafe(binding.spJumlahModulRusak1, data.optString("jumlah_modul_rusak_1", ""), "spJumlahModulRusak1")
-            setSpinnerValueSafe(binding.spJenisBaterai1, data.optString("jenis_baterai_1", ""), "spJenisBaterai1")
-            setSpinnerValueSafe(binding.spMerkBaterai1, data.optString("merk_baterai_1", ""), "spMerkBaterai1")
-            setSpinnerValueSafe(binding.spJumlahBattery1, data.optString("jumlah_battery_p", ""), "spJumlahBattery1")
-            setSpinnerValueSafe(binding.spBatteryRecti1, data.optString("battery_recti_1", ""), "spBatteryRecti1")
-            binding.etBusVoltage1.setText(parseNumberFromSheet(data.optString("bus_voltage_1", "")))
-            binding.etLoadA1.setText(parseNumberFromSheet(data.optString("load_a_1", "")))
-            binding.etPerangkatTerhubung1.setText(data.optString("perangkat_terhubung_1", ""))
-            binding.etRemark1.setText(data.optString("remark_1", ""))
+            fun fillRectiFields(idx: Int, spType: Spinner, spMod: Spinner, spModRusak: Spinner, spJmlBat: Spinner, spBalting: Spinner, spArester: Spinner, etMcb: TextInputEditText, etVolt: TextInputEditText, etLoad: TextInputEditText, etPerangkat: TextInputEditText, etRemark: TextInputEditText? = null) {
+                setSpinnerValueSafe(spType, data.optString("type_rectifier_$idx", ""))
+                setSpinnerValueSafe(spMod, data.optString("jumlah_modul_$idx", ""))
+                setSpinnerValueSafe(spModRusak, data.optString("jumlah_modul_rusak_$idx", ""))
+                setSpinnerValueSafe(spJmlBat, data.optString(if (idx == 1) "jumlah_battery_p" else "jumlah_battery_p_$idx", ""))
+                setSpinnerValueSafe(spBalting, data.optString("battery_recti_$idx", ""))
+                setSpinnerValueSafe(spArester, data.optString("kondisi_arester_$idx", ""))
 
-            setSpinnerValueSafe(binding.spTypeRectifier2, data.optString("type_rectifier_2", ""), "spTypeRectifier2")
-            setSpinnerValueSafe(binding.spJumlahModul2, data.optString("jumlah_modul_2", ""), "spJumlahModul2")
-            setSpinnerValueSafe(binding.spJumlahModulRusak2, data.optString("jumlah_modul_rusak_2", ""), "spJumlahModulRusak2")
-            setSpinnerValueSafe(binding.spJenisBaterai2, data.optString("jenis_baterai_2", ""), "spJenisBaterai2")
-            setSpinnerValueSafe(binding.spMerkBaterai2, data.optString("merk_baterai_2", ""), "spMerkBaterai2")
-            setSpinnerValueSafe(binding.spJumlahBattery2, data.optString("jumlah_battery_p_2", ""), "spJumlahBattery2")
-            setSpinnerValueSafe(binding.spBatteryRecti2, data.optString("battery_recti_2", ""), "spBatteryRecti2")
-            binding.etBusVoltage2.setText(parseNumberFromSheet(data.optString("bus_voltage_2", "")))
-            binding.etLoadA2.setText(parseNumberFromSheet(data.optString("load_a_2", "")))
-            binding.etPerangkatTerhubung2.setText(data.optString("perangkat_terhubung_2", ""))
-            binding.etRemark2.setText(data.optString("remark_2", ""))
+                etMcb.setText(parseNumberFromSheet(data.optString("mcb_battery_recti_$idx", "")))
+                etVolt.setText(parseNumberFromSheet(data.optString("bus_voltage_$idx", "")))
+                etLoad.setText(parseNumberFromSheet(data.optString("load_a_$idx", "")))
+                etPerangkat.setText(data.optString("perangkat_terhubung_$idx", ""))
+                if (etRemark != null) etRemark.setText(data.optString("remark_$idx", ""))
+            }
 
-            setSpinnerValueSafe(binding.spTypeRectifier3, data.optString("type_rectifier_3", ""), "spTypeRectifier3")
-            setSpinnerValueSafe(binding.spJumlahModul3, data.optString("jumlah_modul_3", ""), "spJumlahModul3")
-            setSpinnerValueSafe(binding.spJumlahModulRusak3, data.optString("jumlah_modul_rusak_3", ""), "spJumlahModulRusak3")
-            setSpinnerValueSafe(binding.spJumlahBattery3, data.optString("jumlah_battery_p_3", ""), "spJumlahBattery3")
-            setSpinnerValueSafe(binding.spBatteryRecti3, data.optString("battery_recti_3", ""), "spBatteryRecti3")
-            binding.etBusVoltage3.setText(parseNumberFromSheet(data.optString("bus_voltage_3", "")))
-            binding.etLoadA3.setText(parseNumberFromSheet(data.optString("load_a_3", "")))
-            binding.etPerangkatTerhubung3.setText(data.optString("perangkat_terhubung_3", ""))
+            setSpinnerValueSafe(binding.spJenisBaterai1, data.optString("jenis_baterai_1", ""))
+            setSpinnerValueSafe(binding.spMerkBaterai1, data.optString("merk_baterai_1", ""))
+            fillRectiFields(1, binding.spTypeRectifier1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spJumlahBattery1, binding.spBatteryRecti1, binding.spKondisiArester1, binding.etMcbBatteryRecti1, binding.etBusVoltage1, binding.etLoadA1, binding.etPerangkatTerhubung1, binding.etRemark1)
+
+            setSpinnerValueSafe(binding.spJenisBaterai2, data.optString("jenis_baterai_2", ""))
+            setSpinnerValueSafe(binding.spMerkBaterai2, data.optString("merk_baterai_2", ""))
+            fillRectiFields(2, binding.spTypeRectifier2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spJumlahBattery2, binding.spBatteryRecti2, binding.spKondisiArester2, binding.etMcbBatteryRecti2, binding.etBusVoltage2, binding.etLoadA2, binding.etPerangkatTerhubung2, binding.etRemark2)
+
+            fillRectiFields(3, binding.spTypeRectifier3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spJumlahBattery3, binding.spBatteryRecti3, binding.spKondisiArester3, binding.etMcbBatteryRecti3, binding.etBusVoltage3, binding.etLoadA3, binding.etPerangkatTerhubung3)
+            fillRectiFields(4, binding.spTypeRectifier4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.etMcbBatteryRecti4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkatTerhubung4)
+            fillRectiFields(5, binding.spTypeRectifier5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.etMcbBatteryRecti5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkatTerhubung5)
+            fillRectiFields(6, binding.spTypeRectifier6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.etMcbBatteryRecti6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkatTerhubung6)
+            fillRectiFields(7, binding.spTypeRectifier7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spJumlahBattery7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.etMcbBatteryRecti7, binding.etBusVoltage7, binding.etLoadA7, binding.etPerangkatTerhubung7)
 
         } catch (e: Exception) {
             Log.e(TAG, "Error filling form: ${e.message}", e)
@@ -1091,38 +1092,33 @@ class EditDataActivity : AppCompatActivity() {
                 params["status_genset_2"] = binding.spStatusGenset2.selectedItem?.toString() ?: ""
                 params["remark_genset_2"] = binding.etRemarkGenset2.text.toString().trim()
 
-                params["type_rectifier_1"] = binding.spTypeRectifier1.selectedItem?.toString() ?: ""
-                params["jumlah_modul_1"] = binding.spJumlahModul1.selectedItem?.toString() ?: ""
-                params["jumlah_modul_rusak_1"] = binding.spJumlahModulRusak1.selectedItem?.toString() ?: ""
+                fun putRectiParams(idx: Int, spType: Spinner, spMod: Spinner, spModRusak: Spinner, spJmlBat: Spinner, spBalting: Spinner, spArester: Spinner, etMcb: TextInputEditText, etVolt: TextInputEditText, etLoad: TextInputEditText, etPerangkat: TextInputEditText, etRemark: TextInputEditText? = null) {
+                    params["type_rectifier_$idx"] = spType.selectedItem?.toString() ?: ""
+                    params["jumlah_modul_$idx"] = spMod.selectedItem?.toString() ?: ""
+                    params["jumlah_modul_rusak_$idx"] = spModRusak.selectedItem?.toString() ?: ""
+                    params[if (idx == 1) "jumlah_battery_p" else "jumlah_battery_p_$idx"] = spJmlBat.selectedItem?.toString() ?: ""
+                    params["battery_recti_$idx"] = spBalting.selectedItem?.toString() ?: ""
+                    params["mcb_battery_recti_$idx"] = etMcb.text.toString().trim()
+                    params["kondisi_arester_$idx"] = spArester.selectedItem?.toString() ?: ""
+                    params["bus_voltage_$idx"] = etVolt.text.toString().trim()
+                    params["load_a_$idx"] = etLoad.text.toString().trim()
+                    params["perangkat_terhubung_$idx"] = etPerangkat.text.toString().trim()
+                    if (etRemark != null) params["remark_$idx"] = etRemark.text.toString().trim()
+                }
+
                 params["jenis_baterai_1"] = binding.spJenisBaterai1.selectedItem?.toString() ?: ""
                 params["merk_baterai_1"] = binding.spMerkBaterai1.selectedItem?.toString() ?: ""
-                params["jumlah_battery_p"] = binding.spJumlahBattery1.selectedItem?.toString() ?: ""
-                params["battery_recti_1"] = binding.spBatteryRecti1.selectedItem?.toString() ?: ""
-                params["bus_voltage_1"] = binding.etBusVoltage1.text.toString().trim()
-                params["load_a_1"] = binding.etLoadA1.text.toString().trim()
-                params["perangkat_terhubung_1"] = binding.etPerangkatTerhubung1.text.toString().trim()
-                params["remark_1"] = binding.etRemark1.text.toString().trim()
+                putRectiParams(1, binding.spTypeRectifier1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spJumlahBattery1, binding.spBatteryRecti1, binding.spKondisiArester1, binding.etMcbBatteryRecti1, binding.etBusVoltage1, binding.etLoadA1, binding.etPerangkatTerhubung1, binding.etRemark1)
 
-                params["type_rectifier_2"] = binding.spTypeRectifier2.selectedItem?.toString() ?: ""
-                params["jumlah_modul_2"] = binding.spJumlahModul2.selectedItem?.toString() ?: ""
-                params["jumlah_modul_rusak_2"] = binding.spJumlahModulRusak2.selectedItem?.toString() ?: ""
                 params["jenis_baterai_2"] = binding.spJenisBaterai2.selectedItem?.toString() ?: ""
                 params["merk_baterai_2"] = binding.spMerkBaterai2.selectedItem?.toString() ?: ""
-                params["jumlah_battery_p_2"] = binding.spJumlahBattery2.selectedItem?.toString() ?: ""
-                params["battery_recti_2"] = binding.spBatteryRecti2.selectedItem?.toString() ?: ""
-                params["bus_voltage_2"] = binding.etBusVoltage2.text.toString().trim()
-                params["load_a_2"] = binding.etLoadA2.text.toString().trim()
-                params["perangkat_terhubung_2"] = binding.etPerangkatTerhubung2.text.toString().trim()
-                params["remark_2"] = binding.etRemark2.text.toString().trim()
+                putRectiParams(2, binding.spTypeRectifier2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spJumlahBattery2, binding.spBatteryRecti2, binding.spKondisiArester2, binding.etMcbBatteryRecti2, binding.etBusVoltage2, binding.etLoadA2, binding.etPerangkatTerhubung2, binding.etRemark2)
 
-                params["type_rectifier_3"] = binding.spTypeRectifier3.selectedItem?.toString() ?: ""
-                params["jumlah_modul_3"] = binding.spJumlahModul3.selectedItem?.toString() ?: ""
-                params["jumlah_modul_rusak_3"] = binding.spJumlahModulRusak3.selectedItem?.toString() ?: ""
-                params["jumlah_battery_p_3"] = binding.spJumlahBattery3.selectedItem?.toString() ?: ""
-                params["battery_recti_3"] = binding.spBatteryRecti3.selectedItem?.toString() ?: ""
-                params["bus_voltage_3"] = binding.etBusVoltage3.text.toString().trim()
-                params["load_a_3"] = binding.etLoadA3.text.toString().trim()
-                params["perangkat_terhubung_3"] = binding.etPerangkatTerhubung3.text.toString().trim()
+                putRectiParams(3, binding.spTypeRectifier3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spJumlahBattery3, binding.spBatteryRecti3, binding.spKondisiArester3, binding.etMcbBatteryRecti3, binding.etBusVoltage3, binding.etLoadA3, binding.etPerangkatTerhubung3)
+                putRectiParams(4, binding.spTypeRectifier4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.etMcbBatteryRecti4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkatTerhubung4)
+                putRectiParams(5, binding.spTypeRectifier5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.etMcbBatteryRecti5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkatTerhubung5)
+                putRectiParams(6, binding.spTypeRectifier6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.etMcbBatteryRecti6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkatTerhubung6)
+                putRectiParams(7, binding.spTypeRectifier7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spJumlahBattery7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.etMcbBatteryRecti7, binding.etBusVoltage7, binding.etLoadA7, binding.etPerangkatTerhubung7)
 
                 return params
             }

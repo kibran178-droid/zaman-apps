@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Arester Options (OK, NOK) -->
+    <string-array name="arester_options">
+        <item></item>
+        <item>OK</item>
+        <item>NOK</item>
+    </string-array>
+
     <!-- EAS Options (OK, NOK, Kosong) -->
     <string-array name="status_options">
         <item></item>
