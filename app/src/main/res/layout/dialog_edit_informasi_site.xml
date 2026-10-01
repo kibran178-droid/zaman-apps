@@ -24,6 +24,7 @@
         style="@style/ZamanTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
         app:boxStrokeColor="@color/brand_primary">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editSiteName"
@@ -31,6 +32,39 @@
             android:layout_height="wrap_content"
             android:hint="Site Name"
             android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/ZamanTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:boxStrokeColor="@color/brand_primary">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editIdPelanggan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="ID Pelanggan (ID PLN)"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView style="@style/FieldLabel" android:text="MCB kWh" />
+    <Spinner
+        android:id="@+id/spMcbKwh"
+        style="@style/SpinnerField"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/ZamanTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/brand_primary">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editDaya"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Daya"
+            android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

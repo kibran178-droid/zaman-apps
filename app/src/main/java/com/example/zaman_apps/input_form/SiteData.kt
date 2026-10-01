@@ -7,6 +7,11 @@ import kotlinx.parcelize.Parcelize
 data class SiteData(
     var siteId: String = "",
     var siteName: String = "",
+    // ===== DATA PLN (SEBELUM EAS) =====
+    var idPelanggan: String = "",
+    var mcbKwh: String = "",
+    var daya: String = "",
+    // ===== EAS =====
     var mainsFail: String = "",
     var rectyFail: String = "",
     var stolen: String = "",
@@ -42,6 +47,8 @@ data class SiteData(
     var remark1: String = "",
     var mcbBatteryRecti1: String = "",
     var kondisiArester1: String = "",
+    var jumlahBankNotAktif1: String = "",
+    var statusBatteryNotAktif1: Boolean = false,
 
     // ===== RECTIFIER 2 =====
     var typeRectifier2: String = "",
@@ -57,11 +64,15 @@ data class SiteData(
     var remark2: String = "",
     var mcbBatteryRecti2: String = "",
     var kondisiArester2: String = "",
+    var jumlahBankNotAktif2: String = "",
+    var statusBatteryNotAktif2: Boolean = false,
 
     // ===== RECTIFIER 3 =====
     var typeRectifier3: String = "",
     var jumlahModul3: String = "",
     var jumlahModulRusak3: String = "",
+    var jenisBaterai3: String = "",
+    var merkBaterai3: String = "",
     var jumlahBatteryP3: String = "",
     var batteryRecti3: String = "",
     var busVoltage3: String = "",
@@ -69,11 +80,15 @@ data class SiteData(
     var perangkatTerhubung3: String = "",
     var mcbBatteryRecti3: String = "",
     var kondisiArester3: String = "",
+    var jumlahBankNotAktif3: String = "",
+    var statusBatteryNotAktif3: Boolean = false,
 
     // ===== RECTIFIER 4 =====
     var typeRectifier4: String = "",
     var jumlahModul4: String = "",
     var jumlahModulRusak4: String = "",
+    var jenisBaterai4: String = "",
+    var merkBaterai4: String = "",
     var jumlahBatteryP4: String = "",
     var batteryRecti4: String = "",
     var busVoltage4: String = "",
@@ -81,11 +96,15 @@ data class SiteData(
     var perangkatTerhubung4: String = "",
     var mcbBatteryRecti4: String = "",
     var kondisiArester4: String = "",
+    var jumlahBankNotAktif4: String = "",
+    var statusBatteryNotAktif4: Boolean = false,
 
     // ===== RECTIFIER 5 =====
     var typeRectifier5: String = "",
     var jumlahModul5: String = "",
     var jumlahModulRusak5: String = "",
+    var jenisBaterai5: String = "",
+    var merkBaterai5: String = "",
     var jumlahBatteryP5: String = "",
     var batteryRecti5: String = "",
     var busVoltage5: String = "",
@@ -93,11 +112,15 @@ data class SiteData(
     var perangkatTerhubung5: String = "",
     var mcbBatteryRecti5: String = "",
     var kondisiArester5: String = "",
+    var jumlahBankNotAktif5: String = "",
+    var statusBatteryNotAktif5: Boolean = false,
 
     // ===== RECTIFIER 6 =====
     var typeRectifier6: String = "",
     var jumlahModul6: String = "",
     var jumlahModulRusak6: String = "",
+    var jenisBaterai6: String = "",
+    var merkBaterai6: String = "",
     var jumlahBatteryP6: String = "",
     var batteryRecti6: String = "",
     var busVoltage6: String = "",
@@ -105,11 +128,15 @@ data class SiteData(
     var perangkatTerhubung6: String = "",
     var mcbBatteryRecti6: String = "",
     var kondisiArester6: String = "",
+    var jumlahBankNotAktif6: String = "",
+    var statusBatteryNotAktif6: Boolean = false,
 
     // ===== RECTIFIER 7 =====
     var typeRectifier7: String = "",
     var jumlahModul7: String = "",
     var jumlahModulRusak7: String = "",
+    var jenisBaterai7: String = "",
+    var merkBaterai7: String = "",
     var jumlahBatteryP7: String = "",
     var batteryRecti7: String = "",
     var busVoltage7: String = "",
@@ -117,6 +144,8 @@ data class SiteData(
     var perangkatTerhubung7: String = "",
     var mcbBatteryRecti7: String = "",
     var kondisiArester7: String = "",
+    var jumlahBankNotAktif7: String = "",
+    var statusBatteryNotAktif7: Boolean = false,
 
     // TOGGLE RECTIFIERS (2..7)
     var adaRecti2: Boolean = false,

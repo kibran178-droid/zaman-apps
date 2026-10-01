@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Jumlah Bank Not Aktif Options (0 - 10) -->
+    <string-array name="jumlah_bank_not_aktif_options">
+        <item></item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <!-- MCB kWh Options (1 Phase, 3 Phase) -->
+    <string-array name="mcb_kwh_options">
+        <item></item>
+        <item>1 Phase</item>
+        <item>3 Phase</item>
+    </string-array>
+
     <!-- Arester Options (OK, NOK) -->
     <string-array name="arester_options">
         <item></item>

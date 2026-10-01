@@ -7,13 +7,8 @@
     android:paddingBottom="8dp">
 
     <!-- Type Rectifier -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Type Rectifier #1" />
-
-    <Spinner
-        android:id="@+id/spTypeRectifier1"
-        style="@style/SpinnerField" />
+    <TextView style="@style/FieldLabel" android:text="Type Rectifier #1" />
+    <Spinner android:id="@+id/spTypeRectifier1" style="@style/SpinnerField" />
 
     <!-- Jumlah Modul & Rusak -->
     <LinearLayout
@@ -28,14 +23,8 @@
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
             android:orientation="vertical">
-
-            <TextView
-                style="@style/FieldLabel"
-                android:text="Jumlah Modul" />
-
-            <Spinner
-                android:id="@+id/spJumlahModul1"
-                style="@style/SpinnerField" />
+            <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
+            <Spinner android:id="@+id/spJumlahModul1" style="@style/SpinnerField" />
         </LinearLayout>
 
         <LinearLayout
@@ -44,63 +33,51 @@
             android:layout_weight="1"
             android:layout_marginStart="4dp"
             android:orientation="vertical">
-
-            <TextView
-                style="@style/FieldLabel"
-                android:text="Modul Rusak" />
-
-            <Spinner
-                android:id="@+id/spJumlahModulRusak1"
-                style="@style/SpinnerField" />
+            <TextView style="@style/FieldLabel" android:text="Modul Rusak" />
+            <Spinner android:id="@+id/spJumlahModulRusak1" style="@style/SpinnerField" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Jenis Baterai -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Jenis Baterai #1" />
+    <TextView style="@style/FieldLabel" android:text="Jenis Baterai #1" />
+    <Spinner android:id="@+id/spJenisBaterai1" style="@style/SpinnerField" />
 
-    <Spinner
-        android:id="@+id/spJenisBaterai1"
-        style="@style/SpinnerField" />
+    <TextView style="@style/FieldLabel" android:text="Merk Baterai #1" />
+    <Spinner android:id="@+id/spMerkBaterai1" style="@style/SpinnerField" />
 
-    <!-- Merk Baterai -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Merk Baterai #1" />
+    <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
+    <Spinner android:id="@+id/spJumlahBattery1" style="@style/SpinnerField" />
 
-    <Spinner
-        android:id="@+id/spMerkBaterai1"
-        style="@style/SpinnerField" />
+    <TextView style="@style/FieldLabel" android:text="Battery Recti 1" />
+    <Spinner android:id="@+id/spBatteryRecti1" style="@style/SpinnerField" />
 
-    <!-- Jumlah Battery -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Jumlah Battery (P)" />
+    <!-- Switch Status Battery Not Aktif -->
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchStatusBatteryNotAktif1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="Status Battery Not Aktif?"
+        android:textColor="@color/text_primary" />
 
-    <Spinner
-        android:id="@+id/spJumlahBattery1"
-        style="@style/SpinnerField" />
+    <LinearLayout
+        android:id="@+id/layoutJumlahBankNotAktif1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Battery Recti 1" />
+        <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+        <Spinner android:id="@+id/spJumlahBankNotAktif1" style="@style/SpinnerField" />
+    </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spBatteryRecti1"
-        style="@style/SpinnerField" />
-
-    <!-- MCB Battery Recty -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="MCB Battery Recty #1" />
-
+    <TextView style="@style/FieldLabel" android:text="MCB Battery Recty #1" />
     <com.google.android.material.textfield.TextInputLayout
         style="@style/ZamanTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editMcbBatteryRecti1"
             android:layout_width="match_parent"
@@ -109,26 +86,15 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Kondisi Arester -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Kondisi Arester #1" />
+    <TextView style="@style/FieldLabel" android:text="Kondisi Arester #1" />
+    <Spinner android:id="@+id/spKondisiArester1" style="@style/SpinnerField" />
 
-    <Spinner
-        android:id="@+id/spKondisiArester1"
-        style="@style/SpinnerField" />
-
-    <!-- Bus Voltage -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Bus Voltage #1" />
-
+    <TextView style="@style/FieldLabel" android:text="Bus Voltage #1" />
     <com.google.android.material.textfield.TextInputLayout
         style="@style/ZamanTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editBusVoltage1"
             android:layout_width="match_parent"
@@ -137,17 +103,12 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Load (A) -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Load (A) #1" />
-
+    <TextView style="@style/FieldLabel" android:text="Load (A) #1" />
     <com.google.android.material.textfield.TextInputLayout
         style="@style/ZamanTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editLoadA1"
             android:layout_width="match_parent"
@@ -156,17 +117,12 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Perangkat Terhubung -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Perangkat Terhubung #1" />
-
+    <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung #1" />
     <com.google.android.material.textfield.TextInputLayout
         style="@style/ZamanTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editPerangkat1"
             android:layout_width="match_parent"
@@ -175,16 +131,8 @@
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Remark -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Remark #1" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/ZamanTextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+    <TextView style="@style/FieldLabel" android:text="Remark #1" />
+    <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editRemark1"
             android:layout_width="match_parent"

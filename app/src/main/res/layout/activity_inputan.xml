@@ -129,6 +129,39 @@
                                 android:inputType="text" />
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <!-- DATA PLN / KWH (SEBELUM EAS) -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/ZamanTextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:hint="ID Pelanggan (ID PLN)">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etIdPelanggan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="MCB kWh" />
+                        <Spinner
+                            android:id="@+id/spMcbKwh"
+                            style="@style/SpinnerFieldModern"
+                            android:entries="@array/mcb_kwh_options" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/ZamanTextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:hint="Daya">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etDaya"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -500,6 +533,26 @@
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #1" />
                         <Spinner android:id="@+id/spBatteryRecti1" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchStatusBatteryNotAktif1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Status Battery Not Aktif?"
+                            android:textColor="@color/text_primary" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutJumlahBankNotAktif1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <Spinner android:id="@+id/spJumlahBankNotAktif1" style="@style/SpinnerFieldModern" />
+                        </LinearLayout>
+
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -588,6 +641,26 @@
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #2" />
                         <Spinner android:id="@+id/spBatteryRecti2" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchStatusBatteryNotAktif2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Status Battery Not Aktif?"
+                            android:textColor="@color/text_primary" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutJumlahBankNotAktif2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <Spinner android:id="@+id/spJumlahBankNotAktif2" style="@style/SpinnerFieldModern" />
+                        </LinearLayout>
+
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -661,11 +734,37 @@
                             </LinearLayout>
                         </LinearLayout>
 
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jenis Baterai #3" />
+                        <Spinner android:id="@+id/spJenisBaterai3" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Merk Baterai #3" />
+                        <Spinner android:id="@+id/spMerkBaterai3" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #3" />
                         <Spinner android:id="@+id/spJumlahBattery3" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
 
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #3" />
                         <Spinner android:id="@+id/spBatteryRecti3" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchStatusBatteryNotAktif3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Status Battery Not Aktif?"
+                            android:textColor="@color/text_primary" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutJumlahBankNotAktif3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <Spinner android:id="@+id/spJumlahBankNotAktif3" style="@style/SpinnerFieldModern" />
+                        </LinearLayout>
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti3" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
@@ -737,11 +836,37 @@
                             </LinearLayout>
                         </LinearLayout>
 
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jenis Baterai #4" />
+                        <Spinner android:id="@+id/spJenisBaterai4" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Merk Baterai #4" />
+                        <Spinner android:id="@+id/spMerkBaterai4" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #4" />
                         <Spinner android:id="@+id/spJumlahBattery4" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
 
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #4" />
                         <Spinner android:id="@+id/spBatteryRecti4" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchStatusBatteryNotAktif4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Status Battery Not Aktif?"
+                            android:textColor="@color/text_primary" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutJumlahBankNotAktif4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <Spinner android:id="@+id/spJumlahBankNotAktif4" style="@style/SpinnerFieldModern" />
+                        </LinearLayout>
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti4" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
@@ -813,11 +938,37 @@
                             </LinearLayout>
                         </LinearLayout>
 
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jenis Baterai #5" />
+                        <Spinner android:id="@+id/spJenisBaterai5" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Merk Baterai #5" />
+                        <Spinner android:id="@+id/spMerkBaterai5" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #5" />
                         <Spinner android:id="@+id/spJumlahBattery5" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
 
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #5" />
                         <Spinner android:id="@+id/spBatteryRecti5" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchStatusBatteryNotAktif5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Status Battery Not Aktif?"
+                            android:textColor="@color/text_primary" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutJumlahBankNotAktif5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <Spinner android:id="@+id/spJumlahBankNotAktif5" style="@style/SpinnerFieldModern" />
+                        </LinearLayout>
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti5" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
@@ -889,11 +1040,37 @@
                             </LinearLayout>
                         </LinearLayout>
 
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jenis Baterai #6" />
+                        <Spinner android:id="@+id/spJenisBaterai6" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Merk Baterai #6" />
+                        <Spinner android:id="@+id/spMerkBaterai6" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #6" />
                         <Spinner android:id="@+id/spJumlahBattery6" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
 
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #6" />
                         <Spinner android:id="@+id/spBatteryRecti6" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchStatusBatteryNotAktif6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Status Battery Not Aktif?"
+                            android:textColor="@color/text_primary" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutJumlahBankNotAktif6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <Spinner android:id="@+id/spJumlahBankNotAktif6" style="@style/SpinnerFieldModern" />
+                        </LinearLayout>
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti6" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />
@@ -965,11 +1142,37 @@
                             </LinearLayout>
                         </LinearLayout>
 
+                        <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jenis Baterai #7" />
+                        <Spinner android:id="@+id/spJenisBaterai7" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Merk Baterai #7" />
+                        <Spinner android:id="@+id/spMerkBaterai7" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Jumlah Battery #7" />
                         <Spinner android:id="@+id/spJumlahBattery7" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
 
                         <TextView style="@style/FieldLabel" android:layout_marginTop="16dp" android:text="Battery Recti #7" />
                         <Spinner android:id="@+id/spBatteryRecti7" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchStatusBatteryNotAktif7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Status Battery Not Aktif?"
+                            android:textColor="@color/text_primary" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutJumlahBankNotAktif7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <Spinner android:id="@+id/spJumlahBankNotAktif7" style="@style/SpinnerFieldModern" />
+                        </LinearLayout>
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="MCB Battery Recty">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti7" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" />

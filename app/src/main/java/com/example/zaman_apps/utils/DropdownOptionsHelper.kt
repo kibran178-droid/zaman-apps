@@ -16,6 +16,7 @@ object DropdownOptionsHelper {
     const val KEY_MERK_BATERAI = "key_merk_baterai"
     const val KEY_JUMLAH_BATTERAI = "key_jumlah_batterai"
     const val KEY_BALTING = "key_balting"
+    const val KEY_JUMLAH_BANK_NOT_AKTIF = "key_jumlah_bank_not_aktif"
 
     fun getDefaultResId(key: String): Int {
         return when (key) {
@@ -27,6 +28,7 @@ object DropdownOptionsHelper {
             KEY_MERK_BATERAI -> R.array.merk_baterai_options
             KEY_JUMLAH_BATTERAI -> R.array.jumlah_battery_options
             KEY_BALTING -> R.array.balting_options
+            KEY_JUMLAH_BANK_NOT_AKTIF -> R.array.jumlah_bank_not_aktif_options
             else -> R.array.status_options
         }
     }
@@ -36,12 +38,35 @@ object DropdownOptionsHelper {
             KEY_EAS -> "EAS (MainsFail, RectyFail, Stolen, LowBatt, EngRun)"
             KEY_MERK_GENSET -> "Merk Genset (Genset 1 & 2)"
             KEY_STATUS_GENSET -> "Status Genset (Genset 1 & 2)"
-            KEY_TYPE_RECTIFIER -> "Type Rectifier (Recti 1, 2, 3)"
-            KEY_JENIS_BATERAI -> "Jenis Baterai (Recti 1 & 2)"
-            KEY_MERK_BATERAI -> "Merk Baterai (Recti 1 & 2)"
-            KEY_JUMLAH_BATTERAI -> "Jumlah Baterai (Recti 1, 2, 3)"
+            KEY_TYPE_RECTIFIER -> "Type Rectifier (Recti 1 - 7)"
+            KEY_JENIS_BATERAI -> "Jenis Baterai (Recti 1 - 7)"
+            KEY_MERK_BATERAI -> "Merk Baterai (Recti 1 - 7)"
+            KEY_JUMLAH_BATTERAI -> "Jumlah Baterai (Recti 1 - 7)"
             KEY_BALTING -> "Battery Recti Status (Balting Options)"
+            KEY_JUMLAH_BANK_NOT_AKTIF -> "Jumlah Bank Not Aktif (Recti 1 - 7)"
             else -> "Dropdown Options"
+        }
+    }
+
+    fun getMerkBateraiFiltered(jenisBaterai: String): List<String> {
+        val jenisUpper = jenisBaterai.uppercase().trim()
+        return when {
+            jenisUpper.contains("LITHIUM") -> listOf("", "SACREDSUN", "ZTE", "SACREDSUN + ZTE")
+            jenisUpper.contains("FLOATING") -> listOf("", "SACREDSUN", "MAXLIFE", "SONNENSCHEIN")
+            jenisUpper.contains("SPS") -> listOf("", "SPS")
+            jenisUpper.contains("NO BATTERY") || jenisUpper.contains("NOBATTERY") || jenisUpper == "NOL" -> listOf("", "NO BATTERY", "STOLEN", "-")
+            else -> listOf("", "SACREDSUN", "ZTE", "MAXLIFE", "SONNENSCHEIN", "SACREDSUN + ZTE", "SPS", "NO BATTERY", "STOLEN", "-")
+        }
+    }
+
+    fun getJumlahBatteryFiltered(jenisBaterai: String): List<String> {
+        val jenisUpper = jenisBaterai.uppercase().trim()
+        return when {
+            jenisUpper.contains("LITHIUM") -> listOf("", "0", "1 pack", "2 pack", "3 pack", "4 pack", "5 pack", "6 pack", "7 pack", "8 pack", "9 pack", "10 pack")
+            jenisUpper.contains("FLOATING") -> listOf("", "1 blok", "2 blok", "3 blok", "4 blok", "5 blok", "6 blok", "7 blok", "8 blok", "9 blok", "10 blok", "11 blok", "12 blok")
+            jenisUpper.contains("SPS") -> listOf("", "SPS")
+            jenisUpper.contains("NO BATTERY") || jenisUpper.contains("NOBATTERY") || jenisUpper == "NOL" -> listOf("", "NO BATTERY", "0", "STOLEN")
+            else -> listOf("", "0", "1 pack", "2 pack", "3 pack", "4 pack", "5 pack", "6 pack", "7 pack", "8 pack", "9 pack", "10 pack", "1 blok", "2 blok", "3 blok", "4 blok", "5 blok", "6 blok", "7 blok", "8 blok", "9 blok", "10 blok", "11 blok", "12 blok", "SPS", "NO BATTERY", "STOLEN")
         }
     }
 
@@ -62,7 +87,6 @@ object DropdownOptionsHelper {
             }
         }
 
-        // Fallback to default array resource
         val resId = getDefaultResId(key)
         return context.resources.getStringArray(resId).toList()
     }

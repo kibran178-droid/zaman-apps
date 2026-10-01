@@ -31,7 +31,8 @@ class KelolaDropdownActivity : AppCompatActivity() {
         DropdownOptionsHelper.KEY_JENIS_BATERAI,
         DropdownOptionsHelper.KEY_MERK_BATERAI,
         DropdownOptionsHelper.KEY_JUMLAH_BATTERAI,
-        DropdownOptionsHelper.KEY_BALTING
+        DropdownOptionsHelper.KEY_BALTING,
+        DropdownOptionsHelper.KEY_JUMLAH_BANK_NOT_AKTIF
     )
 
     private var currentCategoryKey = categoryKeys[0]

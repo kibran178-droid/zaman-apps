@@ -6,16 +6,9 @@
     android:orientation="vertical"
     android:paddingBottom="8dp">
 
-    <!-- Type Rectifier -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Type Rectifier #2" />
+    <TextView style="@style/FieldLabel" android:text="Type Rectifier #2" />
+    <Spinner android:id="@+id/spTypeRectifier2" style="@style/SpinnerField" />
 
-    <Spinner
-        android:id="@+id/spTypeRectifier2"
-        style="@style/SpinnerField" />
-
-    <!-- Jumlah Modul & Rusak -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,14 +21,8 @@
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
             android:orientation="vertical">
-
-            <TextView
-                style="@style/FieldLabel"
-                android:text="Jumlah Modul" />
-
-            <Spinner
-                android:id="@+id/spJumlahModul2"
-                style="@style/SpinnerField" />
+            <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
+            <Spinner android:id="@+id/spJumlahModul2" style="@style/SpinnerField" />
         </LinearLayout>
 
         <LinearLayout
@@ -44,63 +31,51 @@
             android:layout_weight="1"
             android:layout_marginStart="4dp"
             android:orientation="vertical">
-
-            <TextView
-                style="@style/FieldLabel"
-                android:text="Modul Rusak" />
-
-            <Spinner
-                android:id="@+id/spJumlahModulRusak2"
-                style="@style/SpinnerField" />
+            <TextView style="@style/FieldLabel" android:text="Modul Rusak" />
+            <Spinner android:id="@+id/spJumlahModulRusak2" style="@style/SpinnerField" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Jenis Baterai -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Jenis Baterai #2" />
+    <TextView style="@style/FieldLabel" android:text="Jenis Baterai #2" />
+    <Spinner android:id="@+id/spJenisBaterai2" style="@style/SpinnerField" />
 
-    <Spinner
-        android:id="@+id/spJenisBaterai2"
-        style="@style/SpinnerField" />
+    <TextView style="@style/FieldLabel" android:text="Merk Baterai #2" />
+    <Spinner android:id="@+id/spMerkBaterai2" style="@style/SpinnerField" />
 
-    <!-- Merk Baterai -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Merk Baterai #2" />
+    <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
+    <Spinner android:id="@+id/spJumlahBattery2" style="@style/SpinnerField" />
 
-    <Spinner
-        android:id="@+id/spMerkBaterai2"
-        style="@style/SpinnerField" />
+    <TextView style="@style/FieldLabel" android:text="Battery Recti 2" />
+    <Spinner android:id="@+id/spBatteryRecti2" style="@style/SpinnerField" />
 
-    <!-- Jumlah Battery -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Jumlah Battery (P)" />
+    <!-- Switch Status Battery Not Aktif -->
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchStatusBatteryNotAktif2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="Status Battery Not Aktif?"
+        android:textColor="@color/text_primary" />
 
-    <Spinner
-        android:id="@+id/spJumlahBattery2"
-        style="@style/SpinnerField" />
+    <LinearLayout
+        android:id="@+id/layoutJumlahBankNotAktif2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Battery Recti 2" />
+        <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+        <Spinner android:id="@+id/spJumlahBankNotAktif2" style="@style/SpinnerField" />
+    </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spBatteryRecti2"
-        style="@style/SpinnerField" />
-
-    <!-- MCB Battery Recty -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="MCB Battery Recty #2" />
-
+    <TextView style="@style/FieldLabel" android:text="MCB Battery Recty #2" />
     <com.google.android.material.textfield.TextInputLayout
         style="@style/ZamanTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editMcbBatteryRecti2"
             android:layout_width="match_parent"
@@ -109,26 +84,15 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Kondisi Arester -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Kondisi Arester #2" />
+    <TextView style="@style/FieldLabel" android:text="Kondisi Arester #2" />
+    <Spinner android:id="@+id/spKondisiArester2" style="@style/SpinnerField" />
 
-    <Spinner
-        android:id="@+id/spKondisiArester2"
-        style="@style/SpinnerField" />
-
-    <!-- Bus Voltage -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Bus Voltage #2" />
-
+    <TextView style="@style/FieldLabel" android:text="Bus Voltage #2" />
     <com.google.android.material.textfield.TextInputLayout
         style="@style/ZamanTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editBusVoltage2"
             android:layout_width="match_parent"
@@ -137,17 +101,12 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Load (A) -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Load (A) #2" />
-
+    <TextView style="@style/FieldLabel" android:text="Load (A) #2" />
     <com.google.android.material.textfield.TextInputLayout
         style="@style/ZamanTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editLoadA2"
             android:layout_width="match_parent"
@@ -156,17 +115,12 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Perangkat Terhubung -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Perangkat Terhubung #2" />
-
+    <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung #2" />
     <com.google.android.material.textfield.TextInputLayout
         style="@style/ZamanTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editPerangkat2"
             android:layout_width="match_parent"
@@ -175,16 +129,8 @@
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Remark -->
-    <TextView
-        style="@style/FieldLabel"
-        android:text="Remark #2" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/ZamanTextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+    <TextView style="@style/FieldLabel" android:text="Remark #2" />
+    <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editRemark2"
             android:layout_width="match_parent"
