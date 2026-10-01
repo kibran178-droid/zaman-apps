@@ -31,6 +31,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
+import com.android.volley.TimeoutError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
@@ -43,6 +44,7 @@ import com.example.zaman_apps.utils.ImageCaptureHelper
 import com.example.zaman_apps.utils.ImageHelper
 import com.example.zaman_apps.utils.NotificationHelper
 import com.example.zaman_apps.utils.SessionHelper
+import com.example.zaman_apps.utils.VolleyHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
@@ -50,6 +52,8 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 import org.json.JSONObject
 import java.net.SocketTimeoutException
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
 
 class RingkasanActivity : AppCompatActivity() {
 
@@ -1343,14 +1347,30 @@ class RingkasanActivity : AppCompatActivity() {
         showLoadingOverlay("Mengompres ${uncompressed.size} foto...")
         binding.btnSimpanFinal.isEnabled = false
         Thread {
+            val latch = CountDownLatch(uncompressed.size)
+            val executor = Executors.newFixedThreadPool(4)
+
             for ((index, uri) in uncompressed) {
-                try {
-                    val b64 = ImageHelper.uriToCompressedBase64(this, uri)
-                    if (b64 != null) {
-                        imageBase64Caches[index] = b64
+                executor.execute {
+                    try {
+                        val b64 = ImageHelper.uriToCompressedBase64(this, uri)
+                        if (b64 != null) {
+                            synchronized(imageBase64Caches) {
+                                imageBase64Caches[index] = b64
+                            }
+                        }
+                    } catch (_: Exception) {
+                    } finally {
+                        latch.countDown()
                     }
-                } catch (_: Exception) { }
+                }
             }
+
+            try {
+                latch.await()
+            } catch (_: Exception) { }
+            executor.shutdown()
+
             runOnUiThread { onSelesai() }
         }.start()
     }
@@ -1360,7 +1380,7 @@ class RingkasanActivity : AppCompatActivity() {
         showLoadingOverlay("Menyimpan data...")
         binding.btnSimpanFinal.isEnabled = false
 
-        val queue = Volley.newRequestQueue(this)
+        val queue = VolleyHelper.getRequestQueue(this)
 
         val request = object : StringRequest(
             Method.POST, urlSheet,
@@ -1408,19 +1428,33 @@ class RingkasanActivity : AppCompatActivity() {
                     false
                 )
 
-                if (error.cause is SocketTimeoutException) {
+                if (error.cause is SocketTimeoutException || error is com.android.volley.TimeoutError) {
                     showTimeoutDialog()
                 } else {
                     showErrorDialog(error.message ?: "Koneksi terputus")
                 }
             }
         ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
+
             override fun getParams(): MutableMap<String, String> {
                 return getSubmitParams()
             }
         }
 
-        request.retryPolicy = DefaultRetryPolicy(60000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(request)
         queue.add(request)
     }
 
@@ -1463,7 +1497,7 @@ class RingkasanActivity : AppCompatActivity() {
         showLoadingOverlay("Mengupdate data...")
         binding.btnSimpanFinal.isEnabled = false
 
-        val queue = Volley.newRequestQueue(this)
+        val queue = VolleyHelper.getRequestQueue(this)
 
         val request = object : StringRequest(
             Method.POST, urlSheet,
@@ -1489,13 +1523,27 @@ class RingkasanActivity : AppCompatActivity() {
                 hideLoadingOverlay()
                 binding.btnSimpanFinal.isEnabled = true
 
-                if (error.cause is SocketTimeoutException) {
+                if (error.cause is SocketTimeoutException || error is TimeoutError) {
                     showTimeoutDialog()
                 } else {
                     showErrorDialog(error.message ?: "Koneksi terputus")
                 }
             }
         ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
+
             override fun getParams(): MutableMap<String, String> {
                 val params = getSubmitParams()
                 params["action"] = "update"
@@ -1503,7 +1551,7 @@ class RingkasanActivity : AppCompatActivity() {
             }
         }
 
-        request.retryPolicy = DefaultRetryPolicy(60000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(request)
         queue.add(request)
     }
 

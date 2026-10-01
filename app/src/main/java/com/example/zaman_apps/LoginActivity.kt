@@ -12,8 +12,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
+import com.android.volley.TimeoutError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.zaman_apps.utils.VolleyHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -107,7 +109,7 @@ class LoginActivity : AppCompatActivity() {
 
         setLoading(true)
 
-        val queue = Volley.newRequestQueue(this)
+        val queue = VolleyHelper.getRequestQueue(this)
         val request = object : StringRequest(
             Method.POST, urlSheet,
             { response ->
@@ -136,14 +138,27 @@ class LoginActivity : AppCompatActivity() {
             },
             { error ->
                 setLoading(false)
-                val msg = when (error.cause) {
-                    is SocketTimeoutException -> "Koneksi timeout, coba lagi"
-                    is UnknownHostException -> "Tidak ada koneksi internet"
+                val msg = when {
+                    error.cause is SocketTimeoutException || error is TimeoutError -> "Koneksi timeout, coba lagi"
+                    error.cause is UnknownHostException -> "Tidak ada koneksi internet"
                     else -> "Koneksi terputus"
                 }
                 showSnackbar(msg, isError = true)
             }
         ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["action"] = "login"
@@ -153,7 +168,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        request.retryPolicy = DefaultRetryPolicy(15000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(request)
         queue.add(request)
     }
 

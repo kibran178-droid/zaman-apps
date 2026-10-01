@@ -557,6 +557,7 @@ class InputanActivity : AppCompatActivity() {
     }
 
     private fun setupSpinners() {
+        val selectedMcbKwh = binding.spMcbKwh.selectedItem?.toString()
         val selectedMainsFail = binding.spMainsFail.selectedItem?.toString()
         val selectedRectyFail = binding.spRectyFail.selectedItem?.toString()
         val selectedStolen = binding.spStolen.selectedItem?.toString()
@@ -634,6 +635,7 @@ class InputanActivity : AppCompatActivity() {
         setupCascadingBateraiListeners(binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6)
         setupCascadingBateraiListeners(binding.spJenisBaterai7, binding.spMerkBaterai7, binding.spJumlahBattery7)
 
+        selectedMcbKwh?.let { setSpinnerSelectionByValue(binding.spMcbKwh, it) }
         selectedMainsFail?.let { setSpinnerSelectionByValue(binding.spMainsFail, it) }
         selectedRectyFail?.let { setSpinnerSelectionByValue(binding.spRectyFail, it) }
         selectedStolen?.let { setSpinnerSelectionByValue(binding.spStolen, it) }

@@ -15,6 +15,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.zaman_apps.databinding.ActivityAdminDashboardBinding
 import com.example.zaman_apps.utils.SessionHelper
+import com.example.zaman_apps.utils.VolleyHelper
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -167,7 +168,7 @@ class AdminDashboardActivity : AppCompatActivity() {
 
     private fun loadDashboardData() {
         binding.overlayLoading.visibility = View.VISIBLE
-        val queue = Volley.newRequestQueue(this)
+        val queue = VolleyHelper.getRequestQueue(this)
 
         val idRequest = StringRequest(Request.Method.GET, "$urlSheet?action=list_ids",
             { response ->
@@ -182,12 +183,12 @@ class AdminDashboardActivity : AppCompatActivity() {
             },
             { loadActivityStats() }
         )
-        idRequest.retryPolicy = DefaultRetryPolicy(20000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(idRequest)
         queue.add(idRequest)
     }
 
     private fun loadActivityStats() {
-        val queue = Volley.newRequestQueue(this)
+        val queue = VolleyHelper.getRequestQueue(this)
         val request = object : StringRequest(
             Method.POST, urlSheet,
             { response ->
@@ -219,6 +220,20 @@ class AdminDashboardActivity : AppCompatActivity() {
                 binding.swipeRefresh.isRefreshing = false
             }
         ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
+
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["action"] = "get_rekap"
@@ -229,7 +244,7 @@ class AdminDashboardActivity : AppCompatActivity() {
             }
         }
 
-        request.retryPolicy = DefaultRetryPolicy(20000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(request)
         queue.add(request)
     }
 

@@ -8,7 +8,11 @@ object SessionHelper {
         return prefs.getString("username", "") ?: ""
     }
 
-    // TAMBAHKAN fungsi baru ini (letakkan di dekat fungsi getUsername yang sudah ada)
+    fun saveUsername(context: Context, username: String) {
+        val prefs = context.getSharedPreferences("session", Context.MODE_PRIVATE)
+        prefs.edit().putString("username", username).apply()
+    }
+
     fun getName(context: Context): String {
         val prefs = context.getSharedPreferences("session", Context.MODE_PRIVATE)
         return prefs.getString("name", "") ?: ""

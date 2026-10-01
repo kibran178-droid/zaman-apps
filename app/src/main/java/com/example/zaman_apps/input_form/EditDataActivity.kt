@@ -32,6 +32,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
+import com.android.volley.TimeoutError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
@@ -42,6 +43,7 @@ import com.example.zaman_apps.utils.ImageCaptureHelper
 import com.example.zaman_apps.utils.ImageHelper
 import com.example.zaman_apps.utils.NotificationHelper
 import com.example.zaman_apps.utils.SessionHelper
+import com.example.zaman_apps.utils.VolleyHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
@@ -151,9 +153,15 @@ class EditDataActivity : AppCompatActivity() {
         requestNotificationPermission()
 
         checkNetwork()
+        setupSpinners()
         loadSiteIdList()
         setupListeners()
         setupCollapsibleSections()
+    }
+
+    private fun setupSpinners() {
+        val adapterMcbKwh = ArrayAdapter.createFromResource(this, R.array.mcb_kwh_options, android.R.layout.simple_spinner_dropdown_item)
+        binding.spMcbKwh.adapter = adapterMcbKwh
     }
 
     private fun requestNotificationPermission() {
@@ -1130,7 +1138,7 @@ class EditDataActivity : AppCompatActivity() {
     private fun kirimUpdateData(siteId: String) {
         showLoadingOverlay("Mengupdate data Site $siteId...")
 
-        val queue = Volley.newRequestQueue(this)
+        val queue = VolleyHelper.getRequestQueue(this)
 
         val request = object : StringRequest(
             Method.POST, urlSheet,
@@ -1156,14 +1164,27 @@ class EditDataActivity : AppCompatActivity() {
             },
             { error ->
                 hideLoadingOverlay()
-                val errorMsg = when (error.cause) {
-                    is SocketTimeoutException -> "Koneksi timeout, coba lagi"
-                    is UnknownHostException -> "Tidak ada koneksi internet"
+                val errorMsg = when {
+                    error.cause is SocketTimeoutException || error is TimeoutError -> "Koneksi timeout, coba lagi"
+                    error.cause is UnknownHostException -> "Tidak ada koneksi internet"
                     else -> error.message ?: "Koneksi terputus"
                 }
                 showSnackbar("❌ Gagal update: $errorMsg", isError = true)
             }
         ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["action"] = "update"
@@ -1233,7 +1254,7 @@ class EditDataActivity : AppCompatActivity() {
             }
         }
 
-        request.retryPolicy = DefaultRetryPolicy(60000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(request)
         queue.add(request)
     }
 

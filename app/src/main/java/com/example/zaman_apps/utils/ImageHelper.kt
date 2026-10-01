@@ -10,10 +10,10 @@ import java.io.ByteArrayOutputStream
 
 object ImageHelper {
 
-    private const val MAX_DIMENSION = 1280
-    private const val MIN_DIMENSION_TO_COMPRESS = 1024
-    private const val SMALL_FILE_BYTES = 300 * 1024
-    private const val TARGET_SIZE_BYTES = 500 * 1024 // 500 KB
+    private const val MAX_DIMENSION = 1024
+    private const val MIN_DIMENSION_TO_COMPRESS = 800
+    private const val SMALL_FILE_BYTES = 100 * 1024
+    private const val TARGET_SIZE_BYTES = 120 * 1024 // 120 KB per foto agar pengiriman cepat & aman dari timeout
 
     fun decodeThumbnailFromUri(context: Context, uri: Uri, reqWidth: Int = 300, reqHeight: Int = 300): Bitmap? {
         return try {
@@ -57,7 +57,6 @@ object ImageHelper {
                 ?.use { it.length }
                 ?: -1L
 
-            // Keep small images untouched; recompressing them often reduces readability.
             if (sourceSize in 1..SMALL_FILE_BYTES &&
                 original.width <= MIN_DIMENSION_TO_COMPRESS &&
                 original.height <= MIN_DIMENSION_TO_COMPRESS
@@ -100,13 +99,13 @@ object ImageHelper {
     }
 
     private fun compressToTargetSize(bitmap: Bitmap, targetBytes: Int): ByteArray {
-        var quality = 85
+        var quality = 80
         var stream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream)
 
-        while (stream.toByteArray().size > targetBytes && quality > 40) {
+        while (stream.toByteArray().size > targetBytes && quality > 35) {
             stream = ByteArrayOutputStream()
-            quality -= 10
+            quality -= 15
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream)
         }
 

@@ -1,36 +1,49 @@
 package com.example.zaman_apps
 
-import android.app.AlertDialog
 import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.DefaultRetryPolicy
+import androidx.core.content.ContextCompat
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.example.zaman_apps.databinding.ActivityKelolaUserBinding
 import com.example.zaman_apps.utils.SessionHelper
+import com.example.zaman_apps.utils.VolleyHelper
+import com.google.android.material.card.MaterialCardView
 import org.json.JSONArray
 import org.json.JSONObject
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class KelolaUserActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityKelolaUserBinding
-    // BARU — samakan dengan deployment aktif yang dipakai LoginActivity
     private val urlSheet = "https://script.google.com/macros/s/AKfycby4n_8DasDqYLL-K7DQMUb_6pyF7FkuDaSWde98TDMlF0BnneJjVVwadqzuRzq-M1KguA/exec"
 
-    private var userList = listOf<JSONObject>()
-    private var isLoading = false
+    private var userList = listOf<UserItem>()
+    private var filteredList = listOf<UserItem>()
+
+    data class UserItem(
+        val username: String,
+        val name: String,
+        val role: String,
+        val canEdit: Boolean
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,54 +51,41 @@ class KelolaUserActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.toolbar.setNavigationOnClickListener { finish() }
-        binding.fabTambahUser.setOnClickListener { dialogTambahUser() }
 
-        // Search TextWatcher
-        binding.etSearchUser.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterUsers(s?.toString() ?: "")
-            }
-            override fun afterTextChanged(s: Editable?) {}
-        })
-
-        // 🔥 SWIPE TO REFRESH
-        binding.swipeRefresh.setColorSchemeResources(R.color.brand_primary)
-        binding.swipeRefresh.setOnRefreshListener {
-            loadUsers(skipLoading = true)
-        }
+        setupSearch()
+        setupListeners()
 
         loadUsers()
     }
 
-    private fun filterUsers(query: String) {
-        val q = query.trim().lowercase()
-        if (q.isEmpty()) {
-            tampilkanUsers(userList)
-            return
-        }
-        val filtered = userList.filter { item ->
-            val username = item.optString("username").lowercase()
-            val name = item.optString("name").lowercase()
-            val role = item.optString("role").lowercase()
-            username.contains(q) || name.contains(q) || role.contains(q)
-        }
-        tampilkanUsers(filtered)
+    private fun setupSearch() {
+        binding.etSearchUser.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterUsers(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
-    // ==================== LOADING OVERLAY ====================
-    private fun showLoading(message: String = "Memuat data user...") {
-        if (!::binding.isInitialized) return
-        isLoading = true
+    private fun setupListeners() {
+        binding.swipeRefresh.setOnRefreshListener {
+            loadUsers(skipLoading = true)
+        }
+
+        binding.fabTambahUser.setOnClickListener {
+            dialogTambahUser()
+        }
+    }
+
+    private fun showLoading(msg: String) {
         binding.overlayLoading.visibility = View.VISIBLE
-        binding.tvLoadingMessage.text = message
+        binding.overlayLoading.findViewById<TextView>(R.id.tvLoadingMessage)?.text = msg
         binding.fabTambahUser.isEnabled = false
         binding.fabTambahUser.alpha = 0.5f
     }
 
     private fun hideLoading() {
-        if (!::binding.isInitialized) return
-        isLoading = false
         binding.overlayLoading.visibility = View.GONE
         binding.fabTambahUser.isEnabled = true
         binding.fabTambahUser.alpha = 1.0f
@@ -96,9 +96,9 @@ class KelolaUserActivity : AppCompatActivity() {
         if (!skipLoading) {
             showLoading("Memuat daftar user...")
         }
-        val queue = Volley.newRequestQueue(this)
+        val queue = VolleyHelper.getRequestQueue(this)
         val request = object : StringRequest(
-            Request.Method.POST, urlSheet,
+            Method.POST, urlSheet,
             { response ->
                 if (!skipLoading) hideLoading() else binding.swipeRefresh.isRefreshing = false
                 try {
@@ -116,13 +116,27 @@ class KelolaUserActivity : AppCompatActivity() {
             { error ->
                 if (!skipLoading) hideLoading() else binding.swipeRefresh.isRefreshing = false
                 val msg = when (error.cause) {
-                    is java.net.SocketTimeoutException -> "Koneksi timeout, coba lagi"
-                    is java.net.UnknownHostException -> "Tidak ada koneksi internet"
+                    is SocketTimeoutException -> "Koneksi timeout, coba lagi"
+                    is UnknownHostException -> "Tidak ada koneksi internet"
                     else -> "Koneksi terputus: ${error.message}"
                 }
                 Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
             }
         ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
+
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["action"] = "list_users"
@@ -130,248 +144,254 @@ class KelolaUserActivity : AppCompatActivity() {
                 return params
             }
         }
-        request.retryPolicy = DefaultRetryPolicy(15000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(request)
         queue.add(request)
     }
 
-    // ==================== PARSE & TAMPILKAN ====================
-    private fun parseUsers(usersArray: JSONArray): List<JSONObject> {
-        val list = mutableListOf<JSONObject>()
-        for (i in 0 until usersArray.length()) {
-            list.add(usersArray.getJSONObject(i))
+    private fun parseUsers(array: JSONArray): List<UserItem> {
+        val list = mutableListOf<UserItem>()
+        for (i in 0 until array.length()) {
+            val obj = array.getJSONObject(i)
+            list.add(
+                UserItem(
+                    username = obj.optString("username"),
+                    name = obj.optString("name", obj.optString("username")),
+                    role = obj.optString("role", "user"),
+                    canEdit = obj.optBoolean("can_edit", false)
+                )
+            )
         }
         return list
     }
 
-    private fun tampilkanUsers(users: List<JSONObject>) {
-        val total = users.size
-        binding.tvTotalUsers.text = "Total $total user terdaftar"
-        binding.containerUsers.removeAllViews()
+    private fun filterUsers(query: String) {
+        val q = query.trim().lowercase()
+        filteredList = if (q.isEmpty()) {
+            userList
+        } else {
+            userList.filter {
+                it.username.lowercase().contains(q) || it.name.lowercase().contains(q)
+            }
+        }
+        renderUsers()
+    }
 
-        if (users.isEmpty()) {
-            val tv = TextView(this)
-            tv.text = "📭 Belum ada user terdaftar."
-            tv.textSize = 15f
-            tv.gravity = Gravity.CENTER
-            tv.setPadding(0, 64, 0, 64)
-            tv.setTextColor(Color.parseColor("#888888"))
-            binding.containerUsers.addView(tv)
+    private fun renderUsers() {
+        binding.containerUsers.removeAllViews()
+        binding.tvTotalUsers.text = "${filteredList.size} User"
+
+        if (filteredList.isEmpty()) {
+            val tvEmpty = TextView(this)
+            tvEmpty.text = if (userList.isEmpty()) "Belum ada user terdaftar." else "Tidak ada user yang cocok."
+            tvEmpty.gravity = Gravity.CENTER
+            tvEmpty.setPadding(0, 64, 0, 64)
+            tvEmpty.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+            binding.containerUsers.addView(tvEmpty)
             return
         }
 
-        users.forEachIndexed { index, item ->
-            val card = buatCardUser(item)
-
-            // 1. Sembunyikan card dan turunkan posisinya SEBELUM dimasukkan ke layout
-            card.alpha = 0f
-            card.translationY = 150f
-
-            // 2. Masukkan card ke dalam container
+        filteredList.forEach { user ->
+            val card = buatCardUser(user)
             binding.containerUsers.addView(card)
-
-            // 3. Gunakan .post { } agar animasi berjalan TEPAT setelah UI siap digambar
-            card.post {
-                card.animate()
-                    .alpha(1f)
-                    .translationY(0f)
-                    .setDuration(500) // Sedikit diperlambat agar mulus
-                    .setStartDelay((index * 80).toLong()) // Jarak waktu antar card
-                    .setInterpolator(android.view.animation.OvershootInterpolator(1.2f))
-                    .start()
-            }
         }
     }
 
-    // ==================== CEK DUPLIKAT ====================
-    private fun isUsernameExists(username: String, excludeUsername: String? = null): Boolean {
-        val normalized = username.trim().lowercase()
-        return userList.any { user ->
-            val existing = user.optString("username").trim().lowercase()
-            if (excludeUsername != null && existing == excludeUsername.trim().lowercase()) {
-                false
-            } else {
-                existing == normalized
-            }
-        }
-    }
-
-    // ==================== CARD USER ====================
-    private fun buatCardUser(item: JSONObject): View {
-        val username = item.optString("username")
-        val name = item.optString("name").ifEmpty { username }
-        val role = item.optString("role")
-        val canEdit = item.optBoolean("can_edit")
-
-        val card = com.google.android.material.card.MaterialCardView(this)
-        card.layoutParams = LinearLayout.LayoutParams(
+    private fun buatCardUser(user: UserItem): View {
+        val card = MaterialCardView(this)
+        val cardParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply { bottomMargin = 28 } // Ruang antar kartu diperlebar
-        card.radius = 28f // Radius melengkung elegan
-        card.cardElevation = 6f // Efek melayang (shadow)
-        card.strokeWidth = 0 // Bersih tanpa garis tepi
+        ).apply { bottomMargin = 16 }
+        card.layoutParams = cardParams
+        card.radius = 16f
+        card.cardElevation = 2f
+        card.strokeWidth = 1
+        card.strokeColor = ContextCompat.getColor(this, R.color.divider)
 
-        val row = LinearLayout(this)
-        row.orientation = LinearLayout.HORIZONTAL
-        row.gravity = Gravity.CENTER_VERTICAL
-        row.setPadding(36, 32, 24, 32)
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.HORIZONTAL
+        root.gravity = Gravity.CENTER_VERTICAL
+        root.setPadding(24, 20, 20, 20)
 
-        // AVATAR INISIAL (Baru)
-        val avatar = TextView(this)
-        avatar.text = name.firstOrNull()?.uppercase() ?: "U"
-        avatar.setTextColor(Color.WHITE)
-        avatar.textSize = 18f
-        avatar.setTypeface(null, android.graphics.Typeface.BOLD)
-        avatar.gravity = Gravity.CENTER
-        avatar.layoutParams = LinearLayout.LayoutParams(100, 100).apply {
-            marginEnd = 32
-        }
-        val bgAvatar = android.graphics.drawable.GradientDrawable()
-        bgAvatar.shape = android.graphics.drawable.GradientDrawable.OVAL
-        // Warna avatar beda untuk Admin (Merah) dan User (Biru)
-        bgAvatar.setColor(if (role == "admin") Color.parseColor("#FF5252") else Color.parseColor("#448AFF"))
-        avatar.background = bgAvatar
-        row.addView(avatar)
-
+        // Column Text Info
         val infoCol = LinearLayout(this)
         infoCol.orientation = LinearLayout.VERTICAL
         infoCol.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
 
         val tvName = TextView(this)
-        tvName.text = name
-        tvName.textSize = 16f
-        tvName.setTypeface(null, android.graphics.Typeface.BOLD)
-        tvName.setTextColor(Color.parseColor("#1A1A1A"))
+        tvName.text = user.name
+        tvName.textSize = 15f
+        tvName.setTypeface(null, Typeface.BOLD)
+        tvName.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
         infoCol.addView(tvName)
 
         val tvUsername = TextView(this)
-        tvUsername.text = "@$username"
+        tvUsername.text = "@${user.username}"
         tvUsername.textSize = 13f
-        tvUsername.setTextColor(Color.parseColor("#777777"))
-        tvUsername.setPadding(0, 4, 0, 4)
+        tvUsername.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+        tvUsername.setPadding(0, 2, 0, 8)
         infoCol.addView(tvUsername)
 
+        val badgeRow = LinearLayout(this)
+        badgeRow.orientation = LinearLayout.HORIZONTAL
+        badgeRow.gravity = Gravity.CENTER_VERTICAL
+
+        // Role Badge
         val tvRole = TextView(this)
-        val roleLabel = if (role == "admin") "🛡️ Admin" else "👤 User"
-        val editLabel = if (canEdit) " • Bisa edit" else " • Tidak bisa edit"
-        tvRole.text = roleLabel + editLabel
-        tvRole.textSize = 12f
-        tvRole.setTextColor(Color.parseColor("#999999"))
-        infoCol.addView(tvRole)
+        val isRoleAdmin = user.role.equals("admin", ignoreCase = true)
+        tvRole.text = if (isRoleAdmin) "ADMIN" else "USER"
+        tvRole.textSize = 11f
+        tvRole.setTypeface(null, Typeface.BOLD)
+        tvRole.setTextColor(Color.WHITE)
+        val bgRole = GradientDrawable()
+        bgRole.cornerRadius = 12f
+        bgRole.setColor(ContextCompat.getColor(this, if (isRoleAdmin) R.color.brand_primary else R.color.brand_accent_light))
+        tvRole.background = bgRole
+        tvRole.setPadding(16, 6, 16, 6)
+        badgeRow.addView(tvRole)
 
-        row.addView(infoCol)
+        // Can Edit Badge
+        val tvCanEdit = TextView(this)
+        tvCanEdit.text = if (user.canEdit) "✓ BISA EDIT" else "❌ NO EDIT"
+        tvCanEdit.textSize = 11f
+        tvCanEdit.setTypeface(null, Typeface.BOLD)
+        tvCanEdit.setTextColor(ContextCompat.getColor(this, if (user.canEdit) R.color.brand_primary else R.color.text_secondary))
+        val bgEdit = GradientDrawable()
+        bgEdit.cornerRadius = 12f
+        bgEdit.setColor(ContextCompat.getColor(this, if (user.canEdit) R.color.brand_accent_light else R.color.section_bg))
+        tvCanEdit.background = bgEdit
+        val editParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { marginStart = 12 }
+        tvCanEdit.layoutParams = editParams
+        tvCanEdit.setPadding(16, 6, 16, 6)
+        badgeRow.addView(tvCanEdit)
 
-        // Wadah Tombol Aksi
-        val actionCol = LinearLayout(this)
-        actionCol.orientation = LinearLayout.HORIZONTAL
-        actionCol.gravity = Gravity.CENTER_VERTICAL
+        infoCol.addView(badgeRow)
+        root.addView(infoCol)
 
-        val btnEdit = ImageButtonSimple("✏️") { dialogEditUser(username, name, role, canEdit) }
-        val btnDelete = ImageButtonSimple("🗑️") { konfirmasiHapus(username) }
+        // Action Edit
+        val btnEdit = TextView(this)
+        btnEdit.text = "✏️"
+        btnEdit.textSize = 18f
+        btnEdit.setPadding(16, 12, 16, 12)
+        btnEdit.setOnClickListener {
+            dialogEditUser(user)
+        }
+        root.addView(btnEdit)
 
-        actionCol.addView(btnEdit)
-        actionCol.addView(btnDelete)
+        // Action Rename Username
+        val btnRename = TextView(this)
+        btnRename.text = "🏷️"
+        btnRename.textSize = 18f
+        btnRename.setPadding(16, 12, 16, 12)
+        btnRename.setOnClickListener {
+            dialogRenameUsername(user.username)
+        }
+        root.addView(btnRename)
 
-        row.addView(actionCol)
-        card.addView(row)
+        // Action Delete (hanya jika bukan akun diri sendiri / admin utama)
+        val currentUsername = SessionHelper.getUsername(this)
+        if (!user.username.equals(currentUsername, ignoreCase = true)) {
+            val btnDelete = TextView(this)
+            btnDelete.text = "🗑️"
+            btnDelete.textSize = 18f
+            btnDelete.setPadding(16, 12, 16, 12)
+            btnDelete.setOnClickListener {
+                konfirmasiHapus(user.username)
+            }
+            root.addView(btnDelete)
+        }
+
+        card.addView(root)
         return card
-    }
-
-    private fun ImageButtonSimple(emoji: String, onClick: () -> Unit): TextView {
-        val tv = TextView(this)
-        tv.text = emoji
-        tv.textSize = 18f
-        tv.setPadding(24, 12, 24, 12)
-        tv.setOnClickListener { onClick() }
-        tv.isClickable = true
-        tv.isFocusable = true
-        val outValue = android.util.TypedValue()
-        theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, outValue, true)
-        tv.setBackgroundResource(outValue.resourceId)
-        return tv
     }
 
     // ==================== DIALOG TAMBAH USER ====================
     private fun dialogTambahUser() {
-        val layout = buatFormDialog(null, null, null)
+        val views = buatFormDialogViews(isEdit = false)
+
         AlertDialog.Builder(this)
             .setTitle("Tambah User Baru")
-            .setView(layout.root)
+            .setView(views.root)
             .setPositiveButton("Simpan") { _, _ ->
-                val name = layout.etName.text.toString().trim()
-                val username = layout.etUsername.text.toString().trim()
-                val password = layout.etPassword.text.toString().trim()
-                val role = layout.spinnerRole.selectedItem.toString().lowercase()
-                val canEdit = true
+                val name = views.etName.text.toString().trim()
+                val username = views.etUsername.text.toString().trim()
+                val password = views.etPassword.text.toString().trim()
+                val role = views.spinnerRole.selectedItem.toString().lowercase()
 
-                if (name.isEmpty() || username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(this, "Nama, Username & password wajib diisi", Toast.LENGTH_SHORT).show()
+                if (username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(this, "Username dan Password wajib diisi", Toast.LENGTH_SHORT).show()
                     return@setPositiveButton
                 }
 
-                if (isUsernameExists(username)) {
-                    AlertDialog.Builder(this)
-                        .setTitle("Username Sudah Ada")
-                        .setMessage("User dengan username \"$username\" sudah terdaftar.\nGunakan username lain.")
-                        .setPositiveButton("OK", null)
-                        .show()
-                    return@setPositiveButton
-                }
-
-                kirimTambahUser(name, username, password, role, canEdit)
+                kirimTambahUser(name, username, password, role, true)
             }
             .setNegativeButton("Batal", null)
             .show()
     }
 
     // ==================== DIALOG EDIT USER ====================
-// BARU
-    private fun dialogEditUser(username: String, currentName: String, currentRole: String, currentCanEdit: Boolean) {
-        val layout = buatFormDialog(username, currentName, currentRole)
+    private fun dialogEditUser(user: UserItem) {
+        val views = buatFormDialogViews(isEdit = true)
+        views.etName.setText(user.name)
+        views.etUsername.setText(user.username)
+        views.etUsername.isEnabled = false
+        views.etUsername.alpha = 0.6f
+
+        val roleOptions = arrayOf("User", "Admin")
+        val selectedRoleIndex = if (user.role.equals("admin", ignoreCase = true)) 1 else 0
+        views.spinnerRole.setSelection(selectedRoleIndex)
 
         AlertDialog.Builder(this)
-            .setTitle("Edit User: $currentName")
-            .setView(layout.root)
+            .setTitle("Edit User @${user.username}")
+            .setView(views.root)
             .setPositiveButton("Simpan") { _, _ ->
-                val newName = layout.etName.text.toString().trim()
-                val newUsername = layout.etUsername.text.toString().trim()
-                val newPassword = layout.etPassword.text.toString().trim()
-                val role = layout.spinnerRole.selectedItem.toString().lowercase()
-                val canEdit = role == "admin"
+                val name = views.etName.text.toString().trim()
+                val password = views.etPassword.text.toString().trim()
+                val role = views.spinnerRole.selectedItem.toString().lowercase()
 
-                if (newUsername.isEmpty() || newName.isEmpty()) {
-                    Toast.makeText(this, "Nama & Username tidak boleh kosong", Toast.LENGTH_SHORT).show()
-                    return@setPositiveButton
-                }
-// BARU (BENAR)
-                if (newUsername != username && isUsernameExists(newUsername, excludeUsername = username)) {
-                    AlertDialog.Builder(this)
-                        .setTitle("Username Sudah Ada")
-                        .setMessage("User dengan username \"$newUsername\" sudah terdaftar.\nGunakan username lain.")
-                        .setPositiveButton("OK", null)
-                        .show()
-                    return@setPositiveButton
-                }
-
-                if (newUsername != username) {
-                    konfirmasiRename(username, newUsername, newName, role, canEdit, newPassword)
-                } else {
-                    kirimEditUser(username, newName, newPassword, role, canEdit)
-                }
-                }
+                kirimEditUser(user.username, name, password, role, true)
+            }
             .setNegativeButton("Batal", null)
             .show()
     }
 
-    // ==================== RENAME KONFIRMASI ====================
-// BARU
-    private fun konfirmasiRename(oldUsername: String, newUsername: String, newName: String, role: String, canEdit: Boolean, newPassword: String) {
+    // ==================== DIALOG RENAME USERNAME ====================
+    private fun dialogRenameUsername(oldUsername: String) {
+        val etNewUsername = EditText(this)
+        etNewUsername.hint = "Masukkan username baru"
+        etNewUsername.setPadding(48, 36, 48, 36)
+
+        val bg = GradientDrawable()
+        bg.setColor(Color.parseColor("#F8F9FA"))
+        bg.cornerRadius = 24f
+        bg.setStroke(3, Color.parseColor("#E9ECEF"))
+        etNewUsername.background = bg
+
+        val container = LinearLayout(this)
+        container.setPadding(48, 24, 48, 12)
+        container.addView(etNewUsername)
+
         AlertDialog.Builder(this)
-            .setTitle("Ganti Username?")
-            .setMessage("Username \"$oldUsername\" akan diganti jadi \"$newUsername\".\nSeluruh histori aktivitas (log input/edit) juga akan diperbarui otomatis.\nLanjutkan?")
-            .setPositiveButton("Ya, Ganti") { _, _ ->
-                kirimRenameUser(oldUsername, newUsername) { berhasil ->
-                    if (berhasil) {
-                        kirimEditUser(newUsername, newName, newPassword, role, canEdit)
+            .setTitle("Ganti Username @$oldUsername")
+            .setMessage("Ganti username untuk \"$oldUsername\". Histori aktivitas user di Google Sheets juga akan diperbarui secara otomatis.")
+            .setView(container)
+            .setPositiveButton("Ganti Username") { _, _ ->
+                val newUsername = etNewUsername.text.toString().trim()
+                if (newUsername.isEmpty()) {
+                    Toast.makeText(this, "Username baru tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+                if (newUsername.equals(oldUsername, ignoreCase = true)) {
+                    Toast.makeText(this, "Username baru sama dengan yang lama", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
+                kirimRenameUser(oldUsername, newUsername) { sukses ->
+                    if (sukses) {
+                        if (oldUsername.equals(SessionHelper.getUsername(this), ignoreCase = true)) {
+                            SessionHelper.saveUsername(this, newUsername)
+                        }
                     }
                 }
             }
@@ -382,9 +402,9 @@ class KelolaUserActivity : AppCompatActivity() {
     // ==================== KIRIM RENAME ====================
     private fun kirimRenameUser(oldUsername: String, newUsername: String, onDone: (Boolean) -> Unit) {
         showLoading("Mengganti username $oldUsername menjadi $newUsername...")
-        val queue = Volley.newRequestQueue(this)
+        val queue = VolleyHelper.getRequestQueue(this)
         val request = object : StringRequest(
-            Request.Method.POST, urlSheet,
+            Method.POST, urlSheet,
             { response ->
                 hideLoading()
                 try {
@@ -404,6 +424,20 @@ class KelolaUserActivity : AppCompatActivity() {
                 onDone(false)
             }
         ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
+
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["action"] = "rename_user"
@@ -413,90 +447,79 @@ class KelolaUserActivity : AppCompatActivity() {
                 return params
             }
         }
-        request.retryPolicy = DefaultRetryPolicy(15000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(request)
         queue.add(request)
     }
 
     // ==================== FORM DIALOG HELPER ====================
-// BARU
-    private data class FormDialogViews(
-        val root: LinearLayout,
+    private class FormDialogViews(
+        val root: View,
         val etName: EditText,
         val etUsername: EditText,
         val etPassword: EditText,
         val spinnerRole: Spinner
     )
 
-    private fun buatFormDialog(username: String?, name: String?, role: String?): FormDialogViews {
+    private fun buatFormDialogViews(isEdit: Boolean): FormDialogViews {
         val root = LinearLayout(this)
         root.orientation = LinearLayout.VERTICAL
-        root.setPadding(64, 48, 64, 24) // Spacing luar yang lebih lega dan proporsional
+        root.setPadding(48, 24, 48, 12)
 
-        // Fungsi internal untuk mencetak EditText yang seragam dan elegan
-        fun createStyledEditText(hintText: String, defaultText: String?, isPassword: Boolean = false): EditText {
+        fun createStyledEditText(hintText: String, isPassword: Boolean = false): EditText {
             val et = EditText(this)
             et.hint = hintText
-            et.setText(defaultText ?: "")
-            et.textSize = 15f
-            et.setPadding(48, 36, 48, 36) // Ruang lega di dalam kotak input
-            et.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { bottomMargin = 36 } // Jarak antar kotak input
-
-            // Latar belakang kotak input: Rounded & Soft Grey
-            val bg = android.graphics.drawable.GradientDrawable()
-            bg.setColor(Color.parseColor("#F8F9FA")) // Latar abu-abu sangat terang
-            bg.cornerRadius = 24f // Sudut melengkung
-            bg.setStroke(3, Color.parseColor("#E9ECEF")) // Garis tepi abu-abu halus
-            et.background = bg
-
             if (isPassword) {
-                et.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+                et.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
+            et.setPadding(40, 32, 40, 32)
+            val bg = GradientDrawable()
+            bg.setColor(Color.parseColor("#F8F9FA"))
+            bg.cornerRadius = 20f
+            bg.setStroke(3, Color.parseColor("#E9ECEF"))
+            et.background = bg
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { bottomMargin = 20 }
+            et.layoutParams = params
             return et
         }
 
-        // Pembuatan Input Form
-        val etName = createStyledEditText("👤 Nama Lengkap", name)
+        val etName = createStyledEditText("Nama Lengkap")
         root.addView(etName)
 
-        val etUsername = createStyledEditText("🏷️ Username", username)
+        val etUsername = createStyledEditText("Username / UserID")
         root.addView(etUsername)
 
-        val passwordHint = if (username == null) "🔒 Password" else "🔒 Password baru (kosongkan jika tetap)"
-        val etPassword = createStyledEditText(passwordHint, null, true)
+        val etPassword = createStyledEditText(if (isEdit) "Password Baru (Opsional)" else "Password", isPassword = true)
         root.addView(etPassword)
 
-        // Label untuk Spinner
         val tvRoleLabel = TextView(this)
-        tvRoleLabel.text = "Role / Hak Akses"
+        tvRoleLabel.text = "Role User"
         tvRoleLabel.textSize = 13f
-        tvRoleLabel.setTextColor(Color.parseColor("#777777"))
-        tvRoleLabel.setPadding(12, 0, 0, 12)
+        tvRoleLabel.setTypeface(null, Typeface.BOLD)
+        tvRoleLabel.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+        tvRoleLabel.setPadding(0, 8, 0, 8)
         root.addView(tvRoleLabel)
 
-        // Wadah Spinner agar desainnya seragam dengan EditText (Rounded)
-        val spinnerContainer = LinearLayout(this)
-        val bgSpinner = android.graphics.drawable.GradientDrawable()
-        bgSpinner.setColor(Color.parseColor("#F8F9FA"))
-        bgSpinner.cornerRadius = 24f
-        bgSpinner.setStroke(3, Color.parseColor("#E9ECEF"))
-        spinnerContainer.background = bgSpinner
-        spinnerContainer.setPadding(24, 8, 24, 8)
-        spinnerContainer.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-
         val spinnerRole = Spinner(this)
-        // Huruf depan kapital agar rapi (sistem lama tetap aman karena menggunakan .lowercase() saat ditarik)
-        val roleAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listOf("User", "Admin"))
-        spinnerRole.adapter = roleAdapter
-        spinnerRole.setSelection(if (role == "admin") 1 else 0)
-        spinnerRole.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        )
+        val roleOptions = arrayOf("User", "Admin")
+        val adapterRole = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
+        spinnerRole.adapter = adapterRole
 
+        val spinnerBg = GradientDrawable()
+        spinnerBg.setColor(Color.parseColor("#F8F9FA"))
+        spinnerBg.cornerRadius = 20f
+        spinnerBg.setStroke(3, Color.parseColor("#E9ECEF"))
+
+        val spinnerContainer = LinearLayout(this)
+        spinnerContainer.background = spinnerBg
+        spinnerContainer.setPadding(20, 8, 20, 8)
+        val containerParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { bottomMargin = 20 }
+        spinnerContainer.layoutParams = containerParams
         spinnerContainer.addView(spinnerRole)
+
         root.addView(spinnerContainer)
 
         return FormDialogViews(root, etName, etUsername, etPassword, spinnerRole)
@@ -515,9 +538,9 @@ class KelolaUserActivity : AppCompatActivity() {
     // ==================== KIRIM REQUEST (TAMBAH, EDIT, HAPUS) ====================
     private fun kirimTambahUser(name: String, username: String, password: String, role: String, canEdit: Boolean) {
         showLoading("Menambahkan user $username...")
-        val queue = Volley.newRequestQueue(this)
+        val queue = VolleyHelper.getRequestQueue(this)
         val request = object : StringRequest(
-            Request.Method.POST, urlSheet,
+            Method.POST, urlSheet,
             { response ->
                 hideLoading()
                 handleSimpleResponse(response)
@@ -527,6 +550,20 @@ class KelolaUserActivity : AppCompatActivity() {
                 Toast.makeText(this, "Koneksi terputus", Toast.LENGTH_SHORT).show()
             }
         ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
+
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["action"] = "add_user"
@@ -539,16 +576,15 @@ class KelolaUserActivity : AppCompatActivity() {
                 return params
             }
         }
-        request.retryPolicy = DefaultRetryPolicy(15000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(request)
         queue.add(request)
     }
 
-    // BARU
     private fun kirimEditUser(username: String, newName: String, newPassword: String, role: String, canEdit: Boolean) {
         showLoading("Menyimpan perubahan user $username...")
-        val queue = Volley.newRequestQueue(this)
+        val queue = VolleyHelper.getRequestQueue(this)
         val request = object : StringRequest(
-            Request.Method.POST, urlSheet,
+            Method.POST, urlSheet,
             { response ->
                 hideLoading()
                 handleSimpleResponse(response)
@@ -558,6 +594,20 @@ class KelolaUserActivity : AppCompatActivity() {
                 Toast.makeText(this, "Koneksi terputus", Toast.LENGTH_SHORT).show()
             }
         ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
+
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["action"] = "edit_user"
@@ -570,24 +620,17 @@ class KelolaUserActivity : AppCompatActivity() {
                 return params
             }
         }
-        request.retryPolicy = DefaultRetryPolicy(15000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(request)
         queue.add(request)
     }
 
     private fun kirimHapusUser(username: String) {
         showLoading("Menghapus user $username...")
 
-        // PERBAIKAN 1: Tambahkan HurlStack untuk mengikuti redirect dari Google Apps Script
-        val queue = Volley.newRequestQueue(this, object : com.android.volley.toolbox.HurlStack() {
-            override fun createConnection(url: java.net.URL): java.net.HttpURLConnection {
-                val connection = super.createConnection(url)
-                connection.instanceFollowRedirects = true
-                return connection
-            }
-        })
+        val queue = VolleyHelper.getRequestQueue(this)
 
         val request = object : StringRequest(
-            Request.Method.POST, urlSheet,
+            Method.POST, urlSheet,
             { response ->
                 hideLoading()
                 handleSimpleResponse(response)
@@ -597,28 +640,42 @@ class KelolaUserActivity : AppCompatActivity() {
                 Toast.makeText(this, "Koneksi terputus", Toast.LENGTH_SHORT).show()
             }
         ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
+
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["action"] = "delete_user"
                 params["requester_role"] = SessionHelper.getRole(this@KelolaUserActivity)
-                params["requester_username"] = SessionHelper.getUsername(this@KelolaUserActivity)
                 params["target_username"] = username
                 return params
             }
         }
-
-        // PERBAIKAN 2: Naikkan timeout menjadi 30 detik (30000 ms) untuk HP fisik
-        request.retryPolicy = DefaultRetryPolicy(30000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.apply60sTimeout(request)
         queue.add(request)
     }
 
     private fun handleSimpleResponse(response: String) {
         try {
             val json = JSONObject(response)
-            Toast.makeText(this, json.optString("message"), Toast.LENGTH_SHORT).show()
-            if (json.optString("status") == "success") loadUsers()
+            val msg = json.optString("message", "Proses selesai")
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+            if (json.optString("status") == "success") {
+                loadUsers()
+            }
         } catch (e: Exception) {
-            Toast.makeText(this, "Gagal memproses respons", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Gagal membaca respons server", Toast.LENGTH_SHORT).show()
         }
     }
 }

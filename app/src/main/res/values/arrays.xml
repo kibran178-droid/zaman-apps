@@ -41,7 +41,7 @@
     <string-array name="type_rectifier_options">
         <item></item>
         <item>VERTIV_R48-2000e3</item>
-        <item>ZTE _R4850</item>
+        <item>ZTE_R4850</item>
         <item>Emerson R482000E3</item>
         <item>EATON_APR48 3G</item>
         <item>EATON_R48</item>
