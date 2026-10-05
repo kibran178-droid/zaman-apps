@@ -31,9 +31,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
-import com.android.volley.TimeoutError
 import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.example.zaman_apps.R
 import com.example.zaman_apps.databinding.ActivityRingkasanBinding
@@ -43,7 +41,9 @@ import com.example.zaman_apps.utils.DropdownOptionsHelper
 import com.example.zaman_apps.utils.ImageCaptureHelper
 import com.example.zaman_apps.utils.ImageHelper
 import com.example.zaman_apps.utils.NotificationHelper
+import com.example.zaman_apps.utils.PerangkatTerhubungHelper
 import com.example.zaman_apps.utils.SessionHelper
+import com.example.zaman_apps.utils.TelegramLogger
 import com.example.zaman_apps.utils.VolleyHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -51,9 +51,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 import org.json.JSONObject
-import java.net.SocketTimeoutException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
+import com.android.volley.VolleyError
+import com.example.zaman_apps.utils.AppLog
 
 class RingkasanActivity : AppCompatActivity() {
 
@@ -62,6 +66,7 @@ class RingkasanActivity : AppCompatActivity() {
     private lateinit var data: SiteData
     private var pendingAction: String = "input"
     private var isSaving = false
+    private var lastUserAction: String = "Membuka Ringkasan Activity"
 
     private val photoUris = mutableListOf<String>()
     private val imageBase64Caches = mutableMapOf<Int, String>()
@@ -69,6 +74,215 @@ class RingkasanActivity : AppCompatActivity() {
     private var currentPopupDialog: Dialog? = null
     private var pendingPhotoIndexPopup = -1
     private var pendingCameraUriRingkasan: Uri? = null
+
+    private fun lanjutkanKirimDataBaru() = kirimKeServer("input")
+    private fun lanjutkanKirimUpdate() = kirimKeServer("update")
+    private fun ukuranPayloadKb(): Int =
+        imageBase64Caches.values.sumOf { it.length } / 1024
+    private fun ringkasState(ms: Long, jumlahFoto: Int): String =
+        "SITE_ID=${data.siteId}, ACTION=$pendingAction, DURASI=${ms}ms, " +
+                "FOTO=${photoUris.size} (b64=$jumlahFoto, ~${ukuranPayloadKb()}KB), " +
+                "isSaving=$isSaving, URL=...${urlSheet.takeLast(24)}"
+    private fun laporkan(tahap: String, jenis: String, error: Throwable, ms: Long, jumlahFoto: Int, detail: String) {
+        TelegramLogger.sendError(
+            context = this,
+            activeScreen = "RingkasanActivity ($jenis - $tahap)",
+            lastUserAction = lastUserAction,
+            error = error,
+            relevantData = ringkasState(ms, jumlahFoto) + "\n" + detail
+        )
+    }
+    private fun laporkanMsg(tahap: String, jenis: String, pesan: String, ms: Long, jumlahFoto: Int, detail: String) {
+        TelegramLogger.sendErrorMsg(
+            context = this,
+            activeScreen = "RingkasanActivity ($jenis - $tahap)",
+            lastUserAction = lastUserAction,
+            errorMessage = pesan,
+            relevantData = ringkasState(ms, jumlahFoto) + "\n" + detail
+        )
+    }
+
+    private fun kirimKeServer(jenis: String, sudahKirimUlang: Boolean = false) {
+        val isUpdate = jenis == "update"
+        pendingAction = jenis
+        lastUserAction = if (isUpdate) "Mengupdate data site (${data.siteId})"
+        else "Menyimpan data site baru (${data.siteId})"
+        showLoadingOverlay(if (isUpdate) "Mengupdate data..." else "Menyimpan data...")
+
+        val t0 = SystemClock.elapsedRealtime()
+        val jumlahFoto = imageBase64Caches.size
+        AppLog.d("Submit", "MULAI $jenis site=${data.siteId} foto=$jumlahFoto kirimUlang=$sudahKirimUlang payload~${ukuranPayloadKb()}KB")
+
+        val request = object : StringRequest(
+            Method.POST, urlSheet,
+            { response ->
+                val ms = SystemClock.elapsedRealtime() - t0
+                AppLog.d("Submit", "RESPON ${ms}ms len=${response.length} body=${response.take(200)}")
+                tanganiRespons(jenis, response, ms, jumlahFoto, sudahKirimUlang)
+            },
+            { error ->
+                val ms = SystemClock.elapsedRealtime() - t0
+                AppLog.e("Submit", "ERROR ${ms}ms ${TelegramLogger.describeVolley(error)}")
+                tanganiGagalJaringan(jenis, error, ms, jumlahFoto, sudahKirimUlang)
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Connection"] = "close"
+                return headers
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded; charset=utf-8"
+            }
+
+            override fun getParamsEncoding(): String {
+                return "UTF-8"
+            }
+
+            override fun getParams(): MutableMap<String, String> {
+                val params = getSubmitParams()
+                if (isUpdate) params["action"] = "update"
+                return params
+            }
+        }
+
+        // timeout 60 dtk, TANPA retry otomatis (mencegah POST terkirim ganda)
+        request.retryPolicy = DefaultRetryPolicy(60_000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.getRequestQueue(this).add(request)
+    }
+
+    private fun tanganiRespons(jenis: String, response: String, ms: Long, jumlahFoto: Int, sudahKirimUlang: Boolean) {
+        val json = try {
+            JSONObject(response)
+        } catch (e: Exception) {
+            laporkan("Parse JSON", jenis, e, ms, jumlahFoto, "RAW_RESPONSE=${response.take(1500)}")
+            tanganiAmbigu(jenis, "respons bukan JSON", sudahKirimUlang)
+            return
+        }
+
+        val status = json.optString("status")
+        val serverMsg = json.optString("message", "-")
+
+        when {
+            status == "success" -> sukses(jenis)
+
+            status == "duplicate" && jenis == "input" -> {
+                hideLoadingOverlay()
+                notificationHelper.showNotification(
+                    "⚠️ Site ID Sudah Ada",
+                    "Site ${data.siteId} sudah terdaftar di sistem.",
+                    false
+                )
+                showDuplicateDialog()
+            }
+
+            // Satu-satunya pesan server yang ditampilkan: pengguna bisa memperbaikinya sendiri
+            status == "error" && json.optString("code") == "VALIDATION" -> {
+                hideLoadingOverlay()
+                AppLog.d("Submit", "VALIDASI DITOLAK: $serverMsg")
+                showSnackbar("❌ $serverMsg", isError = true)
+            }
+            status == "processing" && jenis == "input" -> {
+                AppLog.d("Submit", "Server masih memproses (idempotency guard)")
+                tanganiAmbigu(jenis, "server masih memproses", sudahKirimUlang)
+            }
+            // Selain itu: pesan server TIDAK ditampilkan, detail ke Telegram saja
+            else -> {
+                laporkanMsg(
+                    "Respons Server", jenis, "Apps Script Error: $serverMsg", ms, jumlahFoto,
+                    "RESPONSE=${json.toString().take(1500)}"
+                )
+                tanganiAmbigu(jenis, "server: ${serverMsg.take(60)}", sudahKirimUlang)
+            }
+        }
+    }
+
+    private fun tanganiGagalJaringan(jenis: String, error: VolleyError, ms: Long, jumlahFoto: Int, sudahKirimUlang: Boolean) {
+        laporkan("Network Failure", jenis, error, ms, jumlahFoto, TelegramLogger.describeVolley(error))
+        tanganiAmbigu(jenis, "jaringan: ${error.javaClass.simpleName}", sudahKirimUlang)
+    }
+
+    private fun sukses(jenis: String) {
+        hideLoadingOverlay()
+        val isUpdate = jenis == "update"
+        notificationHelper.showNotification(
+            if (isUpdate) "✅ Data Berhasil Diupdate" else "✅ Data Berhasil Disimpan",
+            if (isUpdate) "Data untuk Site ${data.siteId} berhasil diperbarui di server."
+            else "Site ${data.siteId} berhasil ditambahkan.",
+            true
+        )
+        showSnackbar(if (isUpdate) "✅ Data berhasil diupdate!" else "✅ Data berhasil disimpan!")
+        val intent = Intent()
+        intent.putExtra("RESET_FORM", true)
+        setResult(RESULT_OK, intent)
+        finish()
+    }
+
+    private fun tanganiAmbigu(jenis: String, alasan: String, sudahKirimUlang: Boolean) {
+        if (jenis != "input") {
+            hideLoadingOverlay()
+            showErrorDialog("Terjadi kendala saat menyimpan. Laporan sudah dikirim ke admin.")
+            return
+        }
+
+        showLoadingOverlay("Memverifikasi ke server...")
+        AppLog.d("Submit", "AMBIGU ($alasan) -> verifikasi get_detail")
+
+        verifikasiTersimpan(data.siteId, 1) { ada, catatan ->
+            AppLog.d("Submit", "VERIFIKASI ada=$ada $catatan")
+            when {
+                ada -> {
+                    TelegramLogger.sendErrorMsg(
+                        context = this,
+                        activeScreen = "RingkasanActivity (Verifikasi)",
+                        lastUserAction = lastUserAction,
+                        errorMessage = "Respons ambigu ($alasan) tetapi data TERNYATA TERSIMPAN",
+                        relevantData = "SITE_ID: ${data.siteId}, $catatan"
+                    )
+                    sukses("input")
+                }
+                !sudahKirimUlang -> kirimKeServer("input", sudahKirimUlang = true)
+                else -> {
+                    hideLoadingOverlay()
+                    showErrorDialog("Data belum berhasil tersimpan. Laporan sudah dikirim ke admin.")
+                }
+            }
+        }
+    }
+
+    private fun verifikasiTersimpan(siteId: String, cobaKe: Int, onHasil: (Boolean, String) -> Unit) {
+        val maxCoba = 4
+
+        fun ulangAtauSerah(alasan: String) {
+            if (cobaKe < maxCoba) {
+                Handler(Looper.getMainLooper()).postDelayed(
+                    { verifikasiTersimpan(siteId, cobaKe + 1, onHasil) }, 5000L
+                )
+            } else {
+                onHasil(false, "tidak ditemukan setelah $maxCoba cek ($alasan)")
+            }
+        }
+
+        val url = "$urlSheet?action=get_detail&site_id=${Uri.encode(siteId)}"
+        val req = StringRequest(
+            Request.Method.GET, url,
+            { resp ->
+                val ada = try {
+                    JSONObject(resp).optString("status") == "success"
+                } catch (_: Exception) {
+                    false
+                }
+                if (ada) onHasil(true, "ditemukan pada cek ke-$cobaKe")
+                else ulangAtauSerah("resp=${resp.take(120)}")
+            },
+            { err -> ulangAtauSerah(err.javaClass.simpleName) }
+        )
+        req.retryPolicy = DefaultRetryPolicy(20_000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        VolleyHelper.getRequestQueue(this).add(req)
+    }
+
+
 
     private val pickPhotoRingkasanLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -1053,7 +1267,9 @@ class RingkasanActivity : AppCompatActivity() {
                 view.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti1)?.setText(data.mcbBatteryRecti1)
                 view.findViewById<TextInputEditText>(R.id.editBusVoltage1)?.setText(data.busVoltage1)
                 view.findViewById<TextInputEditText>(R.id.editLoadA1)?.setText(data.loadA1)
-                view.findViewById<TextInputEditText>(R.id.editPerangkat1)?.setText(data.perangkatTerhubung1)
+                val editP1 = view.findViewById<TextInputEditText>(R.id.editPerangkat1)
+                editP1?.setText(data.perangkatTerhubung1)
+                setupPerangkatClick(editP1, 1)
                 view.findViewById<TextInputEditText>(R.id.editRemark1)?.setText(data.remark1)
             }
             "rectifier2" -> {
@@ -1093,7 +1309,9 @@ class RingkasanActivity : AppCompatActivity() {
                 view.findViewById<TextInputEditText>(R.id.editMcbBatteryRecti2)?.setText(data.mcbBatteryRecti2)
                 view.findViewById<TextInputEditText>(R.id.editBusVoltage2)?.setText(data.busVoltage2)
                 view.findViewById<TextInputEditText>(R.id.editLoadA2)?.setText(data.loadA2)
-                view.findViewById<TextInputEditText>(R.id.editPerangkat2)?.setText(data.perangkatTerhubung2)
+                val editP2 = view.findViewById<TextInputEditText>(R.id.editPerangkat2)
+                editP2?.setText(data.perangkatTerhubung2)
+                setupPerangkatClick(editP2, 2)
                 view.findViewById<TextInputEditText>(R.id.editRemark2)?.setText(data.remark2)
             }
             "rectifier3" -> populateRectiGeneric(view, 3, data.typeRectifier3, data.jumlahModul3, data.jumlahModulRusak3, data.jenisBaterai3, data.merkBaterai3, data.jumlahBatteryP3, data.batteryRecti3, data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3, data.perangkatTerhubung3, data.statusBatteryNotAktif3, data.jumlahBankNotAktif3)
@@ -1146,7 +1364,20 @@ class RingkasanActivity : AppCompatActivity() {
         view.findViewById<TextInputEditText>(resources.getIdentifier("editMcbBatteryRecti$idx", "id", packageName))?.setText(mcbBat)
         view.findViewById<TextInputEditText>(resources.getIdentifier("editBusVoltage$idx", "id", packageName))?.setText(voltage)
         view.findViewById<TextInputEditText>(resources.getIdentifier("editLoadA$idx", "id", packageName))?.setText(load)
-        view.findViewById<TextInputEditText>(resources.getIdentifier("editPerangkat$idx", "id", packageName))?.setText(perangkat)
+        val editP = view.findViewById<TextInputEditText>(resources.getIdentifier("editPerangkat$idx", "id", packageName))
+        editP?.setText(perangkat)
+        setupPerangkatClick(editP, idx)
+    }
+
+    private fun setupPerangkatClick(editText: TextInputEditText?, rectiNum: Int) {
+        if (editText == null) return
+        editText.isFocusable = false
+        editText.isClickable = true
+        editText.setOnClickListener {
+            PerangkatTerhubungHelper.showDialog(this, rectiNum, editText.text.toString().trim()) { selected ->
+                editText.setText(selected)
+            }
+        }
     }
 
     private fun validasiRecti(rectiNum: Int, voltStr: String, loadStr: String): Boolean {
@@ -1335,7 +1566,9 @@ class RingkasanActivity : AppCompatActivity() {
             if (!imageBase64Caches.containsKey(i)) {
                 try {
                     uncompressed.add(Pair(i, Uri.parse(photoUris[i])))
-                } catch (_: Exception) { }
+                } catch (e: Exception) {
+                    AppLog.e("Foto", "Uri tidak valid index=$i: ${e.message}")
+                }
             }
         }
 
@@ -1346,9 +1579,12 @@ class RingkasanActivity : AppCompatActivity() {
 
         showLoadingOverlay("Mengompres ${uncompressed.size} foto...")
         binding.btnSimpanFinal.isEnabled = false
+        AppLog.d("Foto", "Kompres ${uncompressed.size} foto dimulai")
+
         Thread {
             val latch = CountDownLatch(uncompressed.size)
             val executor = Executors.newFixedThreadPool(4)
+            val gagal = java.util.concurrent.atomic.AtomicInteger(0)
 
             for ((index, uri) in uncompressed) {
                 executor.execute {
@@ -1358,8 +1594,13 @@ class RingkasanActivity : AppCompatActivity() {
                             synchronized(imageBase64Caches) {
                                 imageBase64Caches[index] = b64
                             }
+                        } else {
+                            gagal.incrementAndGet()
+                            AppLog.e("Foto", "Kompres hasil null index=$index uri=$uri")
                         }
-                    } catch (_: Exception) {
+                    } catch (e: Exception) {
+                        gagal.incrementAndGet()
+                        AppLog.e("Foto", "Kompres gagal index=$index: ${e.javaClass.simpleName}: ${e.message}")
                     } finally {
                         latch.countDown()
                     }
@@ -1371,91 +1612,18 @@ class RingkasanActivity : AppCompatActivity() {
             } catch (_: Exception) { }
             executor.shutdown()
 
+            if (gagal.get() > 0) {
+                TelegramLogger.sendErrorMsg(
+                    context = this,
+                    activeScreen = "RingkasanActivity (Kompres Foto)",
+                    lastUserAction = lastUserAction,
+                    errorMessage = "${gagal.get()} dari ${uncompressed.size} foto gagal dikompres",
+                    relevantData = "SITE_ID: ${data.siteId}, TOTAL_FOTO=${photoUris.size}"
+                )
+            }
+
             runOnUiThread { onSelesai() }
         }.start()
-    }
-
-    private fun lanjutkanKirimDataBaru() {
-        pendingAction = "input"
-        showLoadingOverlay("Menyimpan data...")
-        binding.btnSimpanFinal.isEnabled = false
-
-        val queue = VolleyHelper.getRequestQueue(this)
-
-        val request = object : StringRequest(
-            Method.POST, urlSheet,
-            { response ->
-                hideLoadingOverlay()
-                try {
-                    val json = JSONObject(response)
-                    when (json.optString("status")) {
-                        "success" -> {
-                            notificationHelper.showNotification(
-                                "✅ Data Berhasil Disimpan",
-                                "Site ${data.siteId} berhasil ditambahkan.",
-                                true
-                            )
-                            showSnackbar("✅ Data berhasil disimpan!")
-                            val intent = Intent()
-                            intent.putExtra("RESET_FORM", true)
-                            setResult(RESULT_OK, intent)
-                            finish()
-                        }
-                        "duplicate" -> {
-                            notificationHelper.showNotification(
-                                "⚠️ Site ID Sudah Ada",
-                                "Site ${data.siteId} sudah terdaftar di sistem.",
-                                false
-                            )
-                            showDuplicateDialog()
-                        }
-                        else -> {
-                            showSnackbar("❌ Gagal: ${json.optString("message")}", isError = true)
-                        }
-                    }
-                } catch (e: Exception) {
-                    showSnackbar("❌ Gagal membaca respons server", isError = true)
-                }
-                binding.btnSimpanFinal.isEnabled = true
-            },
-            { error ->
-                hideLoadingOverlay()
-                binding.btnSimpanFinal.isEnabled = true
-
-                notificationHelper.showNotification(
-                    "❌ Gagal Menyimpan Data",
-                    "Gagal menyimpan Site ${data.siteId}. Cek koneksi internet.",
-                    false
-                )
-
-                if (error.cause is SocketTimeoutException || error is com.android.volley.TimeoutError) {
-                    showTimeoutDialog()
-                } else {
-                    showErrorDialog(error.message ?: "Koneksi terputus")
-                }
-            }
-        ) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-                headers["Connection"] = "close"
-                return headers
-            }
-
-            override fun getBodyContentType(): String {
-                return "application/x-www-form-urlencoded; charset=utf-8"
-            }
-
-            override fun getParamsEncoding(): String {
-                return "UTF-8"
-            }
-
-            override fun getParams(): MutableMap<String, String> {
-                return getSubmitParams()
-            }
-        }
-
-        VolleyHelper.apply60sTimeout(request)
-        queue.add(request)
     }
 
     private fun showDuplicateDialog() {
@@ -1490,69 +1658,6 @@ class RingkasanActivity : AppCompatActivity() {
 
     private fun kirimUpdateKeServer() {
         kompresSemuaFotoLaluLanjut { lanjutkanKirimUpdate() }
-    }
-
-    private fun lanjutkanKirimUpdate() {
-        pendingAction = "update"
-        showLoadingOverlay("Mengupdate data...")
-        binding.btnSimpanFinal.isEnabled = false
-
-        val queue = VolleyHelper.getRequestQueue(this)
-
-        val request = object : StringRequest(
-            Method.POST, urlSheet,
-            { response ->
-                hideLoadingOverlay()
-                try {
-                    val json = JSONObject(response)
-                    if (json.optString("status") == "success") {
-                        showSnackbar("✅ Data berhasil diupdate!")
-                        val intent = Intent()
-                        intent.putExtra("RESET_FORM", true)
-                        setResult(RESULT_OK, intent)
-                        finish()
-                    } else {
-                        showSnackbar("❌ Gagal update: ${json.optString("message")}", isError = true)
-                    }
-                } catch (e: Exception) {
-                    showSnackbar("❌ Gagal membaca respons server", isError = true)
-                }
-                binding.btnSimpanFinal.isEnabled = true
-            },
-            { error ->
-                hideLoadingOverlay()
-                binding.btnSimpanFinal.isEnabled = true
-
-                if (error.cause is SocketTimeoutException || error is TimeoutError) {
-                    showTimeoutDialog()
-                } else {
-                    showErrorDialog(error.message ?: "Koneksi terputus")
-                }
-            }
-        ) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-                headers["Connection"] = "close"
-                return headers
-            }
-
-            override fun getBodyContentType(): String {
-                return "application/x-www-form-urlencoded; charset=utf-8"
-            }
-
-            override fun getParamsEncoding(): String {
-                return "UTF-8"
-            }
-
-            override fun getParams(): MutableMap<String, String> {
-                val params = getSubmitParams()
-                params["action"] = "update"
-                return params
-            }
-        }
-
-        VolleyHelper.apply60sTimeout(request)
-        queue.add(request)
     }
 
     private fun getSubmitParams(): MutableMap<String, String> {

@@ -1,12 +1,16 @@
 package com.example.zaman_apps.utils
 
 import android.content.Context
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
 import com.example.zaman_apps.R
 import org.json.JSONArray
+import org.json.JSONObject
 
 object DropdownOptionsHelper {
 
     private const val PREF_NAME = "dropdown_options_prefs"
+    private const val URL_SHEET = "https://script.google.com/macros/s/AKfycby4n_8DasDqYLL-K7DQMUb_6pyF7FkuDaSWde98TDMlF0BnneJjVVwadqzuRzq-M1KguA/exec"
 
     const val KEY_EAS = "key_eas"
     const val KEY_MERK_GENSET = "key_merk_genset"
@@ -51,11 +55,11 @@ object DropdownOptionsHelper {
     fun getMerkBateraiFiltered(jenisBaterai: String): List<String> {
         val jenisUpper = jenisBaterai.uppercase().trim()
         return when {
-            jenisUpper.contains("LITHIUM") -> listOf("", "SACREDSUN", "ZTE", "SACREDSUN + ZTE")
-            jenisUpper.contains("FLOATING") -> listOf("", "SACREDSUN", "MAXLIFE", "SONNENSCHEIN")
+            jenisUpper.contains("LITHIUM") -> listOf("", "SACREDSUN", "ZTE", "SACREDSUN+ZTE")
+            jenisUpper.contains("FLOATING") -> listOf("", "SACREDSUN", "MAXLIFE", "SONENSCHEIN")
             jenisUpper.contains("SPS") -> listOf("", "SPS")
-            jenisUpper.contains("NO BATTERY") || jenisUpper.contains("NOBATTERY") || jenisUpper == "NOL" -> listOf("", "NO BATTERY", "STOLEN", "-")
-            else -> listOf("", "SACREDSUN", "ZTE", "MAXLIFE", "SONNENSCHEIN", "SACREDSUN + ZTE", "SPS", "NO BATTERY", "STOLEN", "-")
+            jenisUpper.contains("NO BATTERY") || jenisUpper.contains("NOBATTERY") || jenisUpper == "NOL" -> listOf("", "No Battery")
+            else -> listOf("", "SACREDSUN", "ZTE", "SACREDSUN+ZTE", "MAXLIFE", "SPS", "SONENSCHEIN", "No Battery")
         }
     }
 
@@ -97,6 +101,8 @@ object DropdownOptionsHelper {
 
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         prefs.edit().putString(key, jsonArray.toString()).apply()
+
+        syncOptionToCloud(context, key, options)
     }
 
     fun addOption(context: Context, key: String, newOption: String) {
@@ -126,6 +132,68 @@ object DropdownOptionsHelper {
     fun resetToDefault(context: Context, key: String) {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         prefs.edit().remove(key).apply()
+
+        // Sync reset to cloud
+        val resId = getDefaultResId(key)
+        val defaultList = context.resources.getStringArray(resId).toList()
+        syncOptionToCloud(context, key, defaultList)
+    }
+
+    fun syncCloudOptions(context: Context, onComplete: (() -> Unit)? = null) {
+        val queue = VolleyHelper.getRequestQueue(context)
+        val url = "$URL_SHEET?action=get_dropdown_options"
+
+        val request = StringRequest(
+            Request.Method.GET, url,
+            { response ->
+                try {
+                    val json = JSONObject(response)
+                    if (json.optString("status") == "success") {
+                        val optionsObj = json.optJSONObject("options")
+                        if (optionsObj != null) {
+                            val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit()
+                            val keys = optionsObj.keys()
+                            while (keys.hasNext()) {
+                                val key = keys.next()
+                                val array = optionsObj.getJSONArray(key)
+                                prefs.putString(key, array.toString())
+                            }
+                            prefs.apply()
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    onComplete?.invoke()
+                }
+            },
+            {
+                onComplete?.invoke()
+            }
+        )
+        VolleyHelper.apply30sTimeout(request)
+        queue.add(request)
+    }
+
+    private fun syncOptionToCloud(context: Context, key: String, options: List<String>) {
+        val queue = VolleyHelper.getRequestQueue(context)
+        val request = object : StringRequest(
+            Method.POST, URL_SHEET,
+            { _ -> },
+            { _ -> }
+        ) {
+            override fun getParams(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["action"] = "save_dropdown_options"
+                params["key"] = key
+                val jsonArray = JSONArray()
+                options.forEach { jsonArray.put(it) }
+                params["options"] = jsonArray.toString()
+                return params
+            }
+        }
+        VolleyHelper.apply30sTimeout(request)
+        queue.add(request)
     }
 
     private fun String?.isNull_or_empty(): Boolean = this == null || this.trim().isEmpty()

@@ -9,9 +9,9 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
@@ -24,7 +24,10 @@ import com.android.volley.toolbox.StringRequest
 import com.example.zaman_apps.databinding.ActivityKelolaUserBinding
 import com.example.zaman_apps.utils.SessionHelper
 import com.example.zaman_apps.utils.VolleyHelper
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.SocketTimeoutException
@@ -157,7 +160,7 @@ class KelolaUserActivity : AppCompatActivity() {
                     username = obj.optString("username"),
                     name = obj.optString("name", obj.optString("username")),
                     role = obj.optString("role", "user"),
-                    canEdit = obj.optBoolean("can_edit", false)
+                    canEdit = obj.optBoolean("can_edit", true)
                 )
             )
         }
@@ -228,103 +231,222 @@ class KelolaUserActivity : AppCompatActivity() {
         tvUsername.text = "@${user.username}"
         tvUsername.textSize = 13f
         tvUsername.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
-        tvUsername.setPadding(0, 2, 0, 8)
+        tvUsername.setPadding(0, 2, 0, 6)
         infoCol.addView(tvUsername)
 
         val badgeRow = LinearLayout(this)
         badgeRow.orientation = LinearLayout.HORIZONTAL
         badgeRow.gravity = Gravity.CENTER_VERTICAL
 
-        // Role Badge
+        // Role Badge (ADMIN / USER)
         val tvRole = TextView(this)
         val isRoleAdmin = user.role.equals("admin", ignoreCase = true)
-        tvRole.text = if (isRoleAdmin) "ADMIN" else "USER"
-        tvRole.textSize = 11f
+        tvRole.text = if (isRoleAdmin) "ADMIN" else "TEKNISI"
+        tvRole.textSize = 10f
         tvRole.setTypeface(null, Typeface.BOLD)
         tvRole.setTextColor(Color.WHITE)
         val bgRole = GradientDrawable()
-        bgRole.cornerRadius = 12f
+        bgRole.cornerRadius = 10f
         bgRole.setColor(ContextCompat.getColor(this, if (isRoleAdmin) R.color.brand_primary else R.color.brand_accent_light))
         tvRole.background = bgRole
-        tvRole.setPadding(16, 6, 16, 6)
+        tvRole.setPadding(14, 4, 14, 4)
         badgeRow.addView(tvRole)
-
-        // Can Edit Badge
-        val tvCanEdit = TextView(this)
-        tvCanEdit.text = if (user.canEdit) "✓ BISA EDIT" else "❌ NO EDIT"
-        tvCanEdit.textSize = 11f
-        tvCanEdit.setTypeface(null, Typeface.BOLD)
-        tvCanEdit.setTextColor(ContextCompat.getColor(this, if (user.canEdit) R.color.brand_primary else R.color.text_secondary))
-        val bgEdit = GradientDrawable()
-        bgEdit.cornerRadius = 12f
-        bgEdit.setColor(ContextCompat.getColor(this, if (user.canEdit) R.color.brand_accent_light else R.color.section_bg))
-        tvCanEdit.background = bgEdit
-        val editParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply { marginStart = 12 }
-        tvCanEdit.layoutParams = editParams
-        tvCanEdit.setPadding(16, 6, 16, 6)
-        badgeRow.addView(tvCanEdit)
 
         infoCol.addView(badgeRow)
         root.addView(infoCol)
 
-        // Action Edit
-        val btnEdit = TextView(this)
-        btnEdit.text = "✏️"
-        btnEdit.textSize = 18f
-        btnEdit.setPadding(16, 12, 16, 12)
+        // Action Buttons Row (Edit & Hapus)
+        val actionRow = LinearLayout(this)
+        actionRow.orientation = LinearLayout.HORIZONTAL
+        actionRow.gravity = Gravity.CENTER_VERTICAL
+
+        // Edit Button (Text)
+        val btnEdit = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle)
+        btnEdit.text = "Edit"
+        btnEdit.textSize = 13f
+        btnEdit.setTypeface(null, Typeface.BOLD)
+        btnEdit.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
         btnEdit.setOnClickListener {
             dialogEditUser(user)
         }
-        root.addView(btnEdit)
+        actionRow.addView(btnEdit)
 
-        // Action Rename Username
-        val btnRename = TextView(this)
-        btnRename.text = "🏷️"
-        btnRename.textSize = 18f
-        btnRename.setPadding(16, 12, 16, 12)
-        btnRename.setOnClickListener {
-            dialogRenameUsername(user.username)
-        }
-        root.addView(btnRename)
-
-        // Action Delete (hanya jika bukan akun diri sendiri / admin utama)
+        // Hapus Button (Text - hanya jika bukan akun diri sendiri)
         val currentUsername = SessionHelper.getUsername(this)
         if (!user.username.equals(currentUsername, ignoreCase = true)) {
-            val btnDelete = TextView(this)
-            btnDelete.text = "🗑️"
-            btnDelete.textSize = 18f
-            btnDelete.setPadding(16, 12, 16, 12)
+            val btnDelete = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle)
+            btnDelete.text = "Hapus"
+            btnDelete.textSize = 13f
+            btnDelete.setTypeface(null, Typeface.BOLD)
+            btnDelete.setTextColor(ContextCompat.getColor(this, R.color.error))
             btnDelete.setOnClickListener {
-                konfirmasiHapus(user.username)
+                konfirmasiHapus(user)
             }
-            root.addView(btnDelete)
+            actionRow.addView(btnDelete)
         }
 
+        root.addView(actionRow)
         card.addView(root)
         return card
     }
 
+    private fun buatCustomDialogHeader(iconRes: Int, title: String, subtitle: String): View {
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
+        root.setPadding(24, 20, 24, 12)
+
+        val headerRow = LinearLayout(this)
+        headerRow.orientation = LinearLayout.HORIZONTAL
+        headerRow.gravity = Gravity.CENTER_VERTICAL
+
+        val cardIcon = MaterialCardView(this)
+        cardIcon.radius = 12f
+        cardIcon.cardElevation = 0f
+        cardIcon.setCardBackgroundColor(ContextCompat.getColor(this, R.color.brand_accent_light))
+        val iconParams = LinearLayout.LayoutParams(42, 42)
+        cardIcon.layoutParams = iconParams
+
+        val iv = ImageView(this)
+        iv.setImageResource(iconRes)
+        iv.setColorFilter(ContextCompat.getColor(this, R.color.brand_primary))
+        iv.setPadding(10, 10, 10, 10)
+        cardIcon.addView(iv)
+        headerRow.addView(cardIcon)
+
+        val textCol = LinearLayout(this)
+        textCol.orientation = LinearLayout.VERTICAL
+        textCol.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+            marginStart = 14
+        }
+
+        val tvTitle = TextView(this)
+        tvTitle.text = title
+        tvTitle.textSize = 16f
+        tvTitle.setTypeface(null, Typeface.BOLD)
+        tvTitle.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
+        textCol.addView(tvTitle)
+
+        val tvSub = TextView(this)
+        tvSub.text = subtitle
+        tvSub.textSize = 12f
+        tvSub.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+        tvSub.setPadding(0, 2, 0, 0)
+        textCol.addView(tvSub)
+
+        headerRow.addView(textCol)
+        root.addView(headerRow)
+
+        val divider = View(this)
+        val divParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2).apply {
+            topMargin = 14
+        }
+        divider.layoutParams = divParams
+        divider.setBackgroundColor(ContextCompat.getColor(this, R.color.divider))
+        root.addView(divider)
+
+        return root
+    }
+
+    private fun createFormInputLayout(hintText: String, isPassword: Boolean = false): Pair<TextInputLayout, TextInputEditText> {
+        val til = TextInputLayout(this, null, com.google.android.material.R.attr.textInputStyle)
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { topMargin = 12 }
+        til.layoutParams = params
+        til.hint = hintText
+        til.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
+        til.setBoxCornerRadii(12f, 12f, 12f, 12f)
+        til.setBoxStrokeColorStateList(ContextCompat.getColorStateList(this, R.color.brand_primary)!!)
+        til.setBoxBackgroundColorResource(R.color.white)
+
+        if (isPassword) {
+            til.endIconMode = TextInputLayout.END_ICON_PASSWORD_TOGGLE
+        }
+
+        val et = TextInputEditText(til.context)
+        et.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        if (isPassword) {
+            et.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        } else {
+            et.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_FILTER
+        }
+        et.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        et.setTextSize(14f)
+
+        til.addView(et)
+        return Pair(til, et)
+    }
+
     // ==================== DIALOG TAMBAH USER ====================
     private fun dialogTambahUser() {
-        val views = buatFormDialogViews(isEdit = false)
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
+
+        val header = buatCustomDialogHeader(
+            android.R.drawable.ic_input_add,
+            "Tambah Akun Teknisi Baru",
+            "Buat akun baru untuk teknisi agar dapat login ke aplikasi"
+        )
+        root.addView(header)
+
+        val formContainer = LinearLayout(this)
+        formContainer.orientation = LinearLayout.VERTICAL
+        formContainer.setPadding(24, 8, 24, 16)
+
+        val (tilName, etName) = createFormInputLayout("Nama Lengkap Teknisi *")
+        val (tilUsername, etUsername) = createFormInputLayout("Username / UserID Login *")
+        val (tilPassword, etPassword) = createFormInputLayout("Password Akun *", isPassword = true)
+
+        formContainer.addView(tilName)
+        formContainer.addView(tilUsername)
+        formContainer.addView(tilPassword)
+
+        val tvRoleLabel = TextView(this)
+        tvRoleLabel.text = "Hak Akses / Role Akun"
+        tvRoleLabel.textSize = 12f
+        tvRoleLabel.setTypeface(null, Typeface.BOLD)
+        tvRoleLabel.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+        tvRoleLabel.setPadding(4, 14, 0, 6)
+        formContainer.addView(tvRoleLabel)
+
+        val spinnerRole = Spinner(this)
+        val roleOptions = arrayOf("User (Teknisi)", "Admin (Akses Penuh)")
+        val adapterRole = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
+        spinnerRole.adapter = adapterRole
+
+        val spinnerBg = GradientDrawable()
+        spinnerBg.setColor(Color.WHITE)
+        spinnerBg.cornerRadius = 12f
+        spinnerBg.setStroke(2, ContextCompat.getColor(this, R.color.brand_primary))
+
+        val spinnerContainer = LinearLayout(this)
+        spinnerContainer.background = spinnerBg
+        spinnerContainer.setPadding(16, 6, 16, 6)
+        val containerParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        spinnerContainer.layoutParams = containerParams
+        spinnerContainer.addView(spinnerRole)
+        formContainer.addView(spinnerContainer)
+
+        root.addView(formContainer)
 
         AlertDialog.Builder(this)
-            .setTitle("Tambah User Baru")
-            .setView(views.root)
-            .setPositiveButton("Simpan") { _, _ ->
-                val name = views.etName.text.toString().trim()
-                val username = views.etUsername.text.toString().trim()
-                val password = views.etPassword.text.toString().trim()
-                val role = views.spinnerRole.selectedItem.toString().lowercase()
+            .setView(root)
+            .setPositiveButton("Simpan Akun") { _, _ ->
+                val name = etName.text.toString().trim()
+                val username = etUsername.text.toString().trim()
+                val password = etPassword.text.toString().trim()
+                val roleSelected = if (spinnerRole.selectedItemPosition == 1) "admin" else "user"
 
                 if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(this, "Username dan Password wajib diisi", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Username dan Password wajib diisi!", Toast.LENGTH_SHORT).show()
                     return@setPositiveButton
                 }
 
-                kirimTambahUser(name, username, password, role, true)
+                kirimTambahUser(name, username, password, roleSelected, true)
             }
             .setNegativeButton("Batal", null)
             .show()
@@ -332,69 +454,155 @@ class KelolaUserActivity : AppCompatActivity() {
 
     // ==================== DIALOG EDIT USER ====================
     private fun dialogEditUser(user: UserItem) {
-        val views = buatFormDialogViews(isEdit = true)
-        views.etName.setText(user.name)
-        views.etUsername.setText(user.username)
-        views.etUsername.isEnabled = false
-        views.etUsername.alpha = 0.6f
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
 
-        val roleOptions = arrayOf("User", "Admin")
+        val header = buatCustomDialogHeader(
+            R.drawable.ic_person,
+            "Edit Akun Teknisi",
+            "Ubah nama, username, password, atau hak akses @${user.username}"
+        )
+        root.addView(header)
+
+        val formContainer = LinearLayout(this)
+        formContainer.orientation = LinearLayout.VERTICAL
+        formContainer.setPadding(24, 8, 24, 16)
+
+        val (tilName, etName) = createFormInputLayout("Nama Lengkap Teknisi *")
+        etName.setText(user.name)
+
+        val (tilUsername, etUsername) = createFormInputLayout("Username / UserID Login *")
+        etUsername.setText(user.username)
+
+        val (tilPassword, etPassword) = createFormInputLayout("Password Baru (kosongkan jika tidak diubah)", isPassword = true)
+
+        formContainer.addView(tilName)
+        formContainer.addView(tilUsername)
+        formContainer.addView(tilPassword)
+
+        val tvRoleLabel = TextView(this)
+        tvRoleLabel.text = "Hak Akses / Role Akun"
+        tvRoleLabel.textSize = 12f
+        tvRoleLabel.setTypeface(null, Typeface.BOLD)
+        tvRoleLabel.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+        tvRoleLabel.setPadding(4, 14, 0, 6)
+        formContainer.addView(tvRoleLabel)
+
+        val spinnerRole = Spinner(this)
+        val roleOptions = arrayOf("User (Teknisi)", "Admin (Akses Penuh)")
+        val adapterRole = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
+        spinnerRole.adapter = adapterRole
         val selectedRoleIndex = if (user.role.equals("admin", ignoreCase = true)) 1 else 0
-        views.spinnerRole.setSelection(selectedRoleIndex)
+        spinnerRole.setSelection(selectedRoleIndex)
+
+        val spinnerBg = GradientDrawable()
+        spinnerBg.setColor(Color.WHITE)
+        spinnerBg.cornerRadius = 12f
+        spinnerBg.setStroke(2, ContextCompat.getColor(this, R.color.brand_primary))
+
+        val spinnerContainer = LinearLayout(this)
+        spinnerContainer.background = spinnerBg
+        spinnerContainer.setPadding(16, 6, 16, 6)
+        val containerParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        spinnerContainer.layoutParams = containerParams
+        spinnerContainer.addView(spinnerRole)
+        formContainer.addView(spinnerContainer)
+
+        root.addView(formContainer)
 
         AlertDialog.Builder(this)
-            .setTitle("Edit User @${user.username}")
-            .setView(views.root)
-            .setPositiveButton("Simpan") { _, _ ->
-                val name = views.etName.text.toString().trim()
-                val password = views.etPassword.text.toString().trim()
-                val role = views.spinnerRole.selectedItem.toString().lowercase()
+            .setView(root)
+            .setPositiveButton("Simpan Perubahan") { _, _ ->
+                val newName = etName.text.toString().trim()
+                val newUsername = etUsername.text.toString().trim()
+                val newPassword = etPassword.text.toString().trim()
+                val roleSelected = if (spinnerRole.selectedItemPosition == 1) "admin" else "user"
 
-                kirimEditUser(user.username, name, password, role, true)
+                if (newUsername.isEmpty()) {
+                    Toast.makeText(this, "Username tidak boleh kosong!", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
+                if (!newUsername.equals(user.username, ignoreCase = true)) {
+                    // Jika username diubah, kirim rename dulu lalu update
+                    kirimRenameUser(user.username, newUsername) { sukses ->
+                        if (sukses) {
+                            if (user.username.equals(SessionHelper.getUsername(this), ignoreCase = true)) {
+                                SessionHelper.saveUsername(this, newUsername)
+                            }
+                            kirimEditUser(newUsername, newName, newPassword, roleSelected, true)
+                        }
+                    }
+                } else {
+                    kirimEditUser(user.username, newName, newPassword, roleSelected, true)
+                }
             }
             .setNegativeButton("Batal", null)
             .show()
     }
 
-    // ==================== DIALOG RENAME USERNAME ====================
-    private fun dialogRenameUsername(oldUsername: String) {
-        val etNewUsername = EditText(this)
-        etNewUsername.hint = "Masukkan username baru"
-        etNewUsername.setPadding(48, 36, 48, 36)
+    // ==================== DIALOG HAPUS USER ====================
+    private fun konfirmasiHapus(user: UserItem) {
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
+        root.setPadding(24, 20, 24, 16)
 
-        val bg = GradientDrawable()
-        bg.setColor(Color.parseColor("#F8F9FA"))
-        bg.cornerRadius = 24f
-        bg.setStroke(3, Color.parseColor("#E9ECEF"))
-        etNewUsername.background = bg
+        val headerCard = MaterialCardView(this)
+        headerCard.radius = 14f
+        headerCard.cardElevation = 0f
+        headerCard.setCardBackgroundColor(Color.parseColor("#FEE2E2"))
+        val cardParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { bottomMargin = 16 }
+        headerCard.layoutParams = cardParams
 
-        val container = LinearLayout(this)
-        container.setPadding(48, 24, 48, 12)
-        container.addView(etNewUsername)
+        val headerRow = LinearLayout(this)
+        headerRow.orientation = LinearLayout.HORIZONTAL
+        headerRow.gravity = Gravity.CENTER_VERTICAL
+        headerRow.setPadding(18, 14, 18, 14)
+
+        val ivWarn = ImageView(this)
+        ivWarn.setImageResource(android.R.drawable.ic_dialog_alert)
+        ivWarn.setColorFilter(ContextCompat.getColor(this, R.color.error))
+        val ivParams = LinearLayout.LayoutParams(36, 36)
+        ivWarn.layoutParams = ivParams
+        headerRow.addView(ivWarn)
+
+        val textCol = LinearLayout(this)
+        textCol.orientation = LinearLayout.VERTICAL
+        textCol.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+            marginStart = 14
+        }
+
+        val tvTitle = TextView(this)
+        tvTitle.text = "Konfirmasi Hapus Akun"
+        tvTitle.textSize = 16f
+        tvTitle.setTypeface(null, Typeface.BOLD)
+        tvTitle.setTextColor(ContextCompat.getColor(this, R.color.error))
+        textCol.addView(tvTitle)
+
+        val tvSub = TextView(this)
+        tvSub.text = "Tindakan ini tidak dapat dibatalkan"
+        tvSub.textSize = 12f
+        tvSub.setTextColor(Color.parseColor("#991B1B"))
+        textCol.addView(tvSub)
+
+        headerRow.addView(textCol)
+        headerCard.addView(headerRow)
+        root.addView(headerCard)
+
+        val tvMsg = TextView(this)
+        tvMsg.text = "Apakah Anda yakin ingin menghapus akun teknisi @${user.username} (${user.name})?\n\nPengguna ini tidak akan dapat login lagi ke aplikasi setelah dihapus."
+        tvMsg.textSize = 14f
+        tvMsg.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        tvMsg.setLineSpacing(4f, 1f)
+        root.addView(tvMsg)
 
         AlertDialog.Builder(this)
-            .setTitle("Ganti Username @$oldUsername")
-            .setMessage("Ganti username untuk \"$oldUsername\". Histori aktivitas user di Google Sheets juga akan diperbarui secara otomatis.")
-            .setView(container)
-            .setPositiveButton("Ganti Username") { _, _ ->
-                val newUsername = etNewUsername.text.toString().trim()
-                if (newUsername.isEmpty()) {
-                    Toast.makeText(this, "Username baru tidak boleh kosong", Toast.LENGTH_SHORT).show()
-                    return@setPositiveButton
-                }
-                if (newUsername.equals(oldUsername, ignoreCase = true)) {
-                    Toast.makeText(this, "Username baru sama dengan yang lama", Toast.LENGTH_SHORT).show()
-                    return@setPositiveButton
-                }
-
-                kirimRenameUser(oldUsername, newUsername) { sukses ->
-                    if (sukses) {
-                        if (oldUsername.equals(SessionHelper.getUsername(this), ignoreCase = true)) {
-                            SessionHelper.saveUsername(this, newUsername)
-                        }
-                    }
-                }
-            }
+            .setView(root)
+            .setPositiveButton("Ya, Hapus Akun") { _, _ -> kirimHapusUser(user.username) }
             .setNegativeButton("Batal", null)
             .show()
     }
@@ -449,90 +657,6 @@ class KelolaUserActivity : AppCompatActivity() {
         }
         VolleyHelper.apply60sTimeout(request)
         queue.add(request)
-    }
-
-    // ==================== FORM DIALOG HELPER ====================
-    private class FormDialogViews(
-        val root: View,
-        val etName: EditText,
-        val etUsername: EditText,
-        val etPassword: EditText,
-        val spinnerRole: Spinner
-    )
-
-    private fun buatFormDialogViews(isEdit: Boolean): FormDialogViews {
-        val root = LinearLayout(this)
-        root.orientation = LinearLayout.VERTICAL
-        root.setPadding(48, 24, 48, 12)
-
-        fun createStyledEditText(hintText: String, isPassword: Boolean = false): EditText {
-            val et = EditText(this)
-            et.hint = hintText
-            if (isPassword) {
-                et.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            }
-            et.setPadding(40, 32, 40, 32)
-            val bg = GradientDrawable()
-            bg.setColor(Color.parseColor("#F8F9FA"))
-            bg.cornerRadius = 20f
-            bg.setStroke(3, Color.parseColor("#E9ECEF"))
-            et.background = bg
-            val params = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { bottomMargin = 20 }
-            et.layoutParams = params
-            return et
-        }
-
-        val etName = createStyledEditText("Nama Lengkap")
-        root.addView(etName)
-
-        val etUsername = createStyledEditText("Username / UserID")
-        root.addView(etUsername)
-
-        val etPassword = createStyledEditText(if (isEdit) "Password Baru (Opsional)" else "Password", isPassword = true)
-        root.addView(etPassword)
-
-        val tvRoleLabel = TextView(this)
-        tvRoleLabel.text = "Role User"
-        tvRoleLabel.textSize = 13f
-        tvRoleLabel.setTypeface(null, Typeface.BOLD)
-        tvRoleLabel.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
-        tvRoleLabel.setPadding(0, 8, 0, 8)
-        root.addView(tvRoleLabel)
-
-        val spinnerRole = Spinner(this)
-        val roleOptions = arrayOf("User", "Admin")
-        val adapterRole = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleOptions)
-        spinnerRole.adapter = adapterRole
-
-        val spinnerBg = GradientDrawable()
-        spinnerBg.setColor(Color.parseColor("#F8F9FA"))
-        spinnerBg.cornerRadius = 20f
-        spinnerBg.setStroke(3, Color.parseColor("#E9ECEF"))
-
-        val spinnerContainer = LinearLayout(this)
-        spinnerContainer.background = spinnerBg
-        spinnerContainer.setPadding(20, 8, 20, 8)
-        val containerParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply { bottomMargin = 20 }
-        spinnerContainer.layoutParams = containerParams
-        spinnerContainer.addView(spinnerRole)
-
-        root.addView(spinnerContainer)
-
-        return FormDialogViews(root, etName, etUsername, etPassword, spinnerRole)
-    }
-
-    // ==================== HAPUS USER ====================
-    private fun konfirmasiHapus(username: String) {
-        AlertDialog.Builder(this)
-            .setTitle("Hapus User")
-            .setMessage("Yakin ingin menghapus \"$username\"? Tindakan ini tidak bisa dibatalkan.")
-            .setPositiveButton("Hapus") { _, _ -> kirimHapusUser(username) }
-            .setNegativeButton("Batal", null)
-            .show()
     }
 
     // ==================== KIRIM REQUEST (TAMBAH, EDIT, HAPUS) ====================

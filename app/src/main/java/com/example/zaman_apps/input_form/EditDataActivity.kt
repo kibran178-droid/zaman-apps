@@ -42,7 +42,9 @@ import com.example.zaman_apps.utils.DropdownOptionsHelper
 import com.example.zaman_apps.utils.ImageCaptureHelper
 import com.example.zaman_apps.utils.ImageHelper
 import com.example.zaman_apps.utils.NotificationHelper
+import com.example.zaman_apps.utils.PerangkatTerhubungHelper
 import com.example.zaman_apps.utils.SessionHelper
+import com.example.zaman_apps.utils.TelegramLogger
 import com.example.zaman_apps.utils.VolleyHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -69,6 +71,7 @@ class EditDataActivity : AppCompatActivity() {
     private var currentSiteId: String? = null
     private var isRefreshing = false
     private val dataCache = mutableMapOf<String, JSONObject>()
+    private var lastUserAction: String = "Membuka Edit Data Activity"
 
     // State Foto Site (sampai 10 foto)
     private val photoItemsEdit = mutableListOf<String>()
@@ -353,6 +356,24 @@ class EditDataActivity : AppCompatActivity() {
         setupCascadingBateraiListeners(binding.spJenisBaterai5, binding.spMerkBaterai5, binding.spJumlahBattery5)
         setupCascadingBateraiListeners(binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6)
         setupCascadingBateraiListeners(binding.spJenisBaterai7, binding.spMerkBaterai7, binding.spJumlahBattery7)
+
+        fun setupPerangkatClick(editText: TextInputEditText, rectiNum: Int) {
+            editText.isFocusable = false
+            editText.isClickable = true
+            editText.setOnClickListener {
+                PerangkatTerhubungHelper.showDialog(this, rectiNum, editText.text.toString().trim()) { selected ->
+                    editText.setText(selected)
+                }
+            }
+        }
+
+        setupPerangkatClick(binding.etPerangkatTerhubung1, 1)
+        setupPerangkatClick(binding.etPerangkatTerhubung2, 2)
+        setupPerangkatClick(binding.etPerangkatTerhubung3, 3)
+        setupPerangkatClick(binding.etPerangkatTerhubung4, 4)
+        setupPerangkatClick(binding.etPerangkatTerhubung5, 5)
+        setupPerangkatClick(binding.etPerangkatTerhubung6, 6)
+        setupPerangkatClick(binding.etPerangkatTerhubung7, 7)
     }
 
     private fun updatePhotoCountBadge() {
@@ -1009,6 +1030,14 @@ class EditDataActivity : AppCompatActivity() {
             setSpinnerValueSafe(binding.spStatusGenset1, data.optString("status_genset_1", ""))
             binding.etRemarkGenset1.setText(data.optString("remark_genset_1", ""))
 
+            val merkG2 = data.optString("merk_genset_2", "").trim()
+            val capG2 = parseNumberFromSheet(data.optString("capacity_genset_2", "")).trim()
+            val statusG2 = data.optString("status_genset_2", "").trim()
+            val remarkG2 = data.optString("remark_genset_2", "").trim()
+
+            val hasGenset2 = merkG2.isNotEmpty() || capG2.isNotEmpty() || statusG2.isNotEmpty() || remarkG2.isNotEmpty()
+            binding.layoutGenset2EditContainer.visibility = if (hasGenset2) View.VISIBLE else View.GONE
+
             setSpinnerValueSafe(binding.spMerkGenset2, data.optString("merk_genset_2", ""))
             binding.etCapacityGenset2.setText(parseNumberFromSheet(data.optString("capacity_genset_2", "")))
             setSpinnerValueSafe(binding.spStatusGenset2, data.optString("status_genset_2", ""))
@@ -1040,17 +1069,59 @@ class EditDataActivity : AppCompatActivity() {
                 if (etRemark != null) etRemark.setText(data.optString("remark_$idx", ""))
             }
 
+            setSpinnerValueSafe(binding.spJenisBaterai1, data.optString("jenis_baterai_1", ""))
+            setSpinnerValueSafe(binding.spMerkBaterai1, data.optString("merk_baterai_1", ""))
             fillRectiFields(1, binding.spTypeRectifier1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spJenisBaterai1, binding.spMerkBaterai1, binding.spJumlahBattery1, binding.spBatteryRecti1, binding.spKondisiArester1, binding.switchStatusBatteryNotAktif1, binding.layoutJumlahBankNotAktif1, binding.spJumlahBankNotAktif1, binding.etMcbBatteryRecti1, binding.etBusVoltage1, binding.etLoadA1, binding.etPerangkatTerhubung1, binding.etRemark1)
+
+            setSpinnerValueSafe(binding.spJenisBaterai2, data.optString("jenis_baterai_2", ""))
+            setSpinnerValueSafe(binding.spMerkBaterai2, data.optString("merk_baterai_2", ""))
             fillRectiFields(2, binding.spTypeRectifier2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spJenisBaterai2, binding.spMerkBaterai2, binding.spJumlahBattery2, binding.spBatteryRecti2, binding.spKondisiArester2, binding.switchStatusBatteryNotAktif2, binding.layoutJumlahBankNotAktif2, binding.spJumlahBankNotAktif2, binding.etMcbBatteryRecti2, binding.etBusVoltage2, binding.etLoadA2, binding.etPerangkatTerhubung2, binding.etRemark2)
+
             fillRectiFields(3, binding.spTypeRectifier3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spJenisBaterai3, binding.spMerkBaterai3, binding.spJumlahBattery3, binding.spBatteryRecti3, binding.spKondisiArester3, binding.switchStatusBatteryNotAktif3, binding.layoutJumlahBankNotAktif3, binding.spJumlahBankNotAktif3, binding.etMcbBatteryRecti3, binding.etBusVoltage3, binding.etLoadA3, binding.etPerangkatTerhubung3)
             fillRectiFields(4, binding.spTypeRectifier4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJenisBaterai4, binding.spMerkBaterai4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.switchStatusBatteryNotAktif4, binding.layoutJumlahBankNotAktif4, binding.spJumlahBankNotAktif4, binding.etMcbBatteryRecti4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkatTerhubung4)
             fillRectiFields(5, binding.spTypeRectifier5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJenisBaterai5, binding.spMerkBaterai5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.switchStatusBatteryNotAktif5, binding.layoutJumlahBankNotAktif5, binding.spJumlahBankNotAktif5, binding.etMcbBatteryRecti5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkatTerhubung5)
             fillRectiFields(6, binding.spTypeRectifier6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.switchStatusBatteryNotAktif6, binding.layoutJumlahBankNotAktif6, binding.spJumlahBankNotAktif6, binding.etMcbBatteryRecti6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkatTerhubung6)
             fillRectiFields(7, binding.spTypeRectifier7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spJenisBaterai7, binding.spMerkBaterai7, binding.spJumlahBattery7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.switchStatusBatteryNotAktif7, binding.layoutJumlahBankNotAktif7, binding.spJumlahBankNotAktif7, binding.etMcbBatteryRecti7, binding.etBusVoltage7, binding.etLoadA7, binding.etPerangkatTerhubung7)
 
+            val rectiCards = listOf(
+                binding.cardRecti1,
+                binding.cardRecti2,
+                binding.cardRecti3,
+                binding.cardRecti4,
+                binding.cardRecti5,
+                binding.cardRecti6,
+                binding.cardRecti7
+            )
+
+            rectiCards.forEachIndexed { i, card ->
+                val rectiIdx = i + 1
+                val hasData = checkHasRectiData(data, rectiIdx)
+                card.visibility = if (hasData || rectiIdx == 1) View.VISIBLE else View.GONE
+            }
+
         } catch (e: Exception) {
             Log.e(TAG, "Error filling form: ${e.message}", e)
         }
+    }
+
+    private fun checkHasRectiData(data: JSONObject, idx: Int): Boolean {
+        val fields = listOf(
+            data.optString("type_rectifier_$idx", "").trim(),
+            data.optString("jumlah_modul_$idx", "").trim(),
+            data.optString("jumlah_modul_rusak_$idx", "").trim(),
+            data.optString("jenis_baterai_$idx", "").trim(),
+            data.optString("merk_baterai_$idx", "").trim(),
+            data.optString(if (idx == 1) "jumlah_battery_p" else "jumlah_battery_p_$idx", "").trim(),
+            data.optString("battery_recti_$idx", "").trim(),
+            data.optString("jumlah_bank_not_aktif_$idx", "").trim(),
+            data.optString("mcb_battery_recti_$idx", "").trim(),
+            data.optString("kondisi_arester_$idx", "").trim(),
+            data.optString("bus_voltage_$idx", "").trim(),
+            data.optString("load_a_$idx", "").trim(),
+            data.optString("perangkat_terhubung_$idx", "").trim(),
+            data.optString("remark_$idx", "").trim()
+        )
+        return fields.any { it.isNotEmpty() && it != "-" && it != "0" }
     }
 
     private fun parseNumberFromSheet(value: String): String {
@@ -1136,6 +1207,7 @@ class EditDataActivity : AppCompatActivity() {
     }
 
     private fun kirimUpdateData(siteId: String) {
+        lastUserAction = "Mengirim update data untuk Site ID $siteId"
         showLoadingOverlay("Mengupdate data Site $siteId...")
 
         val queue = VolleyHelper.getRequestQueue(this)
@@ -1156,20 +1228,42 @@ class EditDataActivity : AppCompatActivity() {
                         showSnackbar("✅ Data berhasil diperbarui di server!")
                         Handler(Looper.getMainLooper()).postDelayed({ finish() }, 1500)
                     } else {
-                        showSnackbar("❌ Gagal: ${json.optString("message")}", isError = true)
+                        val serverMsg = json.optString("message", "Terjadi kendala pada sistem.")
+                        showSnackbar("❌ $serverMsg", isError = true)
+                        TelegramLogger.sendErrorMsg(
+                            context = this,
+                            activeScreen = "EditDataActivity (Update Site)",
+                            lastUserAction = lastUserAction,
+                            errorMessage = "Apps Script Error: $serverMsg",
+                            relevantData = "SITE_ID: $siteId, RESPONSE: $json"
+                        )
                     }
                 } catch (e: Exception) {
-                    showSnackbar("❌ Gagal membaca respons server", isError = true)
+                    showSnackbar("❌ Terjadi kendala saat membaca respons server.", isError = true)
+                    TelegramLogger.sendError(
+                        context = this,
+                        activeScreen = "EditDataActivity (Parse Update JSON)",
+                        lastUserAction = lastUserAction,
+                        error = e,
+                        relevantData = "SITE_ID: $siteId, RAW_RESPONSE: $response"
+                    )
                 }
             },
             { error ->
                 hideLoadingOverlay()
+                TelegramLogger.sendError(
+                    context = this,
+                    activeScreen = "EditDataActivity (Update Network Failure)",
+                    lastUserAction = lastUserAction,
+                    error = error,
+                    relevantData = "SITE_ID: $siteId, VOLLEY_ERROR: ${error.message}"
+                )
                 val errorMsg = when {
                     error.cause is SocketTimeoutException || error is TimeoutError -> "Koneksi timeout, coba lagi"
                     error.cause is UnknownHostException -> "Tidak ada koneksi internet"
-                    else -> error.message ?: "Koneksi terputus"
+                    else -> "Terjadi kendala koneksi ke server."
                 }
-                showSnackbar("❌ Gagal update: $errorMsg", isError = true)
+                showSnackbar("❌ $errorMsg", isError = true)
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {

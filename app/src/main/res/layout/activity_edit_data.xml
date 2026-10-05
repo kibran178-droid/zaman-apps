@@ -869,83 +869,91 @@
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
 
-                            <!-- Divider -->
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginVertical="16dp"
-                                android:background="@color/divider" />
-
                             <!-- ========================================== -->
                             <!-- GENSET 2                                   -->
                             <!-- ========================================== -->
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="8dp"
-                                android:text="GENSET 2"
-                                android:textColor="@color/brand_primary"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-
-                            <TextView style="@style/FieldLabel" android:text="Merk Genset 2" />
-                            <Spinner
-                                android:id="@+id/spMerkGenset2"
-                                style="@style/SpinnerFieldModern"
-                                android:entries="@array/merk_genset_options" />
-
-                            <TextView style="@style/FieldLabel" android:text="Capacity 2" />
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            <LinearLayout
+                                android:id="@+id/layoutGenset2EditContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
-                                app:boxBackgroundColor="@color/white"
-                                app:boxBackgroundMode="outline"
-                                app:boxCornerRadiusBottomEnd="10dp"
-                                app:boxCornerRadiusBottomStart="10dp"
-                                app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/etCapacityGenset2"
+                                android:orientation="vertical">
+
+                                <!-- Divider -->
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginVertical="16dp"
+                                    android:background="@color/divider" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="GENSET 2"
+                                    android:textColor="@color/brand_primary"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView style="@style/FieldLabel" android:text="Merk Genset 2" />
+                                <Spinner
+                                    android:id="@+id/spMerkGenset2"
+                                    style="@style/SpinnerFieldModern"
+                                    android:entries="@array/merk_genset_options" />
+
+                                <TextView style="@style/FieldLabel" android:text="Capacity 2" />
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Capacity (kVA)"
-                                    android:inputType="numberDecimal"
-                                    android:textColor="@color/text_primary"
-                                    android:textColorHint="@color/text_secondary" />
-                            </com.google.android.material.textfield.TextInputLayout>
+                                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    app:boxStrokeColor="@color/brand_primary"
+                                    app:boxBackgroundColor="@color/white"
+                                    app:boxBackgroundMode="outline"
+                                    app:boxCornerRadiusBottomEnd="10dp"
+                                    app:boxCornerRadiusBottomStart="10dp"
+                                    app:boxCornerRadiusTopEnd="10dp"
+                                    app:boxCornerRadiusTopStart="10dp">
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/etCapacityGenset2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="Capacity (kVA)"
+                                        android:inputType="numberDecimal"
+                                        android:textColor="@color/text_primary"
+                                        android:textColorHint="@color/text_secondary" />
+                                </com.google.android.material.textfield.TextInputLayout>
 
-                            <TextView style="@style/FieldLabel" android:text="Status Genset 2" />
-                            <Spinner
-                                android:id="@+id/spStatusGenset2"
-                                style="@style/SpinnerFieldModern"
-                                android:entries="@array/status_genset_options" />
+                                <TextView style="@style/FieldLabel" android:text="Status Genset 2" />
+                                <Spinner
+                                    android:id="@+id/spStatusGenset2"
+                                    style="@style/SpinnerFieldModern"
+                                    android:entries="@array/status_genset_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Remark Genset 2" />
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
-                                app:boxBackgroundColor="@color/white"
-                                app:boxBackgroundMode="outline"
-                                app:boxCornerRadiusBottomEnd="10dp"
-                                app:boxCornerRadiusBottomStart="10dp"
-                                app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/etRemarkGenset2"
+                                <TextView style="@style/FieldLabel" android:text="Remark Genset 2" />
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Catatan Genset 2"
-                                    android:inputType="textMultiLine"
-                                    android:minLines="2"
-                                    android:textColor="@color/text_primary"
-                                    android:textColorHint="@color/text_secondary" />
-                            </com.google.android.material.textfield.TextInputLayout>
+                                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                    app:boxStrokeColor="@color/brand_primary"
+                                    app:boxBackgroundColor="@color/white"
+                                    app:boxBackgroundMode="outline"
+                                    app:boxCornerRadiusBottomEnd="10dp"
+                                    app:boxCornerRadiusBottomStart="10dp"
+                                    app:boxCornerRadiusTopEnd="10dp"
+                                    app:boxCornerRadiusTopStart="10dp">
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/etRemarkGenset2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="Catatan Genset 2"
+                                        android:inputType="textMultiLine"
+                                        android:minLines="2"
+                                        android:textColor="@color/text_primary"
+                                        android:textColorHint="@color/text_secondary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -956,6 +964,7 @@
                 <!-- SECTION: RECTI 1 (Collapsible)            -->
                 <!-- ========================================== -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardRecti1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -1163,8 +1172,9 @@
                                     android:id="@+id/etPerangkatTerhubung1"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Perangkat Terhubung"
-                                    android:inputType="text"
+                                    android:focusable="false"
+                                    android:clickable="true"
+                                    android:hint="Pilih Perangkat (Multi-select)"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
@@ -1201,6 +1211,7 @@
                 <!-- SECTION: RECTI 2 (Collapsible)            -->
                 <!-- ========================================== -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardRecti2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -1408,8 +1419,9 @@
                                     android:id="@+id/etPerangkatTerhubung2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Perangkat Terhubung"
-                                    android:inputType="text"
+                                    android:focusable="false"
+                                    android:clickable="true"
+                                    android:hint="Pilih Perangkat (Multi-select)"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
@@ -1446,6 +1458,7 @@
                 <!-- SECTION: RECTI 3 (Collapsible)            -->
                 <!-- ========================================== -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardRecti3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -1650,8 +1663,9 @@
                                     android:id="@+id/etPerangkatTerhubung3"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Perangkat Terhubung"
-                                    android:inputType="text"
+                                    android:focusable="false"
+                                    android:clickable="true"
+                                    android:hint="Pilih Perangkat (Multi-select)"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
@@ -1663,6 +1677,7 @@
 
                 <!-- SECTION: RECTI 4 -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardRecti4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -1736,7 +1751,7 @@
                             </com.google.android.material.textfield.TextInputLayout>
                             <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
                             <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Perangkat Terhubung" android:inputType="text" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung4" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -1744,6 +1759,7 @@
 
                 <!-- SECTION: RECTI 5 -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardRecti5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -1815,7 +1831,7 @@
                             </com.google.android.material.textfield.TextInputLayout>
                             <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
                             <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Perangkat Terhubung" android:inputType="text" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung5" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -1823,6 +1839,7 @@
 
                 <!-- SECTION: RECTI 6 -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardRecti6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -1894,7 +1911,7 @@
                             </com.google.android.material.textfield.TextInputLayout>
                             <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
                             <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung6" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Perangkat Terhubung" android:inputType="text" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung6" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -1902,6 +1919,7 @@
 
                 <!-- SECTION: RECTI 7 -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardRecti7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -1973,7 +1991,7 @@
                             </com.google.android.material.textfield.TextInputLayout>
                             <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
                             <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Perangkat Terhubung" android:inputType="text" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung7" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
                     </LinearLayout>

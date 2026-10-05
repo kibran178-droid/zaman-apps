@@ -12,6 +12,7 @@ import android.view.View
 import android.view.animation.OvershootInterpolator
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
@@ -30,8 +31,10 @@ import com.example.zaman_apps.databinding.ActivityInputanBinding
 import com.example.zaman_apps.utils.DropdownOptionsHelper
 import com.example.zaman_apps.utils.ImageCaptureHelper
 import com.example.zaman_apps.utils.ImageHelper
+import com.example.zaman_apps.utils.PerangkatTerhubungHelper
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class InputanActivity : AppCompatActivity() {
 
@@ -40,7 +43,7 @@ class InputanActivity : AppCompatActivity() {
     private var currentStep = 1
     private val totalSteps = 12
 
-    // List foto URIs yang benar-benar terpilih saja (dinamis)
+    // List foto URIs yang terpilih
     private val selectedImageUris = mutableListOf<Uri>()
     private var activeCameraSlotIndex = -1
     private var pendingCameraUri: Uri? = null
@@ -85,7 +88,21 @@ class InputanActivity : AppCompatActivity() {
                 updatePhotoSlotsUI()
                 showSnackbar("Berhasil menambahkan ${toAdd.size} foto", isError = false)
             } else {
-                showSnackbar("Maksimal 10 foto dokumentasi sudah terpenuhi!", isError = false)
+                showSnackbar("Maksimal 10 foto dokumentasi sudah terpenuhi!", isError = true)
+            }
+        }
+    }
+
+    // Single Image Replace Launcher (khusus tombol Ganti pada slot tertentu)
+    private var activeSlotIndexToReplace = -1
+    private val replaceSingleImageLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            if (activeSlotIndexToReplace in 0 until selectedImageUris.size) {
+                selectedImageUris[activeSlotIndexToReplace] = it
+                updatePhotoSlotsUI()
+                showSnackbar("Foto #${activeSlotIndexToReplace + 1} berhasil diganti", isError = false)
             }
         }
     }
@@ -194,9 +211,27 @@ class InputanActivity : AppCompatActivity() {
         binding.switchStatusBatteryNotAktif6.setOnCheckedChangeListener { _, isChecked -> binding.layoutJumlahBankNotAktif6.visibility = if (isChecked) View.VISIBLE else View.GONE }
         binding.switchStatusBatteryNotAktif7.setOnCheckedChangeListener { _, isChecked -> binding.layoutJumlahBankNotAktif7.visibility = if (isChecked) View.VISIBLE else View.GONE }
 
+        fun setupPerangkatClick(editText: EditText, rectiNum: Int) {
+            editText.isFocusable = false
+            editText.isClickable = true
+            editText.setOnClickListener {
+                PerangkatTerhubungHelper.showDialog(this, rectiNum, editText.text.toString().trim()) { selected ->
+                    editText.setText(selected)
+                }
+            }
+        }
+
+        setupPerangkatClick(binding.etPerangkat1, 1)
+        setupPerangkatClick(binding.etPerangkat2, 2)
+        setupPerangkatClick(binding.etPerangkat3, 3)
+        setupPerangkatClick(binding.etPerangkat4, 4)
+        setupPerangkatClick(binding.etPerangkat5, 5)
+        setupPerangkatClick(binding.etPerangkat6, 6)
+        setupPerangkatClick(binding.etPerangkat7, 7)
+
         binding.btnPilihFotoMulti.setOnClickListener {
             if (selectedImageUris.size >= 10) {
-                showSnackbar("Maksimal 10 foto telah terpilih", isError = false)
+                showSnackbar("Maksimal 10 foto telah terpilih!", isError = true)
                 return@setOnClickListener
             }
             pickMultipleImagesLauncher.launch("image/*")
@@ -204,7 +239,7 @@ class InputanActivity : AppCompatActivity() {
 
         binding.btnAmbilFotoKamera.setOnClickListener {
             if (selectedImageUris.size >= 10) {
-                showSnackbar("Maksimal 10 foto telah terpilih", isError = false)
+                showSnackbar("Maksimal 10 foto telah terpilih!", isError = true)
                 return@setOnClickListener
             }
             activeCameraSlotIndex = -1
@@ -239,7 +274,7 @@ class InputanActivity : AppCompatActivity() {
         val count = selectedImageUris.size
         binding.tvCountFoto.text = "$count / 10"
 
-        if (count == 10) {
+        if (count in 3..10) {
             binding.tvCountFoto.setBackgroundResource(R.drawable.badge_welcome_bg)
             binding.tvCountFoto.setTextColor(Color.WHITE)
         } else {
@@ -251,7 +286,7 @@ class InputanActivity : AppCompatActivity() {
 
         if (selectedImageUris.isEmpty()) {
             val tvEmpty = TextView(this)
-            tvEmpty.text = "Belum ada foto terpilih. Gunakan tombol 'Pilih Foto' atau 'Ambil Kamera' di atas."
+            tvEmpty.text = "Belum ada foto terpilih (minimal 3 foto wajib terpilih). Gunakan tombol 'Pilih Foto' atau 'Ambil Kamera'."
             tvEmpty.textSize = 13f
             tvEmpty.gravity = Gravity.CENTER
             tvEmpty.setPadding(32, 48, 32, 48)
@@ -369,7 +404,8 @@ class InputanActivity : AppCompatActivity() {
                         }
                     }
                     1 -> {
-                        pickMultipleImagesLauncher.launch("image/*")
+                        activeSlotIndexToReplace = slotIndex
+                        replaceSingleImageLauncher.launch("image/*")
                     }
                 }
             }
@@ -410,13 +446,18 @@ class InputanActivity : AppCompatActivity() {
         }
     }
 
-    private fun validasiLangkah1(): Boolean {
+    // ==================== MANDATORY VALIDATIONS ====================
+
+    private fun validasiStep1(): Boolean {
         val siteId = binding.etSiteId.text.toString().trim()
         val siteName = binding.etSiteName.text.toString().trim()
+        val idPelanggan = binding.etIdPelanggan.text.toString().trim()
+        val mcbKwh = binding.spMcbKwh.selectedItem?.toString() ?: ""
+        val daya = binding.etDaya.text.toString().trim()
 
         if (siteId.isEmpty()) {
             binding.siteIdLayout.error = "Site ID wajib diisi!"
-            showSnackbar("Site ID tidak boleh kosong", isError = true)
+            showSnackbar("Site ID tidak boleh kosong!", isError = true)
             binding.etSiteId.requestFocus()
             return false
         } else {
@@ -425,66 +466,153 @@ class InputanActivity : AppCompatActivity() {
 
         if (siteName.isEmpty()) {
             binding.siteNameLayout.error = "Nama Site wajib diisi!"
-            showSnackbar("Nama Site tidak boleh kosong", isError = true)
+            showSnackbar("Nama Site tidak boleh kosong!", isError = true)
             binding.etSiteName.requestFocus()
             return false
         } else {
             binding.siteNameLayout.error = null
         }
 
+        if (idPelanggan.isEmpty()) {
+            showSnackbar("ID Pelanggan (PLN) wajib diisi!", isError = true)
+            binding.etIdPelanggan.requestFocus()
+            return false
+        }
+
+        if (mcbKwh.isBlank()) {
+            showSnackbar("MCB kWh wajib dipilih!", isError = true)
+            return false
+        }
+
+        if (daya.isEmpty()) {
+            showSnackbar("Daya wajib diisi!", isError = true)
+            binding.etDaya.requestFocus()
+            return false
+        }
+
         val photoCount = selectedImageUris.size
-        if (photoCount < 10) {
-            showSnackbar("Informasi: Anda memilih $photoCount/10 foto (Opsional untuk testing)", isError = false)
+        if (photoCount < 3) {
+            showSnackbar("Minimal 3 foto dokumentasi wajib dipilih! (Saat ini: $photoCount foto)", isError = true)
+            return false
         }
 
         return true
     }
 
-    private fun validasiRecti(rectiNum: Int, voltStr: String, loadStr: String): Boolean {
-        if (voltStr.isNotBlank()) {
-            val volt = voltStr.replace(",", ".").toDoubleOrNull()
-            if (volt == null || volt < 40.0 || volt > 60.0) {
-                AlertDialog.Builder(this)
-                    .setTitle("⚠️ Bus Voltage Tidak Valid")
-                    .setMessage("Bus Voltage pada Recti #$rectiNum harus di antara 40 - 60 V.\n\nNilai diinput: $voltStr V")
-                    .setPositiveButton("Mengerti", null)
-                    .show()
-                showSnackbar("Bus Voltage Recti #$rectiNum harus antara 40 - 60 V", isError = true)
-                return false
-            }
+    private fun validasiStepEas(): Boolean {
+        if ((binding.spMainsFail.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Mains Fail wajib dipilih!", isError = true); return false }
+        if ((binding.spRectyFail.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Recty Fail wajib dipilih!", isError = true); return false }
+        if ((binding.spStolen.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Stolen wajib dipilih!", isError = true); return false }
+        if ((binding.spLowBatt.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Low Batt wajib dipilih!", isError = true); return false }
+        if ((binding.spEngRun.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Eng Run wajib dipilih!", isError = true); return false }
+        return true
+    }
+
+    private fun validasiStepListrik(): Boolean {
+        if (binding.etRV.text.toString().trim().isEmpty()) { showSnackbar("Voltage R wajib diisi!", isError = true); binding.etRV.requestFocus(); return false }
+        if (binding.etSV.text.toString().trim().isEmpty()) { showSnackbar("Voltage S wajib diisi!", isError = true); binding.etSV.requestFocus(); return false }
+        if (binding.etTV.text.toString().trim().isEmpty()) { showSnackbar("Voltage T wajib diisi!", isError = true); binding.etTV.requestFocus(); return false }
+        if (binding.etRA.text.toString().trim().isEmpty()) { showSnackbar("Arus R wajib diisi!", isError = true); binding.etRA.requestFocus(); return false }
+        if (binding.etSA.text.toString().trim().isEmpty()) { showSnackbar("Arus S wajib diisi!", isError = true); binding.etSA.requestFocus(); return false }
+        if (binding.etTA.text.toString().trim().isEmpty()) { showSnackbar("Arus T wajib diisi!", isError = true); binding.etTA.requestFocus(); return false }
+        return true
+    }
+
+    private fun validasiStepGenset(): Boolean {
+        if ((binding.spMerkGenset1.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Merk Genset 1 wajib dipilih!", isError = true); return false }
+        if (binding.etCapacityGenset1.text.toString().trim().isEmpty()) { showSnackbar("Capacity Genset 1 wajib diisi!", isError = true); binding.etCapacityGenset1.requestFocus(); return false }
+        if ((binding.spStatusGenset1.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Status Genset 1 wajib dipilih!", isError = true); return false }
+        if (binding.etRemarkGenset1.text.toString().trim().isEmpty()) { showSnackbar("Catatan Genset 1 wajib diisi!", isError = true); binding.etRemarkGenset1.requestFocus(); return false }
+
+        if (adaGenset2) {
+            if ((binding.spMerkGenset2.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Merk Genset 2 wajib dipilih!", isError = true); return false }
+            if (binding.etCapacityGenset2.text.toString().trim().isEmpty()) { showSnackbar("Capacity Genset 2 wajib diisi!", isError = true); binding.etCapacityGenset2.requestFocus(); return false }
+            if ((binding.spStatusGenset2.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Status Genset 2 wajib dipilih!", isError = true); return false }
+            if (binding.etRemarkGenset2.text.toString().trim().isEmpty()) { showSnackbar("Catatan Genset 2 wajib diisi!", isError = true); binding.etRemarkGenset2.requestFocus(); return false }
         }
-        if (loadStr.isNotBlank()) {
-            val load = loadStr.replace(",", ".").toDoubleOrNull()
-            if (load == null || load < 0.0 || load > 200.0) {
-                AlertDialog.Builder(this)
-                    .setTitle("⚠️ Load (A) Tidak Valid")
-                    .setMessage("Load (A) pada Recti #$rectiNum harus di antara 0 - 200 A.\n\nNilai diinput: $loadStr A")
-                    .setPositiveButton("Mengerti", null)
-                    .show()
-                showSnackbar("Load Recti #$rectiNum harus antara 0 - 200 A", isError = true)
-                return false
-            }
+        return true
+    }
+
+    private fun validasiRectiFull(
+        rectiNum: Int,
+        spType: Spinner, spMod: Spinner, spModRusak: Spinner,
+        spJenisBat: Spinner, spMerkBat: Spinner, spJmlBat: Spinner,
+        spBalting: Spinner, switchNotAktif: SwitchMaterial,
+        spBankNotAktif: Spinner, etMcb: EditText,
+        spArester: Spinner, etVolt: EditText,
+        etLoad: EditText, etPerangkat: EditText,
+        etRemark: EditText? = null
+    ): Boolean {
+        if ((spType.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Type Rectifier #$rectiNum wajib dipilih!", isError = true); return false }
+        if ((spMod.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Jumlah Modul #$rectiNum wajib dipilih!", isError = true); return false }
+        if ((spModRusak.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Modul Rusak #$rectiNum wajib dipilih!", isError = true); return false }
+        if ((spJenisBat.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Jenis Baterai #$rectiNum wajib dipilih!", isError = true); return false }
+        if ((spMerkBat.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Merk Baterai #$rectiNum wajib dipilih!", isError = true); return false }
+        if ((spJmlBat.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Jumlah Battery #$rectiNum wajib dipilih!", isError = true); return false }
+        if ((spBalting.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Battery Status #$rectiNum wajib dipilih!", isError = true); return false }
+
+        if (switchNotAktif.isChecked) {
+            if ((spBankNotAktif.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Jumlah Bank Not Aktif Recti #$rectiNum wajib dipilih!", isError = true); return false }
         }
+
+        val mcbStr = etMcb.text.toString().trim()
+        if (mcbStr.isEmpty()) { showSnackbar("MCB Battery Recti #$rectiNum wajib diisi!", isError = true); etMcb.requestFocus(); return false }
+
+        if ((spArester.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Kondisi Arester #$rectiNum wajib dipilih!", isError = true); return false }
+
+        val voltStr = etVolt.text.toString().trim()
+        if (voltStr.isEmpty()) { showSnackbar("Bus Voltage Recti #$rectiNum wajib diisi!", isError = true); etVolt.requestFocus(); return false }
+        val volt = voltStr.replace(",", ".").toDoubleOrNull()
+        if (volt == null || volt < 40.0 || volt > 60.0) {
+            AlertDialog.Builder(this)
+                .setTitle("⚠️ Bus Voltage Tidak Valid")
+                .setMessage("Bus Voltage pada Recti #$rectiNum harus di antara 40 - 60 V.\n\nNilai diinput: $voltStr V")
+                .setPositiveButton("Mengerti", null)
+                .show()
+            showSnackbar("Bus Voltage Recti #$rectiNum harus antara 40 - 60 V", isError = true)
+            etVolt.requestFocus()
+            return false
+        }
+
+        val loadStr = etLoad.text.toString().trim()
+        if (loadStr.isEmpty()) { showSnackbar("Load (A) Recti #$rectiNum wajib diisi!", isError = true); etLoad.requestFocus(); return false }
+        val load = loadStr.replace(",", ".").toDoubleOrNull()
+        if (load == null || load < 0.0 || load > 200.0) {
+            AlertDialog.Builder(this)
+                .setTitle("⚠️ Load (A) Tidak Valid")
+                .setMessage("Load (A) pada Recti #$rectiNum harus di antara 0 - 200 A.\n\nNilai diinput: $loadStr A")
+                .setPositiveButton("Mengerti", null)
+                .show()
+            showSnackbar("Load Recti #$rectiNum harus antara 0 - 200 A", isError = true)
+            etLoad.requestFocus()
+            return false
+        }
+
+        val perangkatStr = etPerangkat.text.toString().trim()
+        if (perangkatStr.isEmpty()) { showSnackbar("Perangkat Terhubung Recti #$rectiNum wajib dipilih!", isError = true); etPerangkat.requestFocus(); return false }
+
+        if (etRemark != null && etRemark.text.toString().trim().isEmpty()) {
+            showSnackbar("Catatan Recti #$rectiNum wajib diisi!", isError = true)
+            etRemark.requestFocus()
+            return false
+        }
+
         return true
     }
 
     private fun onNextClicked() {
-        if (currentStep == 1) {
-            if (!validasiLangkah1()) return
-        } else if (currentStep == 5) {
-            if (!validasiRecti(1, binding.etBusVoltage1.text.toString().trim(), binding.etLoadA1.text.toString().trim())) return
-        } else if (currentStep == 6) {
-            if (!validasiRecti(2, binding.etBusVoltage2.text.toString().trim(), binding.etLoadA2.text.toString().trim())) return
-        } else if (currentStep == 7) {
-            if (!validasiRecti(3, binding.etBusVoltage3.text.toString().trim(), binding.etLoadA3.text.toString().trim())) return
-        } else if (currentStep == 8) {
-            if (!validasiRecti(4, binding.etBusVoltage4.text.toString().trim(), binding.etLoadA4.text.toString().trim())) return
-        } else if (currentStep == 9) {
-            if (!validasiRecti(5, binding.etBusVoltage5.text.toString().trim(), binding.etLoadA5.text.toString().trim())) return
-        } else if (currentStep == 10) {
-            if (!validasiRecti(6, binding.etBusVoltage6.text.toString().trim(), binding.etLoadA6.text.toString().trim())) return
-        } else if (currentStep == 11) {
-            if (!validasiRecti(7, binding.etBusVoltage7.text.toString().trim(), binding.etLoadA7.text.toString().trim())) return
+        when (currentStep) {
+            1 -> if (!validasiStep1()) return
+            2 -> if (!validasiStepEas()) return
+            3 -> if (!validasiStepListrik()) return
+            4 -> if (!validasiStepGenset()) return
+            5 -> if (!validasiRectiFull(1, binding.spTypeRectifier1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spJenisBaterai1, binding.spMerkBaterai1, binding.spJumlahBattery1, binding.spBatteryRecti1, binding.switchStatusBatteryNotAktif1, binding.spJumlahBankNotAktif1, binding.etMcbBatteryRecti1, binding.spKondisiArester1, binding.etBusVoltage1, binding.etLoadA1, binding.etPerangkat1, binding.etRemark1)) return
+            6 -> if (adaRecti2 && !validasiRectiFull(2, binding.spTypeRectifier2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spJenisBaterai2, binding.spMerkBaterai2, binding.spJumlahBattery2, binding.spBatteryRecti2, binding.switchStatusBatteryNotAktif2, binding.spJumlahBankNotAktif2, binding.etMcbBatteryRecti2, binding.spKondisiArester2, binding.etBusVoltage2, binding.etLoadA2, binding.etPerangkat2, binding.etRemark2)) return
+            7 -> if (adaRecti3 && !validasiRectiFull(3, binding.spTypeRectifier3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spJenisBaterai3, binding.spMerkBaterai3, binding.spJumlahBattery3, binding.spBatteryRecti3, binding.switchStatusBatteryNotAktif3, binding.spJumlahBankNotAktif3, binding.etMcbBatteryRecti3, binding.spKondisiArester3, binding.etBusVoltage3, binding.etLoadA3, binding.etPerangkat3)) return
+            8 -> if (adaRecti4 && !validasiRectiFull(4, binding.spTypeRectifier4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJenisBaterai4, binding.spMerkBaterai4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.switchStatusBatteryNotAktif4, binding.spJumlahBankNotAktif4, binding.etMcbBatteryRecti4, binding.spKondisiArester4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkat4)) return
+            9 -> if (adaRecti5 && !validasiRectiFull(5, binding.spTypeRectifier5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJenisBaterai5, binding.spMerkBaterai5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.switchStatusBatteryNotAktif5, binding.spJumlahBankNotAktif5, binding.etMcbBatteryRecti5, binding.spKondisiArester5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkat5)) return
+            10 -> if (adaRecti6 && !validasiRectiFull(6, binding.spTypeRectifier6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.switchStatusBatteryNotAktif6, binding.spJumlahBankNotAktif6, binding.etMcbBatteryRecti6, binding.spKondisiArester6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkat6)) return
+            11 -> if (adaRecti7 && !validasiRectiFull(7, binding.spTypeRectifier7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spJenisBaterai7, binding.spMerkBaterai7, binding.spJumlahBattery7, binding.spBatteryRecti7, binding.switchStatusBatteryNotAktif7, binding.spJumlahBankNotAktif7, binding.etMcbBatteryRecti7, binding.spKondisiArester7, binding.etBusVoltage7, binding.etLoadA7, binding.etPerangkat7)) return
         }
 
         if (currentStep < totalSteps) {
@@ -833,10 +961,12 @@ class InputanActivity : AppCompatActivity() {
         text.append("⚡ Capacity: ${valOrDash(d.capacityGenset1)}\n")
         text.append("⚙️ Status: ${valOrDash(d.statusGenset1)}\n\n")
 
-        text.append("🔧 GENSET 2\n")
-        text.append("🏷️ Merk: ${valOrDash(d.merkGenset2)}\n")
-        text.append("⚡ Capacity: ${valOrDash(d.capacityGenset2)}\n")
-        text.append("⚙️ Status: ${valOrDash(d.statusGenset2)}\n\n")
+        if (d.adaGenset2) {
+            text.append("🔧 GENSET 2\n")
+            text.append("🏷️ Merk: ${valOrDash(d.merkGenset2)}\n")
+            text.append("⚡ Capacity: ${valOrDash(d.capacityGenset2)}\n")
+            text.append("⚙️ Status: ${valOrDash(d.statusGenset2)}\n\n")
+        }
 
         fun appendRectiPreview(idx: Int, type: String, modul: String, modulRusak: String, jenisBat: String, merkBat: String, jmlBat: String, statusBat: String, mcbBat: String, arester: String, voltage: String, load: String, perangkat: String, notAktif: Boolean, jmlNotAktif: String) {
             text.append("📦 RECTI $idx\n")
@@ -1065,8 +1195,6 @@ class InputanActivity : AppCompatActivity() {
         updatePhotoSlotsUI()
         tampilkanPratinjauRingkasan()
     }
-
-    private fun dataClassVal(v: String?): String = v ?: ""
 
     private fun setSpinnerSelectionByValue(spinner: Spinner?, value: String) {
         if (spinner == null || spinner.adapter == null) return

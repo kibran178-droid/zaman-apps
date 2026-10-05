@@ -41,49 +41,34 @@
     <string-array name="type_rectifier_options">
         <item></item>
         <item>VERTIV_R48-2000e3</item>
-        <item>ZTE_R4850</item>
-        <item>Emerson R482000E3</item>
-        <item>EATON_APR48 3G</item>
-        <item>EATON_R48</item>
-        <item>Emerson R482000E2</item>
-        <item>ZTE_ZXD3000</item>
+        <item>ZTE _R4850</item>
+        <item>EMERSON R482000E2</item>
         <item>ZTE_CSU603</item>
-        <item>VERTIV_R48-3000e3</item>
+        <item>ZTE_ZXD3000</item>
+        <item>EATON_APR48 3G</item>
+        <item>EATON_R48 2G</item>
+        <item>SPS</item>
     </string-array>
 
     <!-- Jenis Baterai Options -->
     <string-array name="jenis_baterai_options">
         <item></item>
-        <item>STOLEN</item>
-        <item>FLOATING</item>
         <item>LITHIUM</item>
-        <item>ZTE</item>
-        <item>TUBULAR</item>
-        <item>SACREDSUN</item>
-        <item>SONNENSCHEIN SOLAR</item>
-        <item>SACREDSUN + ZTE</item>
-        <item>NO BATTERY</item>
-        <item>LITHIUM + FLOATING</item>
-        <item>DI GEMBOK</item>
-        <item>DALAM KERANGKENG</item>
-        <item>-</item>
+        <item>FLOATING</item>
         <item>SPS</item>
+        <item>NO BATTERY</item>
     </string-array>
 
     <!-- Merk Baterai Options -->
     <string-array name="merk_baterai_options">
         <item></item>
-        <item>ZTE</item>
         <item>SACREDSUN</item>
+        <item>ZTE</item>
+        <item>SACREDSUN+ZTE</item>
         <item>MAXLIFE</item>
-        <item>SONNENSCHEIN</item>
-        <item>DI GEMBOK</item>
-        <item>DALAM KERANGKENG</item>
-        <item>-</item>
-        <item>SACREDSUN + ZTE</item>
-        <item>STOLEN</item>
-        <item>NO BATTERY</item>
         <item>SPS</item>
+        <item>SONENSCHEIN</item>
+        <item>No Battery</item>
     </string-array>
 
     <!-- Jumlah Battery Options -->

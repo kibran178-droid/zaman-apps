@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.zaman_apps.databinding.ActivitySplashScreenBinding
 import com.example.zaman_apps.input_form.InputanActivity
+import com.example.zaman_apps.utils.DropdownOptionsHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -91,6 +92,9 @@ class SplashScreenActivity : AppCompatActivity() {
         binding.tvSubtitle.startAnimation(fadeInAnimation)
         binding.progressBar.startAnimation(fadeInAnimation)
         binding.tvLoading.startAnimation(fadeInAnimation)
+
+        // Sync dropdown options dari cloud di background
+        DropdownOptionsHelper.syncCloudOptions(this)
 
         // Coroutine untuk navigasi dengan delay
         lifecycleScope.launch {

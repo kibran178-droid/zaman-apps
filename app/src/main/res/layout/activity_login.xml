@@ -7,40 +7,42 @@
     android:background="@color/section_bg"
     tools:context=".LoginActivity">
 
-    <!-- Top Gradient Background -->
+    <!-- TOP GRADIENT BACKGROUND -->
     <View
         android:id="@+id/viewHeader"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_height="260dp"
         android:background="@drawable/toolbar_gradient"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="24dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="24dp">
+            android:padding="20dp">
 
-            <!-- Logo Section -->
+            <!-- LOGO SECTION -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardLogo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="60dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="36dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="50dp"
-                app:cardElevation="12dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:padding="12dp"
                     android:src="@drawable/freesample_vectorizer_io_ic_logo_pt" />
@@ -50,10 +52,10 @@
                 android:id="@+id/tvAppTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:text="ZT-Dapot Power"
                 android:textColor="@color/white"
-                android:textSize="28sp"
+                android:textSize="26sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -63,93 +65,125 @@
                 android:id="@+id/tvAppSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.8"
+                android:layout_marginTop="2dp"
+                android:alpha="0.85"
+                android:letterSpacing="0.1"
                 android:text="SISTEM MONITORING DAPOT POWER"
                 android:textColor="@color/white"
-                android:textSize="12sp"
-                android:letterSpacing="0.1"
+                android:textSize="11sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvAppTitle" />
 
-            <!-- Login Card -->
+            <!-- LOGIN CARD -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardLogin"
+                style="@style/ZamanCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="28dp"
                 app:cardCornerRadius="24dp"
-                app:cardElevation="8dp"
+                app:cardElevation="6dp"
                 app:layout_constraintTop_toBottomOf="@id/tvAppSubtitle">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="28dp">
+                    android:padding="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Selamat Datang"
-                        android:textColor="@color/text_primary"
-                        android:textSize="22sp"
+                        android:textColor="@color/brand_primary"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Silakan masuk untuk melanjutkan"
+                        android:layout_marginTop="2dp"
+                        android:text="Silakan masuk dengan akun teknisi Anda"
                         android:textColor="@color/text_secondary"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
 
+                    <!-- USERNAME INPUT -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/usernameLayout"
-                        style="@style/ZamanTextInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:hint="Username"
-                        app:startIconDrawable="@drawable/ic_person">
+                        android:layout_marginTop="24dp"
+                        android:theme="@style/ThemeOverlay.AppCompat.Light"
+                        app:boxStrokeColor="@color/brand_primary"
+                        app:boxBackgroundColor="@color/white"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:startIconDrawable="@drawable/ic_person"
+                        app:startIconTint="@color/brand_primary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etUsername"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text" />
+                            android:hint="Username / UserID"
+                            android:inputType="text"
+                            android:textColor="@color/text_primary"
+                            android:textColorHint="@color/text_secondary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <!-- PASSWORD INPUT -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/passwordLayout"
-                        style="@style/ZamanTextInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:hint="Password"
+                        android:layout_marginTop="14dp"
+                        android:theme="@style/ThemeOverlay.AppCompat.Light"
+                        app:boxStrokeColor="@color/brand_primary"
+                        app:boxBackgroundColor="@color/white"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
                         app:passwordToggleEnabled="true"
-                        app:startIconDrawable="@drawable/ic_lock">
+                        app:startIconDrawable="@drawable/ic_lock"
+                        app:startIconTint="@color/brand_primary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPassword" />
+                            android:hint="Password"
+                            android:inputType="textPassword"
+                            android:textColor="@color/text_primary"
+                            android:textColorHint="@color/text_secondary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <!-- LOGIN BUTTON -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnLogin"
                         style="@style/ZamanButton"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_marginTop="32dp"
-                        android:text="Masuk Sekarang"
-                        android:textSize="16sp" />
+                        android:layout_height="52dp"
+                        android:layout_marginTop="28dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:paddingVertical="0dp"
+                        android:text="MASUK SEKARANG"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <ProgressBar
                         android:id="@+id/progressLogin"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="16dp"
                         android:indeterminateTint="@color/brand_primary"
@@ -158,16 +192,18 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- FOOTER WITH VERSION v4 -->
             <TextView
                 android:id="@+id/tvFooter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="20dp"
-                android:alpha="0.7"
-                android:text="PT ZAMAN TEKNINDO"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="16dp"
+                android:alpha="0.75"
+                android:fontFamily="sans-serif-medium"
+                android:text="PT ZAMAN TEKNINDO • v4"
                 android:textColor="@color/text_secondary"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

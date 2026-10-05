@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Sistem Informasi Power &amp; Infrastruktur"
+        android:text="Sistem Informasi Dapot Power"
         android:textColor="@color/brand_primary_light"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"

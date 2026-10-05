@@ -125,8 +125,9 @@
             android:id="@+id/editPerangkat2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Perangkat"
-            android:inputType="text" />
+            android:focusable="false"
+            android:clickable="true"
+            android:hint="Pilih Perangkat (Multi-select)" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView style="@style/FieldLabel" android:text="Remark #2" />

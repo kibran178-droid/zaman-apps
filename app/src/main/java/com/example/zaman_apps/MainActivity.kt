@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             in 15..18 -> "Selamat Sore"
             else -> "Selamat Malam"
         }
-        return "$sapaan, $name 👋"
+        return "$sapaan, $name"
     }
 
     private fun setupMenuVisibility(isAdmin: Boolean) {

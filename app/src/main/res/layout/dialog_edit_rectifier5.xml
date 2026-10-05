@@ -72,6 +72,6 @@
 
     <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung #5" />
     <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
-        <com.google.android.material.textfield.TextInputEditText android:id="@+id/editPerangkat5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Perangkat" android:inputType="text" />
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/editPerangkat5" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat (Multi-select)" />
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>
