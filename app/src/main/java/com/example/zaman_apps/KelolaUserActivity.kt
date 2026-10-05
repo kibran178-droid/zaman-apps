@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.example.zaman_apps.databinding.ActivityKelolaUserBinding
+import com.example.zaman_apps.utils.ServerConfig
 import com.example.zaman_apps.utils.SessionHelper
 import com.example.zaman_apps.utils.VolleyHelper
 import com.google.android.material.button.MaterialButton
@@ -36,7 +37,7 @@ import java.net.UnknownHostException
 class KelolaUserActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityKelolaUserBinding
-    private val urlSheet = "https://script.google.com/macros/s/AKfycby4n_8DasDqYLL-K7DQMUb_6pyF7FkuDaSWde98TDMlF0BnneJjVVwadqzuRzq-M1KguA/exec"
+    private val urlSheet = ServerConfig.SCRIPT_URL
 
     private var userList = listOf<UserItem>()
     private var filteredList = listOf<UserItem>()

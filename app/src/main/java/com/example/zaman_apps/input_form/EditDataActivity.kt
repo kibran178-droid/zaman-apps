@@ -43,6 +43,7 @@ import com.example.zaman_apps.utils.ImageCaptureHelper
 import com.example.zaman_apps.utils.ImageHelper
 import com.example.zaman_apps.utils.NotificationHelper
 import com.example.zaman_apps.utils.PerangkatTerhubungHelper
+import com.example.zaman_apps.utils.ServerConfig
 import com.example.zaman_apps.utils.SessionHelper
 import com.example.zaman_apps.utils.TelegramLogger
 import com.example.zaman_apps.utils.VolleyHelper
@@ -60,7 +61,7 @@ class EditDataActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditDataBinding
     private lateinit var notificationHelper: NotificationHelper
-    private val urlSheet = "https://script.google.com/macros/s/AKfycby4n_8DasDqYLL-K7DQMUb_6pyF7FkuDaSWde98TDMlF0BnneJjVVwadqzuRzq-M1KguA/exec"
+    private val urlSheet = ServerConfig.SCRIPT_URL
 
     private var selectedSiteId: String? = null
     private var siteIdsList = mutableListOf<String>()

@@ -15,6 +15,7 @@ import com.android.volley.Request
 import com.android.volley.TimeoutError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.zaman_apps.utils.ServerConfig
 import com.example.zaman_apps.utils.VolleyHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
@@ -25,7 +26,7 @@ import java.net.UnknownHostException
 
 class LoginActivity : AppCompatActivity() {
 
-    private val urlSheet = "https://script.google.com/macros/s/AKfycby4n_8DasDqYLL-K7DQMUb_6pyF7FkuDaSWde98TDMlF0BnneJjVVwadqzuRzq-M1KguA/exec"
+    private val urlSheet = ServerConfig.SCRIPT_URL
 
     private lateinit var etUsername: TextInputEditText
     private lateinit var etPassword: TextInputEditText

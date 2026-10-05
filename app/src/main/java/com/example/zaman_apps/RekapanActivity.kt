@@ -22,6 +22,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.zaman_apps.databinding.ActivityRekapanBinding
+import com.example.zaman_apps.utils.ServerConfig
 import com.example.zaman_apps.utils.SessionHelper
 import com.google.android.material.card.MaterialCardView
 import org.json.JSONArray
@@ -33,7 +34,7 @@ import java.util.Locale
 class RekapanActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRekapanBinding
-    private val urlSheet = "https://script.google.com/macros/s/AKfycby4n_8DasDqYLL-K7DQMUb_6pyF7FkuDaSWde98TDMlF0BnneJjVVwadqzuRzq-M1KguA/exec"
+    private val urlSheet = ServerConfig.SCRIPT_URL
     private var detailArrayGlobal: JSONArray? = null
     private var cachedRekapArray: JSONArray? = null
 

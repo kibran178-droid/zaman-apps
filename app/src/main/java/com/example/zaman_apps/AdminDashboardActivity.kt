@@ -14,6 +14,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.zaman_apps.databinding.ActivityAdminDashboardBinding
+import com.example.zaman_apps.utils.ServerConfig
 import com.example.zaman_apps.utils.SessionHelper
 import com.example.zaman_apps.utils.VolleyHelper
 import com.github.mikephil.charting.components.XAxis
@@ -36,7 +37,7 @@ import java.util.Locale
 class AdminDashboardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdminDashboardBinding
-    private val urlSheet = "https://script.google.com/macros/s/AKfycby4n_8DasDqYLL-K7DQMUb_6pyF7FkuDaSWde98TDMlF0BnneJjVVwadqzuRzq-M1KguA/exec"
+    private val urlSheet = ServerConfig.SCRIPT_URL
 
     private var detailDataGlobal: JSONArray? = null
     private var selectedBulan = 0

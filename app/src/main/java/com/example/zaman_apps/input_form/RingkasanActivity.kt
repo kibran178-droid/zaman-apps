@@ -58,6 +58,7 @@ import android.os.Looper
 import android.os.SystemClock
 import com.android.volley.VolleyError
 import com.example.zaman_apps.utils.AppLog
+import com.example.zaman_apps.utils.ServerConfig
 
 class RingkasanActivity : AppCompatActivity() {
 
@@ -356,7 +357,7 @@ class RingkasanActivity : AppCompatActivity() {
         }
     }
 
-    private val urlSheet = "https://script.google.com/macros/s/AKfycby4n_8DasDqYLL-K7DQMUb_6pyF7FkuDaSWde98TDMlF0BnneJjVVwadqzuRzq-M1KguA/exec"
+    private val urlSheet = ServerConfig.SCRIPT_URL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

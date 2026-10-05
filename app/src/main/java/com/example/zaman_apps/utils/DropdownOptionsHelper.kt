@@ -10,7 +10,7 @@ import org.json.JSONObject
 object DropdownOptionsHelper {
 
     private const val PREF_NAME = "dropdown_options_prefs"
-    private const val URL_SHEET = "https://script.google.com/macros/s/AKfycby4n_8DasDqYLL-K7DQMUb_6pyF7FkuDaSWde98TDMlF0BnneJjVVwadqzuRzq-M1KguA/exec"
+    private val URL_SHEET = ServerConfig.SCRIPT_URL
 
     const val KEY_EAS = "key_eas"
     const val KEY_MERK_GENSET = "key_merk_genset"

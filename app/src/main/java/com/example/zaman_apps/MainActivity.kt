@@ -17,6 +17,7 @@ import com.example.zaman_apps.databinding.ActivityMainBinding
 import com.example.zaman_apps.input_form.EditDataActivity
 import com.example.zaman_apps.input_form.InputanActivity
 import com.example.zaman_apps.utils.NotificationHelper
+import com.example.zaman_apps.utils.ServerConfig
 import com.example.zaman_apps.utils.SessionHelper
 import org.json.JSONObject
 import java.util.*
@@ -24,7 +25,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val urlSheet = "https://script.google.com/macros/s/AKfycby4n_8DasDqYLL-K7DQMUb_6pyF7FkuDaSWde98TDMlF0BnneJjVVwadqzuRzq-M1KguA/exec"
+    private val urlSheet = ServerConfig.SCRIPT_URL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
