@@ -173,7 +173,7 @@
 
     <string-array name="balting_options">
         <item></item>
-        <item>Balting</item>
-        <item>Belum Balting</item>
+        <item>Belting</item>
+        <item>Belum Belting</item>
     </string-array>
 </resources>
