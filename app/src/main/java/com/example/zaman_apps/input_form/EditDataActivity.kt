@@ -162,7 +162,9 @@ class EditDataActivity : AppCompatActivity() {
         setupListeners()
         setupCollapsibleSections()
     }
-
+    fun applyNoRetry60s(request: Request<*>) {
+        request.retryPolicy = DefaultRetryPolicy(60_000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+    }
     private fun setupSpinners() {
         val adapterMcbKwh = ArrayAdapter.createFromResource(this, R.array.mcb_kwh_options, android.R.layout.simple_spinner_dropdown_item)
         binding.spMcbKwh.adapter = adapterMcbKwh
@@ -1271,12 +1273,25 @@ class EditDataActivity : AppCompatActivity() {
                     error = error,
                     relevantData = "SITE_ID: $siteId, VOLLEY_ERROR: ${error.message}"
                 )
-                val errorMsg = when {
-                    error.cause is SocketTimeoutException || error is TimeoutError -> "Koneksi timeout, coba lagi"
-                    error.cause is UnknownHostException -> "Tidak ada koneksi internet"
-                    else -> "Terjadi kendala koneksi ke server."
+                val isTimeout = error is TimeoutError || error.cause is SocketTimeoutException
+                if (isTimeout) {
+                    AlertDialog.Builder(this)
+                        .setTitle("Server belum membalas")
+                        .setMessage(
+                            "Data Site $siteId kemungkinan sudah tersimpan, hanya balasan server yang terlambat.\n\n" +
+                                    "Cek data di server dulu sebelum mengirim ulang agar tidak terkirim dobel."
+                        )
+                        .setPositiveButton("Cek data server") { _, _ -> refreshDetailData(siteId) }
+                        .setNeutralButton("Kirim ulang") { _, _ -> kirimUpdateData(siteId) }
+                        .setNegativeButton("Tutup", null)
+                        .show()
+                } else {
+                    val errorMsg = if (error.cause is UnknownHostException)
+                        "Tidak ada koneksi internet"
+                    else
+                        "Terjadi kendala koneksi ke server."
+                    showSnackbar("❌ $errorMsg", isError = true)
                 }
-                showSnackbar("❌ $errorMsg", isError = true)
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -1361,7 +1376,7 @@ class EditDataActivity : AppCompatActivity() {
             }
         }
 
-        VolleyHelper.apply60sTimeout(request)
+        applyNoRetry60s(request)
         queue.add(request)
     }
 

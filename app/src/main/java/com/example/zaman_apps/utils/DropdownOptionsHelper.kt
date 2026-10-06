@@ -75,8 +75,8 @@ object DropdownOptionsHelper {
             jenisUpper.contains("LITHIUM") -> listOf("", "0", "1 pack", "2 pack", "3 pack", "4 pack", "5 pack", "6 pack", "7 pack", "8 pack", "9 pack", "10 pack")
             jenisUpper.contains("FLOATING") -> listOf("", "1 blok", "2 blok", "3 blok", "4 blok", "5 blok", "6 blok", "7 blok", "8 blok", "9 blok", "10 blok", "11 blok", "12 blok")
             jenisUpper.contains("SPS") -> listOf("", "SPS")
-            jenisUpper.contains("NO BATTERY") || jenisUpper.contains("NOBATTERY") || jenisUpper == "NOL" -> listOf("", "NO BATTERY")
-            else -> listOf("", "0", "1 pack", "2 pack", "3 pack", "4 pack", "5 pack", "6 pack", "7 pack", "8 pack", "9 pack", "10 pack", "1 blok", "2 blok", "3 blok", "4 blok", "5 blok", "6 blok", "7 blok", "8 blok", "9 blok", "10 blok", "11 blok", "12 blok", "SPS", "NO BATTERY", "STOLEN")
+            jenisUpper.contains("NO BATTERY") || jenisUpper.contains("NOBATTERY") || jenisUpper == "NOL" -> listOf("", "0")
+            else -> listOf("", "0", "1 pack", "2 pack", "3 pack", "4 pack", "5 pack", "6 pack", "7 pack", "8 pack", "9 pack", "10 pack", "1 blok", "2 blok", "3 blok", "4 blok", "5 blok", "6 blok", "7 blok", "8 blok", "9 blok", "10 blok", "11 blok", "12 blok", "SPS")
         }
     }
 
