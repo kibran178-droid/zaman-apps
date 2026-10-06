@@ -264,8 +264,8 @@ class EditDataActivity : AppCompatActivity() {
                 val currentMerk = spMerk.selectedItem?.toString() ?: ""
                 val currentJml = spJml.selectedItem?.toString() ?: ""
 
-                val merkOpts = DropdownOptionsHelper.getMerkBateraiFiltered(jenis)
-                val jmlOpts = DropdownOptionsHelper.getJumlahBatteryFiltered(jenis)
+                val merkOpts = DropdownOptionsHelper.getMerkBateraiFiltered(this@EditDataActivity, jenis)
+                val jmlOpts = DropdownOptionsHelper.getJumlahBatteryFiltered(this@EditDataActivity, jenis)
 
                 spMerk.adapter = ArrayAdapter(this@EditDataActivity, android.R.layout.simple_spinner_dropdown_item, merkOpts)
                 val merkIdx = merkOpts.indexOfFirst { it.equals(currentMerk, ignoreCase = true) }

@@ -12,15 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/toolbar_gradient"
-        app:elevation="0dp">
+        app:elevation="4dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:paddingVertical="4dp"
+            app:contentInsetStart="16dp"
             app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@color/white"
-            app:title="Kelola Option Dropdown"
+            app:title="Pengaturan Option Dropdown"
             app:titleTextColor="@color/white"
             app:titleTextAppearance="@style/ToolbarTitle" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -43,7 +45,7 @@
                 style="@style/ZamanCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -122,7 +124,7 @@
                             android:id="@+id/btnTambahOption"
                             style="@style/ZamanButton"
                             android:layout_width="0dp"
-                            android:layout_height="54dp"
+                            android:layout_height="50dp"
                             android:layout_marginEnd="6dp"
                             android:layout_weight="1"
                             android:gravity="center"
@@ -131,14 +133,14 @@
                             android:insetBottom="0dp"
                             android:paddingTop="0dp"
                             android:paddingBottom="0dp"
-                            android:text="Tambah Option Baru"
+                            android:text="Tambah Opsi Baru"
                             android:textSize="13sp" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnResetDefault"
                             style="@style/ZamanButtonOutlined"
                             android:layout_width="wrap_content"
-                            android:layout_height="54dp"
+                            android:layout_height="50dp"
                             android:layout_marginStart="6dp"
                             android:gravity="center"
                             android:includeFontPadding="false"

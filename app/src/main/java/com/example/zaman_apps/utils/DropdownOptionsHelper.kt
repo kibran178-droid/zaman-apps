@@ -22,6 +22,11 @@ object DropdownOptionsHelper {
     const val KEY_BALTING = "key_balting"
     const val KEY_JUMLAH_BANK_NOT_AKTIF = "key_jumlah_bank_not_aktif"
 
+    // Custom Mapping Keys
+    const val KEY_BATERAI_MAPPING = "key_baterai_mapping"
+    const val KEY_MAPPING_MERK_BATTERAI = "key_mapping_merk_baterai"
+    const val KEY_MAPPING_JUMLAH_BATTERAI = "key_mapping_jumlah_baterai"
+
     fun getDefaultResId(key: String): Int {
         return when (key) {
             KEY_EAS -> R.array.status_options
@@ -48,6 +53,7 @@ object DropdownOptionsHelper {
             KEY_JUMLAH_BATTERAI -> "Jumlah Baterai (Recti 1 - 7)"
             KEY_BALTING -> "Battery Recti Status (Balting Options)"
             KEY_JUMLAH_BANK_NOT_AKTIF -> "Jumlah Bank Not Aktif (Recti 1 - 7)"
+            KEY_BATERAI_MAPPING -> "Relasi Baterai (Jenis ➔ Merk & Jumlah)"
             else -> "Dropdown Options"
         }
     }
@@ -69,9 +75,89 @@ object DropdownOptionsHelper {
             jenisUpper.contains("LITHIUM") -> listOf("", "0", "1 pack", "2 pack", "3 pack", "4 pack", "5 pack", "6 pack", "7 pack", "8 pack", "9 pack", "10 pack")
             jenisUpper.contains("FLOATING") -> listOf("", "1 blok", "2 blok", "3 blok", "4 blok", "5 blok", "6 blok", "7 blok", "8 blok", "9 blok", "10 blok", "11 blok", "12 blok")
             jenisUpper.contains("SPS") -> listOf("", "SPS")
-            jenisUpper.contains("NO BATTERY") || jenisUpper.contains("NOBATTERY") || jenisUpper == "NOL" -> listOf("", "NO BATTERY", "0", "STOLEN")
+            jenisUpper.contains("NO BATTERY") || jenisUpper.contains("NOBATTERY") || jenisUpper == "NOL" -> listOf("", "NO BATTERY")
             else -> listOf("", "0", "1 pack", "2 pack", "3 pack", "4 pack", "5 pack", "6 pack", "7 pack", "8 pack", "9 pack", "10 pack", "1 blok", "2 blok", "3 blok", "4 blok", "5 blok", "6 blok", "7 blok", "8 blok", "9 blok", "10 blok", "11 blok", "12 blok", "SPS", "NO BATTERY", "STOLEN")
         }
+    }
+
+    fun getMerkBateraiFiltered(context: Context, jenisBaterai: String): List<String> {
+        val jenisTrimmed = jenisBaterai.trim()
+        if (jenisTrimmed.isEmpty()) return getOptions(context, KEY_MERK_BATERAI)
+
+        val customMapping = getMerkMappingForJenis(context, jenisTrimmed)
+        if (customMapping.isNotEmpty()) {
+            return listOf("") + customMapping
+        }
+        return getMerkBateraiFiltered(jenisTrimmed)
+    }
+
+    fun getJumlahBatteryFiltered(context: Context, jenisBaterai: String): List<String> {
+        val jenisTrimmed = jenisBaterai.trim()
+        if (jenisTrimmed.isEmpty()) return getOptions(context, KEY_JUMLAH_BATTERAI)
+
+        val customMapping = getJumlahMappingForJenis(context, jenisTrimmed)
+        if (customMapping.isNotEmpty()) {
+            return listOf("") + customMapping
+        }
+        return getJumlahBatteryFiltered(jenisTrimmed)
+    }
+
+    fun getMerkMappingForJenis(context: Context, jenisBaterai: String): List<String> {
+        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val jsonStr = prefs.getString(KEY_MAPPING_MERK_BATTERAI, null) ?: return emptyList()
+        return try {
+            val obj = JSONObject(jsonStr)
+            val array = obj.optJSONArray(jenisBaterai.trim().uppercase()) ?: return emptyList()
+            val list = mutableListOf<String>()
+            for (i in 0 until array.length()) list.add(array.getString(i))
+            list
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    fun getJumlahMappingForJenis(context: Context, jenisBaterai: String): List<String> {
+        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val jsonStr = prefs.getString(KEY_MAPPING_JUMLAH_BATTERAI, null) ?: return emptyList()
+        return try {
+            val obj = JSONObject(jsonStr)
+            val array = obj.optJSONArray(jenisBaterai.trim().uppercase()) ?: return emptyList()
+            val list = mutableListOf<String>()
+            for (i in 0 until array.length()) list.add(array.getString(i))
+            list
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    fun saveMappingForJenis(
+        context: Context,
+        jenisBaterai: String,
+        selectedMerkList: List<String>,
+        selectedJumlahList: List<String>
+    ) {
+        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val keyUpper = jenisBaterai.trim().uppercase()
+
+        // 1. Save Merk Mapping
+        val merkJsonStr = prefs.getString(KEY_MAPPING_MERK_BATTERAI, "{}") ?: "{}"
+        val merkObj = try { JSONObject(merkJsonStr) } catch (_: Exception) { JSONObject() }
+        val merkArr = JSONArray()
+        selectedMerkList.forEach { merkArr.put(it) }
+        merkObj.put(keyUpper, merkArr)
+        prefs.edit().putString(KEY_MAPPING_MERK_BATTERAI, merkObj.toString()).apply()
+
+        // 2. Save Jumlah Mapping
+        val jmlJsonStr = prefs.getString(KEY_MAPPING_JUMLAH_BATTERAI, "{}") ?: "{}"
+        val jmlObj = try { JSONObject(jmlJsonStr) } catch (_: Exception) { JSONObject() }
+        val jmlArr = JSONArray()
+        selectedJumlahList.forEach { jmlArr.put(it) }
+        jmlObj.put(keyUpper, jmlArr)
+        prefs.edit().putString(KEY_MAPPING_JUMLAH_BATTERAI, jmlObj.toString()).apply()
+
+        // 3. Sync Mappings to Cloud
+        syncOptionToCloud(context, KEY_MAPPING_MERK_BATTERAI, listOf(merkObj.toString()))
+        syncOptionToCloud(context, KEY_MAPPING_JUMLAH_BATTERAI, listOf(jmlObj.toString()))
     }
 
     fun getOptions(context: Context, key: String): List<String> {

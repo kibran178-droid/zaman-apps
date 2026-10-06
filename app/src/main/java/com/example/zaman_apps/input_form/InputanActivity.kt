@@ -666,8 +666,8 @@ class InputanActivity : AppCompatActivity() {
                 val currentMerk = spMerk.selectedItem?.toString() ?: ""
                 val currentJml = spJml.selectedItem?.toString() ?: ""
 
-                val merkOpts = DropdownOptionsHelper.getMerkBateraiFiltered(jenis)
-                val jmlOpts = DropdownOptionsHelper.getJumlahBatteryFiltered(jenis)
+                val merkOpts = DropdownOptionsHelper.getMerkBateraiFiltered(this@InputanActivity, jenis)
+                val jmlOpts = DropdownOptionsHelper.getJumlahBatteryFiltered(this@InputanActivity, jenis)
 
                 val adapterMerk = ArrayAdapter(this@InputanActivity, android.R.layout.simple_spinner_dropdown_item, merkOpts)
                 spMerk.adapter = adapterMerk

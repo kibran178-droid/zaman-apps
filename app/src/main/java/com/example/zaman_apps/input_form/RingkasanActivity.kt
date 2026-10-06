@@ -1088,8 +1088,8 @@ class RingkasanActivity : AppCompatActivity() {
                 val currentMerk = spMerk.selectedItem?.toString() ?: ""
                 val currentJml = spJml.selectedItem?.toString() ?: ""
 
-                val merkOpts = DropdownOptionsHelper.getMerkBateraiFiltered(jenis)
-                val jmlOpts = DropdownOptionsHelper.getJumlahBatteryFiltered(jenis)
+                val merkOpts = DropdownOptionsHelper.getMerkBateraiFiltered(this@RingkasanActivity, jenis)
+                val jmlOpts = DropdownOptionsHelper.getJumlahBatteryFiltered(this@RingkasanActivity, jenis)
 
                 spMerk.adapter = ArrayAdapter(this@RingkasanActivity, android.R.layout.simple_spinner_dropdown_item, merkOpts)
                 val merkIdx = merkOpts.indexOfFirst { it.equals(currentMerk, ignoreCase = true) }

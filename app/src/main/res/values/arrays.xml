@@ -74,7 +74,6 @@
     <!-- Jumlah Battery Options -->
     <string-array name="jumlah_battery_options">
         <item></item>
-        <item>STOLEN</item>
         <item>NO BATTERY</item>
         <item>0 Pack</item>
         <item>1 Pack</item>

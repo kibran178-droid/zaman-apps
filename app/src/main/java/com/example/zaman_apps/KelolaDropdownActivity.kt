@@ -2,14 +2,15 @@ package com.example.zaman_apps
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.text.InputType
 import android.view.Gravity
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -17,7 +18,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.zaman_apps.databinding.ActivityKelolaDropdownBinding
 import com.example.zaman_apps.utils.DropdownOptionsHelper
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class KelolaDropdownActivity : AppCompatActivity() {
 
@@ -32,7 +36,8 @@ class KelolaDropdownActivity : AppCompatActivity() {
         DropdownOptionsHelper.KEY_MERK_BATERAI,
         DropdownOptionsHelper.KEY_JUMLAH_BATTERAI,
         DropdownOptionsHelper.KEY_BALTING,
-        DropdownOptionsHelper.KEY_JUMLAH_BANK_NOT_AKTIF
+        DropdownOptionsHelper.KEY_JUMLAH_BANK_NOT_AKTIF,
+        DropdownOptionsHelper.KEY_BATERAI_MAPPING
     )
 
     private var currentCategoryKey = categoryKeys[0]
@@ -89,11 +94,19 @@ class KelolaDropdownActivity : AppCompatActivity() {
     }
 
     private fun loadAndRenderOptions() {
-        val options = DropdownOptionsHelper.getOptions(this, currentCategoryKey)
         binding.tvCategoryTitle.text = DropdownOptionsHelper.getCategoryName(currentCategoryKey)
-        binding.tvOptionCount.text = "${options.size} Opsi"
-
         binding.containerOptionList.removeAllViews()
+
+        if (currentCategoryKey == DropdownOptionsHelper.KEY_BATERAI_MAPPING) {
+            renderBateraiMappingList()
+            return
+        }
+
+        binding.btnTambahOption.visibility = View.VISIBLE
+        binding.btnResetDefault.visibility = View.VISIBLE
+
+        val options = DropdownOptionsHelper.getOptions(this, currentCategoryKey)
+        binding.tvOptionCount.text = "${options.size} Opsi"
 
         if (options.isEmpty()) {
             val tvEmpty = TextView(this)
@@ -111,6 +124,165 @@ class KelolaDropdownActivity : AppCompatActivity() {
         }
     }
 
+    private fun renderBateraiMappingList() {
+        binding.btnTambahOption.visibility = View.GONE
+        binding.btnResetDefault.visibility = View.GONE
+
+        val jenisList = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_JENIS_BATERAI).filter { it.isNotBlank() }
+        binding.tvOptionCount.text = "${jenisList.size} Jenis Baterai"
+
+        if (jenisList.isEmpty()) {
+            val tvEmpty = TextView(this)
+            tvEmpty.text = "Belum ada jenis baterai terdaftar. Silakan tambahkan Jenis Baterai terlebih dahulu."
+            tvEmpty.gravity = Gravity.CENTER
+            tvEmpty.setPadding(0, 64, 0, 64)
+            tvEmpty.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+            binding.containerOptionList.addView(tvEmpty)
+            return
+        }
+
+        jenisList.forEachIndexed { index, jenisName ->
+            val mappedMerks = DropdownOptionsHelper.getMerkMappingForJenis(this, jenisName)
+            val mappedJumlahs = DropdownOptionsHelper.getJumlahMappingForJenis(this, jenisName)
+
+            val card = buatCardMappingItem(index, jenisName, mappedMerks, mappedJumlahs)
+            binding.containerOptionList.addView(card)
+        }
+    }
+
+    private fun buatCardMappingItem(index: Int, jenisName: String, merks: List<String>, jumlahs: List<String>): View {
+        val card = MaterialCardView(this)
+        val cardParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { bottomMargin = 16 }
+        card.layoutParams = cardParams
+        card.radius = 16f
+        card.cardElevation = 2f
+        card.strokeWidth = 1
+        card.strokeColor = ContextCompat.getColor(this, R.color.divider)
+
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
+        root.setPadding(24, 20, 20, 20)
+
+        // Title Row
+        val titleRow = LinearLayout(this)
+        titleRow.orientation = LinearLayout.HORIZONTAL
+        titleRow.gravity = Gravity.CENTER_VERTICAL
+
+        val tvIndex = TextView(this)
+        tvIndex.text = "#${index + 1}"
+        tvIndex.textSize = 12f
+        tvIndex.setTypeface(null, Typeface.BOLD)
+        tvIndex.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
+        tvIndex.setBackgroundResource(R.drawable.bg_badge)
+        tvIndex.setPadding(16, 6, 16, 6)
+        titleRow.addView(tvIndex)
+
+        val tvJenis = TextView(this)
+        tvJenis.text = jenisName
+        tvJenis.textSize = 15f
+        tvJenis.setTypeface(null, Typeface.BOLD)
+        tvJenis.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
+        val textParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+            marginStart = 16
+        }
+        tvJenis.layoutParams = textParams
+        titleRow.addView(tvJenis)
+
+        val btnAtur = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle)
+        btnAtur.text = "Atur Relasi"
+        btnAtur.textSize = 12f
+        btnAtur.setTypeface(null, Typeface.BOLD)
+        btnAtur.setTextColor(ContextCompat.getColor(this, R.color.white))
+        btnAtur.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_primary)
+        btnAtur.cornerRadius = 20
+        btnAtur.setOnClickListener {
+            dialogAturRelasiBaterai(jenisName)
+        }
+        titleRow.addView(btnAtur)
+
+        root.addView(titleRow)
+
+        // Divider
+        val divider = View(this)
+        val divParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1).apply {
+            topMargin = 12
+            bottomMargin = 12
+        }
+        divider.layoutParams = divParams
+        divider.setBackgroundColor(ContextCompat.getColor(this, R.color.divider))
+        root.addView(divider)
+
+        // Mapping Details
+        val tvMerkLabel = TextView(this)
+        val merkText = if (merks.isEmpty()) "Aturan Default (Semua / Bawaan)" else merks.joinToString(", ")
+        tvMerkLabel.text = "🏷️ Merk Terhubung: $merkText"
+        tvMerkLabel.textSize = 13f
+        tvMerkLabel.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        root.addView(tvMerkLabel)
+
+        val tvJmlLabel = TextView(this)
+        val jmlText = if (jumlahs.isEmpty()) "Aturan Default (Semua / Bawaan)" else jumlahs.joinToString(", ")
+        tvJmlLabel.text = "🔢 Jumlah Terhubung: $jmlText"
+        tvJmlLabel.textSize = 13f
+        tvJmlLabel.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+        tvJmlLabel.setPadding(0, 4, 0, 0)
+        root.addView(tvJmlLabel)
+
+        card.addView(root)
+        return card
+    }
+
+    private fun dialogAturRelasiBaterai(jenisName: String) {
+        val allMerkOptions = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_MERK_BATERAI).filter { it.isNotBlank() }
+        val currentMerkSelected = DropdownOptionsHelper.getMerkMappingForJenis(this, jenisName)
+        val checkedMerks = BooleanArray(allMerkOptions.size) { idx ->
+            currentMerkSelected.contains(allMerkOptions[idx])
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("1. Pilih Merk Baterai untuk [$jenisName]")
+            .setMultiChoiceItems(allMerkOptions.toTypedArray(), checkedMerks) { _, which, isChecked ->
+                checkedMerks[which] = isChecked
+            }
+            .setPositiveButton("Lanjut ke Jumlah Battery ➔") { _, _ ->
+                val selectedMerks = mutableListOf<String>()
+                checkedMerks.forEachIndexed { i, checked ->
+                    if (checked) selectedMerks.add(allMerkOptions[i])
+                }
+                dialogAturRelasiJumlahBattery(jenisName, selectedMerks)
+            }
+            .setNegativeButton("Batal", null)
+            .show()
+    }
+
+    private fun dialogAturRelasiJumlahBattery(jenisName: String, selectedMerks: List<String>) {
+        val allJumlahOptions = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_JUMLAH_BATTERAI).filter { it.isNotBlank() }
+        val currentJumlahSelected = DropdownOptionsHelper.getJumlahMappingForJenis(this, jenisName)
+        val checkedJumlahs = BooleanArray(allJumlahOptions.size) { idx ->
+            currentJumlahSelected.contains(allJumlahOptions[idx])
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("2. Pilih Jumlah Battery untuk [$jenisName]")
+            .setMultiChoiceItems(allJumlahOptions.toTypedArray(), checkedJumlahs) { _, which, isChecked ->
+                checkedJumlahs[which] = isChecked
+            }
+            .setPositiveButton("Simpan Relasi Cloud") { _, _ ->
+                val selectedJumlahs = mutableListOf<String>()
+                checkedJumlahs.forEachIndexed { i, checked ->
+                    if (checked) selectedJumlahs.add(allJumlahOptions[i])
+                }
+
+                DropdownOptionsHelper.saveMappingForJenis(this, jenisName, selectedMerks, selectedJumlahs)
+                loadAndRenderOptions()
+                Toast.makeText(this, "Relasi Baterai untuk [$jenisName] berhasil disimpan ke cloud", Toast.LENGTH_LONG).show()
+            }
+            .setNegativeButton("Batal", null)
+            .show()
+    }
+
     private fun buatCardOptionItem(index: Int, text: String): View {
         val card = MaterialCardView(this)
         val cardParams = LinearLayout.LayoutParams(
@@ -125,7 +297,7 @@ class KelolaDropdownActivity : AppCompatActivity() {
         val root = LinearLayout(this)
         root.orientation = LinearLayout.HORIZONTAL
         root.gravity = Gravity.CENTER_VERTICAL
-        root.setPadding(24, 20, 20, 20)
+        root.setPadding(24, 16, 16, 16)
 
         // Index Badge
         val tvIndex = TextView(this)
@@ -144,62 +316,153 @@ class KelolaDropdownActivity : AppCompatActivity() {
         tvText.setTypeface(null, Typeface.BOLD)
         tvText.setTextColor(ContextCompat.getColor(this, if (text.isEmpty()) R.color.text_secondary else R.color.text_primary))
         val textParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-            marginStart = 20
+            marginStart = 16
         }
         tvText.layoutParams = textParams
         root.addView(tvText)
 
-        // Action Edit
-        val btnEdit = TextView(this)
-        btnEdit.text = "✏️"
-        btnEdit.textSize = 16f
-        btnEdit.setPadding(16, 12, 16, 12)
+        // Action Buttons Row
+        val actionRow = LinearLayout(this)
+        actionRow.orientation = LinearLayout.HORIZONTAL
+        actionRow.gravity = Gravity.CENTER_VERTICAL
+
+        // Edit Button (Text)
+        val btnEdit = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle)
+        btnEdit.text = "Edit"
+        btnEdit.textSize = 13f
+        btnEdit.setTypeface(null, Typeface.BOLD)
+        btnEdit.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
         btnEdit.setOnClickListener {
             dialogEditOption(index, text)
         }
-        root.addView(btnEdit)
+        actionRow.addView(btnEdit)
 
-        // Action Delete
-        val btnDelete = TextView(this)
-        btnDelete.text = "🗑️"
-        btnDelete.textSize = 16f
-        btnDelete.setPadding(16, 12, 16, 12)
+        // Hapus Button (Text)
+        val btnDelete = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle)
+        btnDelete.text = "Hapus"
+        btnDelete.textSize = 13f
+        btnDelete.setTypeface(null, Typeface.BOLD)
+        btnDelete.setTextColor(ContextCompat.getColor(this, R.color.error))
         btnDelete.setOnClickListener {
             dialogHapusOption(index, text)
         }
-        root.addView(btnDelete)
+        actionRow.addView(btnDelete)
 
+        root.addView(actionRow)
         card.addView(root)
         return card
     }
 
+    private fun buatCustomDialogHeader(iconRes: Int, title: String, subtitle: String): View {
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
+        root.setPadding(24, 20, 24, 12)
+
+        val headerRow = LinearLayout(this)
+        headerRow.orientation = LinearLayout.HORIZONTAL
+        headerRow.gravity = Gravity.CENTER_VERTICAL
+
+        val cardIcon = MaterialCardView(this)
+        cardIcon.radius = 12f
+        cardIcon.cardElevation = 0f
+        cardIcon.setCardBackgroundColor(ContextCompat.getColor(this, R.color.brand_accent_light))
+        val iconParams = LinearLayout.LayoutParams(42, 42)
+        cardIcon.layoutParams = iconParams
+
+        val iv = ImageView(this)
+        iv.setImageResource(iconRes)
+        iv.setColorFilter(ContextCompat.getColor(this, R.color.brand_primary))
+        iv.setPadding(10, 10, 10, 10)
+        cardIcon.addView(iv)
+        headerRow.addView(cardIcon)
+
+        val textCol = LinearLayout(this)
+        textCol.orientation = LinearLayout.VERTICAL
+        textCol.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+            marginStart = 14
+        }
+
+        val tvTitle = TextView(this)
+        tvTitle.text = title
+        tvTitle.textSize = 16f
+        tvTitle.setTypeface(null, Typeface.BOLD)
+        tvTitle.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
+        textCol.addView(tvTitle)
+
+        val tvSub = TextView(this)
+        tvSub.text = subtitle
+        tvSub.textSize = 12f
+        tvSub.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+        tvSub.setPadding(0, 2, 0, 0)
+        textCol.addView(tvSub)
+
+        headerRow.addView(textCol)
+        root.addView(headerRow)
+
+        val divider = View(this)
+        val divParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2).apply {
+            topMargin = 14
+        }
+        divider.layoutParams = divParams
+        divider.setBackgroundColor(ContextCompat.getColor(this, R.color.divider))
+        root.addView(divider)
+
+        return root
+    }
+
+    private fun createFormInputLayout(hintText: String): Pair<TextInputLayout, TextInputEditText> {
+        val til = TextInputLayout(this, null, com.google.android.material.R.attr.textInputStyle)
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { topMargin = 12 }
+        til.layoutParams = params
+        til.hint = hintText
+        til.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
+        til.setBoxCornerRadii(12f, 12f, 12f, 12f)
+        til.setBoxStrokeColorStateList(ContextCompat.getColorStateList(this, R.color.brand_primary)!!)
+        til.setBoxBackgroundColorResource(R.color.white)
+
+        val et = TextInputEditText(til.context)
+        et.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        et.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_FILTER
+        et.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        et.setTextSize(14f)
+
+        til.addView(et)
+        return Pair(til, et)
+    }
+
     private fun dialogTambahOption() {
-        val etInput = EditText(this)
-        etInput.hint = "Masukkan nama option baru"
-        etInput.setPadding(48, 36, 48, 36)
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
 
-        val bg = GradientDrawable()
-        bg.setColor(Color.parseColor("#F8F9FA"))
-        bg.cornerRadius = 24f
-        bg.setStroke(3, Color.parseColor("#E9ECEF"))
-        etInput.background = bg
+        val header = buatCustomDialogHeader(
+            R.drawable.ic_input,
+            "Tambah Opsi Dropdown Baru",
+            "Kategori: ${DropdownOptionsHelper.getCategoryName(currentCategoryKey)}"
+        )
+        root.addView(header)
 
-        val container = LinearLayout(this)
-        container.setPadding(48, 24, 48, 12)
-        container.addView(etInput)
+        val formContainer = LinearLayout(this)
+        formContainer.orientation = LinearLayout.VERTICAL
+        formContainer.setPadding(24, 8, 24, 16)
+
+        val (tilInput, etInput) = createFormInputLayout("Nama Opsi Baru *")
+        formContainer.addView(tilInput)
+        root.addView(formContainer)
 
         AlertDialog.Builder(this)
-            .setTitle("Tambah Option Baru")
-            .setMessage("Kategori: ${DropdownOptionsHelper.getCategoryName(currentCategoryKey)}")
-            .setView(container)
-            .setPositiveButton("Simpan") { _, _ ->
+            .setView(root)
+            .setPositiveButton("Simpan Opsi") { _, _ ->
                 val newText = etInput.text.toString().trim()
                 if (newText.isNotEmpty()) {
                     DropdownOptionsHelper.addOption(this, currentCategoryKey, newText)
                     loadAndRenderOptions()
-                    Toast.makeText(this, "Option berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Opsi berhasil ditambahkan ke cloud", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "Nama option tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Nama opsi tidak boleh kosong", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("Batal", null)
@@ -207,28 +470,32 @@ class KelolaDropdownActivity : AppCompatActivity() {
     }
 
     private fun dialogEditOption(index: Int, oldText: String) {
-        val etInput = EditText(this)
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
+
+        val header = buatCustomDialogHeader(
+            R.drawable.ic_edit,
+            "Edit Opsi Dropdown",
+            "Kategori: ${DropdownOptionsHelper.getCategoryName(currentCategoryKey)}"
+        )
+        root.addView(header)
+
+        val formContainer = LinearLayout(this)
+        formContainer.orientation = LinearLayout.VERTICAL
+        formContainer.setPadding(24, 8, 24, 16)
+
+        val (tilInput, etInput) = createFormInputLayout("Nama Opsi *")
         etInput.setText(oldText)
-        etInput.setPadding(48, 36, 48, 36)
-
-        val bg = GradientDrawable()
-        bg.setColor(Color.parseColor("#F8F9FA"))
-        bg.cornerRadius = 24f
-        bg.setStroke(3, Color.parseColor("#E9ECEF"))
-        etInput.background = bg
-
-        val container = LinearLayout(this)
-        container.setPadding(48, 24, 48, 12)
-        container.addView(etInput)
+        formContainer.addView(tilInput)
+        root.addView(formContainer)
 
         AlertDialog.Builder(this)
-            .setTitle("Edit Option")
-            .setView(container)
-            .setPositiveButton("Simpan") { _, _ ->
+            .setView(root)
+            .setPositiveButton("Simpan Perubahan") { _, _ ->
                 val newText = etInput.text.toString().trim()
                 DropdownOptionsHelper.updateOption(this, currentCategoryKey, index, newText)
                 loadAndRenderOptions()
-                Toast.makeText(this, "Option berhasil diubah", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Opsi berhasil diperbarui ke cloud", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("Batal", null)
             .show()
@@ -236,13 +503,68 @@ class KelolaDropdownActivity : AppCompatActivity() {
 
     private fun dialogHapusOption(index: Int, oldText: String) {
         val label = if (oldText.isEmpty()) "(Kosong / Blank)" else "\"$oldText\""
+
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
+        root.setPadding(24, 20, 24, 16)
+
+        val headerCard = MaterialCardView(this)
+        headerCard.radius = 14f
+        headerCard.cardElevation = 0f
+        headerCard.setCardBackgroundColor(Color.parseColor("#FEE2E2"))
+        val cardParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { bottomMargin = 16 }
+        headerCard.layoutParams = cardParams
+
+        val headerRow = LinearLayout(this)
+        headerRow.orientation = LinearLayout.HORIZONTAL
+        headerRow.gravity = Gravity.CENTER_VERTICAL
+        headerRow.setPadding(18, 14, 18, 14)
+
+        val ivWarn = ImageView(this)
+        ivWarn.setImageResource(android.R.drawable.ic_dialog_alert)
+        ivWarn.setColorFilter(ContextCompat.getColor(this, R.color.error))
+        val ivParams = LinearLayout.LayoutParams(36, 36)
+        ivWarn.layoutParams = ivParams
+        headerRow.addView(ivWarn)
+
+        val textCol = LinearLayout(this)
+        textCol.orientation = LinearLayout.VERTICAL
+        textCol.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+            marginStart = 14
+        }
+
+        val tvTitle = TextView(this)
+        tvTitle.text = "Konfirmasi Hapus Opsi"
+        tvTitle.textSize = 16f
+        tvTitle.setTypeface(null, Typeface.BOLD)
+        tvTitle.setTextColor(ContextCompat.getColor(this, R.color.error))
+        textCol.addView(tvTitle)
+
+        val tvSub = TextView(this)
+        tvSub.text = "Kategori: ${DropdownOptionsHelper.getCategoryName(currentCategoryKey)}"
+        tvSub.textSize = 12f
+        tvSub.setTextColor(Color.parseColor("#991B1B"))
+        textCol.addView(tvSub)
+
+        headerRow.addView(textCol)
+        headerCard.addView(headerRow)
+        root.addView(headerCard)
+
+        val tvMsg = TextView(this)
+        tvMsg.text = "Yakin ingin menghapus opsi $label dari kategori ini?\n\nPerubahan ini akan tersimpan ke cloud dan berlaku untuk seluruh pengguna."
+        tvMsg.textSize = 14f
+        tvMsg.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        tvMsg.setLineSpacing(4f, 1f)
+        root.addView(tvMsg)
+
         AlertDialog.Builder(this)
-            .setTitle("Hapus Option")
-            .setMessage("Yakin ingin menghapus $label dari kategori ini?")
-            .setPositiveButton("Hapus") { _, _ ->
+            .setView(root)
+            .setPositiveButton("Ya, Hapus Opsi") { _, _ ->
                 DropdownOptionsHelper.deleteOption(this, currentCategoryKey, index)
                 loadAndRenderOptions()
-                Toast.makeText(this, "Option berhasil dihapus", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Opsi berhasil dihapus dari cloud", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("Batal", null)
             .show()
