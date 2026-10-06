@@ -1031,13 +1031,15 @@ class EditDataActivity : AppCompatActivity() {
             setSpinnerValueSafe(binding.spStatusGenset1, data.optString("status_genset_1", ""))
             binding.etRemarkGenset1.setText(data.optString("remark_genset_1", ""))
 
-            val merkG2 = data.optString("merk_genset_2", "").trim()
-            val capG2 = parseNumberFromSheet(data.optString("capacity_genset_2", "")).trim()
-            val statusG2 = data.optString("status_genset_2", "").trim()
-            val remarkG2 = data.optString("remark_genset_2", "").trim()
+            val hasGenset1 = checkHasGensetData(data, 1)
+            val hasGenset2 = checkHasGensetData(data, 2)
 
-            val hasGenset2 = merkG2.isNotEmpty() || capG2.isNotEmpty() || statusG2.isNotEmpty() || remarkG2.isNotEmpty()
-            binding.layoutGenset2EditContainer.visibility = if (hasGenset2) View.VISIBLE else View.GONE
+            if (!hasGenset1 && !hasGenset2) {
+                binding.cardGenset.visibility = View.GONE
+            } else {
+                binding.cardGenset.visibility = View.VISIBLE
+                binding.layoutGenset2EditContainer.visibility = if (hasGenset2) View.VISIBLE else View.GONE
+            }
 
             setSpinnerValueSafe(binding.spMerkGenset2, data.optString("merk_genset_2", ""))
             binding.etCapacityGenset2.setText(parseNumberFromSheet(data.optString("capacity_genset_2", "")))
@@ -1103,6 +1105,16 @@ class EditDataActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e(TAG, "Error filling form: ${e.message}", e)
         }
+    }
+
+    private fun checkHasGensetData(data: JSONObject, unitNum: Int): Boolean {
+        val fields = listOf(
+            data.optString("merk_genset_$unitNum", "").trim(),
+            data.optString("capacity_genset_$unitNum", "").trim(),
+            data.optString("status_genset_$unitNum", "").trim(),
+            data.optString("remark_genset_$unitNum", "").trim()
+        )
+        return fields.any { it.isNotEmpty() && it != "-" && it != "0" }
     }
 
     private fun checkHasRectiData(data: JSONObject, idx: Int): Boolean {

@@ -731,6 +731,7 @@
                 <!-- SECTION: GENSET 1 & GENSET 2 (Collapsible) -->
                 <!-- ========================================== -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardGenset"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
