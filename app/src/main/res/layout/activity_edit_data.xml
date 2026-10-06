@@ -1058,7 +1058,7 @@
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery1" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Battery Recti 1" />
+                            <TextView style="@style/FieldLabel" android:text="Status Belting 1" />
                             <Spinner
                                 android:id="@+id/spBatteryRecti1"
                                 style="@style/SpinnerFieldModern"
@@ -1305,7 +1305,7 @@
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery2" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Battery Recti 2" />
+                            <TextView style="@style/FieldLabel" android:text="Status Belting 2" />
                             <Spinner
                                 android:id="@+id/spBatteryRecti2"
                                 style="@style/SpinnerFieldModern"
@@ -1549,7 +1549,7 @@
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery3" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Battery Recti 3" />
+                            <TextView style="@style/FieldLabel" android:text="Status Belting 3" />
                             <Spinner
                                 android:id="@+id/spBatteryRecti3"
                                 style="@style/SpinnerFieldModern"
@@ -1714,7 +1714,7 @@
 
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery4" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
-                            <TextView style="@style/FieldLabel" android:text="Battery Recti 4" />
+                            <TextView style="@style/FieldLabel" android:text="Status Belting 4" />
                             <Spinner android:id="@+id/spBatteryRecti4" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -1794,7 +1794,7 @@
                             <Spinner android:id="@+id/spMerkBaterai5" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery5" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
-                            <TextView style="@style/FieldLabel" android:text="Battery Recti 5" />
+                            <TextView style="@style/FieldLabel" android:text="Status Belting 5" />
                             <Spinner android:id="@+id/spBatteryRecti5" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -1874,7 +1874,7 @@
                             <Spinner android:id="@+id/spMerkBaterai6" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery6" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
-                            <TextView style="@style/FieldLabel" android:text="Battery Recti 6" />
+                            <TextView style="@style/FieldLabel" android:text="Status Belting 6" />
                             <Spinner android:id="@+id/spBatteryRecti6" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -1954,7 +1954,7 @@
                             <Spinner android:id="@+id/spMerkBaterai7" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery7" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
-                            <TextView style="@style/FieldLabel" android:text="Battery Recti 7" />
+                            <TextView style="@style/FieldLabel" android:text="Status Belting 7" />
                             <Spinner android:id="@+id/spBatteryRecti7" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
