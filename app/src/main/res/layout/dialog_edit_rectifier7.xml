@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="8dp">
+
+    <TextView style="@style/FieldLabel" android:text="Type Rectifier #7" />
+    <Spinner android:id="@+id/spTypeRectifier7" style="@style/SpinnerField" />
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginEnd="4dp" android:orientation="vertical">
+            <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
+            <Spinner android:id="@+id/spJumlahModul7" style="@style/SpinnerField" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:orientation="vertical">
+            <TextView style="@style/FieldLabel" android:text="Modul Rusak" />
+            <Spinner android:id="@+id/spJumlahModulRusak7" style="@style/SpinnerField" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView style="@style/FieldLabel" android:text="Jenis Baterai #7" />
+    <Spinner android:id="@+id/spJenisBaterai7" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="Merk Baterai #7" />
+    <Spinner android:id="@+id/spMerkBaterai7" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
+    <Spinner android:id="@+id/spJumlahBattery7" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="Battery Recti 7" />
+    <Spinner android:id="@+id/spBatteryRecti7" style="@style/SpinnerField" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchStatusBatteryNotAktif7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="Status Battery Not Aktif?"
+        android:textColor="@color/text_primary" />
+
+    <LinearLayout
+        android:id="@+id/layoutJumlahBankNotAktif7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+        <Spinner android:id="@+id/spJumlahBankNotAktif7" style="@style/SpinnerField" />
+    </LinearLayout>
+
+    <TextView style="@style/FieldLabel" android:text="MCB Battery Recty #7" />
+    <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/editMcbBatteryRecti7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView style="@style/FieldLabel" android:text="Kondisi Arester #7" />
+    <Spinner android:id="@+id/spKondisiArester7" style="@style/SpinnerField" />
+
+    <TextView style="@style/FieldLabel" android:text="Bus Voltage #7" />
+    <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/editBusVoltage7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage" android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView style="@style/FieldLabel" android:text="Load (A) #7" />
+    <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/editLoadA7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Load (A)" android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung #7" />
+    <com.google.android.material.textfield.TextInputLayout style="@style/ZamanTextInputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/editPerangkat7" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat (Multi-select)" />
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>
