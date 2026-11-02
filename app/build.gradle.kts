@@ -8,9 +8,9 @@ android {
     // Keep the existing local debug keystore compatible with developer machines.
     signingConfigs {
         getByName("debug") {
-            storePassword = "zamantech"
-            keyAlias = "zamantech"
-            keyPassword = "zamantech"
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
         }
     }
     namespace = "com.example.zaman_apps"

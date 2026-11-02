@@ -33,8 +33,8 @@
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_popup_sync"
                 android:contentDescription="Refresh Data"
+                android:src="@android:drawable/ic_popup_sync"
                 android:tooltipText="Refresh Data"
                 app:tint="@color/white" />
 
@@ -47,8 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="100dp"
         android:fillViewport="true"
+        android:paddingBottom="100dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -84,8 +84,8 @@
                         <androidx.cardview.widget.CardView
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            app:cardCornerRadius="10dp"
-                            app:cardBackgroundColor="@color/brand_accent_light">
+                            app:cardBackgroundColor="@color/brand_accent_light"
+                            app:cardCornerRadius="10dp">
 
                             <ImageView
                                 android:layout_width="20dp"
@@ -116,13 +116,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:theme="@style/ThemeOverlay.AppCompat.Light"
-                        app:boxStrokeColor="@color/brand_primary"
                         app:boxBackgroundColor="@color/white"
                         app:boxBackgroundMode="outline"
                         app:boxCornerRadiusBottomEnd="10dp"
                         app:boxCornerRadiusBottomStart="10dp"
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/brand_primary"
                         app:hintTextColor="@color/text_secondary"
                         app:startIconDrawable="@drawable/ic_site_id"
                         app:startIconTint="@color/brand_primary">
@@ -131,20 +131,20 @@
                             android:id="@+id/actvSiteIdList"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:clickable="true"
+                            android:completionThreshold="1"
+                            android:cursorVisible="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             android:hint="Masukkan atau pilih Site ID"
                             android:inputType="text"
                             android:padding="14dp"
-                            android:textSize="14sp"
+                            android:popupBackground="@android:color/white"
                             android:singleLine="true"
-                            android:completionThreshold="1"
                             android:textColor="@color/text_primary"
                             android:textColorHint="@color/text_secondary"
-                            android:background="@android:color/transparent"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:cursorVisible="true"
-                            android:clickable="true"
-                            android:popupBackground="@android:color/white" />
+                            android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <ProgressBar
@@ -188,38 +188,37 @@
                             android:id="@+id/headerInformasiSite"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="18dp"
+                            android:background="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
-                            android:background="?attr/selectableItemBackground">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
-                                app:cardCornerRadius="10dp"
-                                app:cardBackgroundColor="@color/brand_accent_light">
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
 
                                 <ImageView
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_gravity="center"
-                                    android:src="@android:drawable/ic_menu_mylocation"
+                                    android:src="@android:drawable/ic_menu_info_details"
                                     app:tint="@color/brand_primary" />
                             </androidx.cardview.widget.CardView>
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_marginStart="12dp"
-                                android:text="Informasi Site"
+                                android:layout_weight="1"
+                                android:text="INFORMASI SITE"
                                 android:textColor="@color/brand_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
-                            <!-- Ikon toggle expand/collapse -->
                             <ImageView
                                 android:id="@+id/icToggleInformasiSite"
                                 android:layout_width="24dp"
@@ -228,7 +227,7 @@
                                 app:tint="@color/brand_primary" />
                         </LinearLayout>
 
-                        <!-- CONTENT yang bisa di-collapse -->
+                        <!-- CONTENT -->
                         <LinearLayout
                             android:id="@+id/contentInformasiSite"
                             android:layout_width="match_parent"
@@ -238,55 +237,48 @@
                             android:paddingBottom="18dp"
                             android:visibility="visible">
 
+                            <TextView style="@style/FieldLabel" android:text="Nama Site" />
                             <com.google.android.material.textfield.TextInputLayout
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
                                 app:boxCornerRadiusTopStart="10dp"
-                                app:hintTextColor="@color/text_secondary"
-                                app:startIconDrawable="@drawable/ic_site_name"
-                                app:startIconTint="@color/brand_primary">
-
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etSiteName"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Site Name"
+                                    android:hint="Nama Site"
                                     android:inputType="text"
-                                    android:textSize="14sp"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
 
-                            <!-- DATA PLN (SEBELUM EAS) -->
+                            <TextView style="@style/FieldLabel" android:text="ID Pelanggan (ID PLN)" />
                             <com.google.android.material.textfield.TextInputLayout
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
                                 app:boxCornerRadiusTopStart="10dp"
-                                app:hintTextColor="@color/text_secondary">
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etIdPelanggan"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="ID Pelanggan (ID PLN)"
+                                    android:hint="ID Pelanggan"
                                     android:inputType="numberDecimal"
-                                    android:textSize="14sp"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
@@ -297,34 +289,30 @@
                                 style="@style/SpinnerFieldModern"
                                 android:entries="@array/mcb_kwh_options" />
 
+                            <TextView style="@style/FieldLabel" android:text="Daya" />
                             <com.google.android.material.textfield.TextInputLayout
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
                                 app:boxCornerRadiusTopStart="10dp"
-                                app:hintTextColor="@color/text_secondary">
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etDaya"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Daya"
                                     android:inputType="numberDecimal"
-                                    android:textSize="14sp"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
 
-                            <!-- ========================================== -->
-                            <!-- FOTO SITE                                   -->
-                            <!-- ========================================== -->
+                            <!-- Foto Site Badge & Action Button -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -336,35 +324,38 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Foto Dokumentasi Site (Sampai 10 Foto)"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="13sp"
+                                    android:text="Foto Dokumentasi Site"
+                                    android:textColor="@color/brand_primary"
+                                    android:textSize="14sp"
                                     android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/tvCountFotoEdit"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/bg_badge"
+                                    android:background="@drawable/badge_welcome_bg"
                                     android:paddingHorizontal="10dp"
                                     android:paddingVertical="4dp"
                                     android:text="0 / 10"
-                                    android:textColor="@color/brand_primary"
+                                    android:textColor="@color/white"
                                     android:textSize="12sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnKelolaFotoEdit"
-                                style="@style/ZamanButton"
+                                style="@style/ZamanButtonOutlined"
                                 android:layout_width="match_parent"
-                                android:layout_height="52dp"
+                                android:layout_height="48dp"
                                 android:layout_marginTop="10dp"
-                                android:text="Lihat &amp; Kelola Foto Dokumentasi"
-                                android:textSize="14sp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:paddingVertical="0dp"
+                                android:text="Kelola &amp; Lihat Foto Site"
+                                android:textSize="13sp"
                                 app:icon="@android:drawable/ic_menu_gallery"
                                 app:iconGravity="textStart"
-                                app:iconTint="@color/white" />
+                                app:iconTint="@color/brand_primary" />
 
                         </LinearLayout>
 
@@ -392,18 +383,18 @@
                             android:id="@+id/headerStatusPerangkat"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="18dp"
+                            android:background="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
-                            android:background="?attr/selectableItemBackground">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
-                                app:cardCornerRadius="10dp"
-                                app:cardBackgroundColor="@color/brand_accent_light">
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
 
                                 <ImageView
                                     android:layout_width="20dp"
@@ -416,9 +407,9 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_marginStart="12dp"
-                                android:text="Status Perangkat"
+                                android:layout_weight="1"
+                                android:text="STATUS PERANGKAT (EAS)"
                                 android:textColor="@color/brand_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -441,65 +432,20 @@
                             android:paddingBottom="18dp"
                             android:visibility="visible">
 
-                            <androidx.gridlayout.widget.GridLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:columnCount="2">
+                            <TextView style="@style/FieldLabel" android:text="Mains Fail" />
+                            <Spinner android:id="@+id/spMainsFail" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="8dp"
-                                    android:orientation="vertical"
-                                    app:layout_columnWeight="1">
-                                    <TextView style="@style/FieldLabel" android:text="Mains Fail" />
-                                    <Spinner android:id="@+id/spMainsFail" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
-                                </LinearLayout>
+                            <TextView style="@style/FieldLabel" android:text="Recty Fail" />
+                            <Spinner android:id="@+id/spRectyFail" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:orientation="vertical"
-                                    app:layout_columnWeight="1">
-                                    <TextView style="@style/FieldLabel" android:text="Recty Fail" />
-                                    <Spinner android:id="@+id/spRectyFail" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
-                                </LinearLayout>
+                            <TextView style="@style/FieldLabel" android:text="Stolen" />
+                            <Spinner android:id="@+id/spStolen" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="8dp"
-                                    android:layout_marginTop="8dp"
-                                    android:orientation="vertical"
-                                    app:layout_columnWeight="1">
-                                    <TextView style="@style/FieldLabel" android:text="Stolen" />
-                                    <Spinner android:id="@+id/spStolen" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
-                                </LinearLayout>
+                            <TextView style="@style/FieldLabel" android:text="Low Batt" />
+                            <Spinner android:id="@+id/spLowBatt" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginTop="8dp"
-                                    android:orientation="vertical"
-                                    app:layout_columnWeight="1">
-                                    <TextView style="@style/FieldLabel" android:text="Low Batt" />
-                                    <Spinner android:id="@+id/spLowBatt" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="8dp"
-                                    android:layout_marginTop="8dp"
-                                    android:orientation="vertical"
-                                    app:layout_columnWeight="1">
-                                    <TextView style="@style/FieldLabel" android:text="Eng Run" />
-                                    <Spinner android:id="@+id/spEngRun" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
-                                </LinearLayout>
-
-                            </androidx.gridlayout.widget.GridLayout>
+                            <TextView style="@style/FieldLabel" android:text="Eng Run" />
+                            <Spinner android:id="@+id/spEngRun" style="@style/SpinnerFieldModern" android:entries="@array/status_options" />
 
                         </LinearLayout>
 
@@ -527,18 +473,18 @@
                             android:id="@+id/headerTeganganArus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="18dp"
+                            android:background="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
-                            android:background="?attr/selectableItemBackground">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
-                                app:cardCornerRadius="10dp"
-                                app:cardBackgroundColor="@color/brand_accent_light">
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
 
                                 <ImageView
                                     android:layout_width="20dp"
@@ -551,9 +497,9 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_marginStart="12dp"
-                                android:text="Tegangan dan Arus"
+                                android:layout_weight="1"
+                                android:text="TEGANGAN &amp; ARUS"
                                 android:textColor="@color/brand_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -576,8 +522,12 @@
                             android:paddingBottom="18dp"
                             android:visibility="visible">
 
-                            <TextView style="@style/GroupLabelModern" android:text="Tegangan (V)" />
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <TextView style="@style/GroupLabelModern" android:text="Voltage" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
                                 <com.google.android.material.textfield.TextInputLayout
                                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="0dp"
@@ -585,45 +535,47 @@
                                     android:layout_marginEnd="4dp"
                                     android:layout_weight="1"
                                     android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                    app:boxStrokeColor="@color/brand_primary"
                                     app:boxBackgroundColor="@color/white"
                                     app:boxBackgroundMode="outline"
                                     app:boxCornerRadiusBottomEnd="10dp"
                                     app:boxCornerRadiusBottomStart="10dp"
                                     app:boxCornerRadiusTopEnd="10dp"
-                                    app:boxCornerRadiusTopStart="10dp">
+                                    app:boxCornerRadiusTopStart="10dp"
+                                    app:boxStrokeColor="@color/brand_primary">
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/etRV"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:hint="R"
-                                        android:inputType="numberDecimal"
+                                        android:inputType="number"
                                         android:textColor="@color/text_primary"
                                         android:textColorHint="@color/text_secondary" />
                                 </com.google.android.material.textfield.TextInputLayout>
+
                                 <com.google.android.material.textfield.TextInputLayout
                                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginHorizontal="4dp"
+                                    android:layout_marginHorizontal="2dp"
                                     android:layout_weight="1"
                                     android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                    app:boxStrokeColor="@color/brand_primary"
                                     app:boxBackgroundColor="@color/white"
                                     app:boxBackgroundMode="outline"
                                     app:boxCornerRadiusBottomEnd="10dp"
                                     app:boxCornerRadiusBottomStart="10dp"
                                     app:boxCornerRadiusTopEnd="10dp"
-                                    app:boxCornerRadiusTopStart="10dp">
+                                    app:boxCornerRadiusTopStart="10dp"
+                                    app:boxStrokeColor="@color/brand_primary">
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/etSV"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:hint="S"
-                                        android:inputType="numberDecimal"
+                                        android:inputType="number"
                                         android:textColor="@color/text_primary"
                                         android:textColorHint="@color/text_secondary" />
                                 </com.google.android.material.textfield.TextInputLayout>
+
                                 <com.google.android.material.textfield.TextInputLayout
                                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="0dp"
@@ -631,26 +583,30 @@
                                     android:layout_marginStart="4dp"
                                     android:layout_weight="1"
                                     android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                    app:boxStrokeColor="@color/brand_primary"
                                     app:boxBackgroundColor="@color/white"
                                     app:boxBackgroundMode="outline"
                                     app:boxCornerRadiusBottomEnd="10dp"
                                     app:boxCornerRadiusBottomStart="10dp"
                                     app:boxCornerRadiusTopEnd="10dp"
-                                    app:boxCornerRadiusTopStart="10dp">
+                                    app:boxCornerRadiusTopStart="10dp"
+                                    app:boxStrokeColor="@color/brand_primary">
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/etTV"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:hint="T"
-                                        android:inputType="numberDecimal"
+                                        android:inputType="number"
                                         android:textColor="@color/text_primary"
                                         android:textColorHint="@color/text_secondary" />
                                 </com.google.android.material.textfield.TextInputLayout>
                             </LinearLayout>
 
-                            <TextView style="@style/GroupLabelModern" android:layout_marginTop="12dp" android:text="Arus (A)" />
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <TextView style="@style/GroupLabelModern" android:text="Arus" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
                                 <com.google.android.material.textfield.TextInputLayout
                                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="0dp"
@@ -658,13 +614,13 @@
                                     android:layout_marginEnd="4dp"
                                     android:layout_weight="1"
                                     android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                    app:boxStrokeColor="@color/brand_primary"
                                     app:boxBackgroundColor="@color/white"
                                     app:boxBackgroundMode="outline"
                                     app:boxCornerRadiusBottomEnd="10dp"
                                     app:boxCornerRadiusBottomStart="10dp"
                                     app:boxCornerRadiusTopEnd="10dp"
-                                    app:boxCornerRadiusTopStart="10dp">
+                                    app:boxCornerRadiusTopStart="10dp"
+                                    app:boxStrokeColor="@color/brand_primary">
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/etRA"
                                         android:layout_width="match_parent"
@@ -674,20 +630,21 @@
                                         android:textColor="@color/text_primary"
                                         android:textColorHint="@color/text_secondary" />
                                 </com.google.android.material.textfield.TextInputLayout>
+
                                 <com.google.android.material.textfield.TextInputLayout
                                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginHorizontal="4dp"
+                                    android:layout_marginHorizontal="2dp"
                                     android:layout_weight="1"
                                     android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                    app:boxStrokeColor="@color/brand_primary"
                                     app:boxBackgroundColor="@color/white"
                                     app:boxBackgroundMode="outline"
                                     app:boxCornerRadiusBottomEnd="10dp"
                                     app:boxCornerRadiusBottomStart="10dp"
                                     app:boxCornerRadiusTopEnd="10dp"
-                                    app:boxCornerRadiusTopStart="10dp">
+                                    app:boxCornerRadiusTopStart="10dp"
+                                    app:boxStrokeColor="@color/brand_primary">
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/etSA"
                                         android:layout_width="match_parent"
@@ -697,6 +654,7 @@
                                         android:textColor="@color/text_primary"
                                         android:textColorHint="@color/text_secondary" />
                                 </com.google.android.material.textfield.TextInputLayout>
+
                                 <com.google.android.material.textfield.TextInputLayout
                                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="0dp"
@@ -704,13 +662,13 @@
                                     android:layout_marginStart="4dp"
                                     android:layout_weight="1"
                                     android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                    app:boxStrokeColor="@color/brand_primary"
                                     app:boxBackgroundColor="@color/white"
                                     app:boxBackgroundMode="outline"
                                     app:boxCornerRadiusBottomEnd="10dp"
                                     app:boxCornerRadiusBottomStart="10dp"
                                     app:boxCornerRadiusTopEnd="10dp"
-                                    app:boxCornerRadiusTopStart="10dp">
+                                    app:boxCornerRadiusTopStart="10dp"
+                                    app:boxStrokeColor="@color/brand_primary">
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/etTA"
                                         android:layout_width="match_parent"
@@ -749,18 +707,18 @@
                             android:id="@+id/headerGenset"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="18dp"
+                            android:background="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
-                            android:background="?attr/selectableItemBackground">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
-                                app:cardCornerRadius="10dp"
-                                app:cardBackgroundColor="@color/brand_accent_light">
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
 
                                 <ImageView
                                     android:layout_width="20dp"
@@ -773,8 +731,8 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_marginStart="12dp"
+                                android:layout_weight="1"
                                 android:text="GENSET"
                                 android:textColor="@color/brand_primary"
                                 android:textSize="16sp"
@@ -804,8 +762,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="8dp"
                                 android:layout_marginTop="4dp"
+                                android:layout_marginBottom="8dp"
                                 android:text="GENSET 1"
                                 android:textColor="@color/brand_primary"
                                 android:textSize="14sp"
@@ -823,13 +781,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etCapacityGenset1"
                                     android:layout_width="match_parent"
@@ -852,13 +810,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etRemarkGenset1"
                                     android:layout_width="match_parent"
@@ -907,13 +865,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                    app:boxStrokeColor="@color/brand_primary"
                                     app:boxBackgroundColor="@color/white"
                                     app:boxBackgroundMode="outline"
                                     app:boxCornerRadiusBottomEnd="10dp"
                                     app:boxCornerRadiusBottomStart="10dp"
                                     app:boxCornerRadiusTopEnd="10dp"
-                                    app:boxCornerRadiusTopStart="10dp">
+                                    app:boxCornerRadiusTopStart="10dp"
+                                    app:boxStrokeColor="@color/brand_primary">
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/etCapacityGenset2"
                                         android:layout_width="match_parent"
@@ -936,13 +894,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                    app:boxStrokeColor="@color/brand_primary"
                                     app:boxBackgroundColor="@color/white"
                                     app:boxBackgroundMode="outline"
                                     app:boxCornerRadiusBottomEnd="10dp"
                                     app:boxCornerRadiusBottomStart="10dp"
                                     app:boxCornerRadiusTopEnd="10dp"
-                                    app:boxCornerRadiusTopStart="10dp">
+                                    app:boxCornerRadiusTopStart="10dp"
+                                    app:boxStrokeColor="@color/brand_primary">
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/etRemarkGenset2"
                                         android:layout_width="match_parent"
@@ -957,7 +915,6 @@
                             </LinearLayout>
 
                         </LinearLayout>
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -983,18 +940,18 @@
                             android:id="@+id/headerRecti1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="18dp"
+                            android:background="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
-                            android:background="?attr/selectableItemBackground">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
-                                app:cardCornerRadius="10dp"
-                                app:cardBackgroundColor="@color/brand_accent_light">
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
 
                                 <ImageView
                                     android:layout_width="20dp"
@@ -1007,8 +964,8 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_marginStart="12dp"
+                                android:layout_weight="1"
                                 android:text="RECTI 1"
                                 android:textColor="@color/brand_primary"
                                 android:textSize="16sp"
@@ -1090,13 +1047,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etMcbBatteryRecti1"
                                     android:layout_width="match_parent"
@@ -1116,13 +1073,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etBusVoltage1"
                                     android:layout_width="match_parent"
@@ -1139,13 +1096,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etLoadA1"
                                     android:layout_width="match_parent"
@@ -1162,19 +1119,19 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etPerangkatTerhubung1"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:focusable="false"
                                     android:clickable="true"
+                                    android:focusable="false"
                                     android:hint="Pilih Perangkat (Multi-select)"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
@@ -1186,19 +1143,20 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etRemark1"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Remark"
-                                    android:inputType="text"
+                                    android:hint="Catatan / Remark 1"
+                                    android:inputType="textMultiLine"
+                                    android:minLines="2"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
@@ -1230,18 +1188,18 @@
                             android:id="@+id/headerRecti2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="18dp"
+                            android:background="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
-                            android:background="?attr/selectableItemBackground">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
-                                app:cardCornerRadius="10dp"
-                                app:cardBackgroundColor="@color/brand_accent_light">
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
 
                                 <ImageView
                                     android:layout_width="20dp"
@@ -1254,8 +1212,8 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_marginStart="12dp"
+                                android:layout_weight="1"
                                 android:text="RECTI 2"
                                 android:textColor="@color/brand_primary"
                                 android:textSize="16sp"
@@ -1337,13 +1295,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etMcbBatteryRecti2"
                                     android:layout_width="match_parent"
@@ -1363,13 +1321,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etBusVoltage2"
                                     android:layout_width="match_parent"
@@ -1386,13 +1344,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etLoadA2"
                                     android:layout_width="match_parent"
@@ -1409,19 +1367,19 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etPerangkatTerhubung2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:focusable="false"
                                     android:clickable="true"
+                                    android:focusable="false"
                                     android:hint="Pilih Perangkat (Multi-select)"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
@@ -1433,19 +1391,20 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etRemark2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Remark"
-                                    android:inputType="text"
+                                    android:hint="Catatan / Remark 2"
+                                    android:inputType="textMultiLine"
+                                    android:minLines="2"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
@@ -1477,18 +1436,18 @@
                             android:id="@+id/headerRecti3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="18dp"
+                            android:background="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
-                            android:background="?attr/selectableItemBackground">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
-                                app:cardCornerRadius="10dp"
-                                app:cardBackgroundColor="@color/brand_accent_light">
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
 
                                 <ImageView
                                     android:layout_width="20dp"
@@ -1501,8 +1460,8 @@
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_marginStart="12dp"
+                                android:layout_weight="1"
                                 android:text="RECTI 3"
                                 android:textColor="@color/brand_primary"
                                 android:textSize="16sp"
@@ -1544,7 +1503,10 @@
                             <Spinner android:id="@+id/spJenisBaterai3" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Merk Baterai #3" />
-                            <Spinner android:id="@+id/spMerkBaterai3" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+                            <Spinner
+                                android:id="@+id/spMerkBaterai3"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/merk_baterai_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery3" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
@@ -1581,13 +1543,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etMcbBatteryRecti3"
                                     android:layout_width="match_parent"
@@ -1607,13 +1569,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etBusVoltage3"
                                     android:layout_width="match_parent"
@@ -1630,13 +1592,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etLoadA3"
                                     android:layout_width="match_parent"
@@ -1653,19 +1615,19 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                                app:boxStrokeColor="@color/brand_primary"
                                 app:boxBackgroundColor="@color/white"
                                 app:boxBackgroundMode="outline"
                                 app:boxCornerRadiusBottomEnd="10dp"
                                 app:boxCornerRadiusBottomStart="10dp"
                                 app:boxCornerRadiusTopEnd="10dp"
-                                app:boxCornerRadiusTopStart="10dp">
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/etPerangkatTerhubung3"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:focusable="false"
                                     android:clickable="true"
+                                    android:focusable="false"
                                     android:hint="Pilih Perangkat (Multi-select)"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
@@ -1679,23 +1641,71 @@
                 <!-- SECTION: RECTI 4 -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardRecti4"
+                    style="@style/ZamanCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardBackgroundColor="@color/card_bg"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-                        <LinearLayout android:id="@+id/headerRecti4" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="18dp" android:clickable="true" android:focusable="true" android:background="?attr/selectableItemBackground">
-                            <androidx.cardview.widget.CardView android:layout_width="36dp" android:layout_height="36dp" app:cardCornerRadius="10dp" app:cardBackgroundColor="@color/brand_accent_light">
-                                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_manage" app:tint="@color/brand_primary" />
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/headerRecti4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_manage"
+                                    app:tint="@color/brand_primary" />
                             </androidx.cardview.widget.CardView>
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:text="RECTI 4" android:textColor="@color/brand_primary" android:textSize="16sp" android:textStyle="bold" />
-                            <ImageView android:id="@+id/icToggleRecti4" android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/arrow_up_float" app:tint="@color/brand_primary" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_weight="1"
+                                android:text="RECTI 4"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/icToggleRecti4"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
                         </LinearLayout>
-                        <LinearLayout android:id="@+id/contentRecti4" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="18dp" android:paddingBottom="18dp" android:visibility="visible">
+
+                        <LinearLayout
+                            android:id="@+id/contentRecti4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
                             <TextView style="@style/FieldLabel" android:text="Type Rectifier #4" />
                             <Spinner android:id="@+id/spTypeRectifier4" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -1706,16 +1716,24 @@
                                     <Spinner android:id="@+id/spJumlahModulRusak4" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
                                 </LinearLayout>
                             </LinearLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Jenis Baterai #4" />
                             <Spinner android:id="@+id/spJenisBaterai4" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Merk Baterai #4" />
-                            <Spinner android:id="@+id/spMerkBaterai4" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+                            <Spinner
+                                android:id="@+id/spMerkBaterai4"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/merk_baterai_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery4" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Status Belting 4" />
-                            <Spinner android:id="@+id/spBatteryRecti4" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+                            <Spinner
+                                android:id="@+id/spBatteryRecti4"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/balting_options" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:id="@+id/switchStatusBatteryNotAktif4"
@@ -1736,48 +1754,176 @@
                                 <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
                                 <Spinner android:id="@+id/spJumlahBankNotAktif4" style="@style/SpinnerFieldModern" />
                             </LinearLayout>
+
                             <TextView style="@style/FieldLabel" android:text="MCB Battery Recty #4" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etMcbBatteryRecti4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="MCB Battery Recty"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #4" />
                             <Spinner android:id="@+id/spKondisiArester4" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBusVoltage4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Bus Voltage"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Load A" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Load A" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etLoadA4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Load A"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung4" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPerangkatTerhubung4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:focusable="false"
+                                    android:hint="Pilih Perangkat (Multi-select)"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                         </LinearLayout>
+
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- SECTION: RECTI 5 -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardRecti5"
+                    style="@style/ZamanCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardBackgroundColor="@color/card_bg"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-                        <LinearLayout android:id="@+id/headerRecti5" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="18dp" android:clickable="true" android:focusable="true" android:background="?attr/selectableItemBackground">
-                            <androidx.cardview.widget.CardView android:layout_width="36dp" android:layout_height="36dp" app:cardCornerRadius="10dp" app:cardBackgroundColor="@color/brand_accent_light">
-                                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_manage" app:tint="@color/brand_primary" />
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/headerRecti5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_manage"
+                                    app:tint="@color/brand_primary" />
                             </androidx.cardview.widget.CardView>
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:text="RECTI 5" android:textColor="@color/brand_primary" android:textSize="16sp" android:textStyle="bold" />
-                            <ImageView android:id="@+id/icToggleRecti5" android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/arrow_up_float" app:tint="@color/brand_primary" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_weight="1"
+                                android:text="RECTI 5"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/icToggleRecti5"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
                         </LinearLayout>
-                        <LinearLayout android:id="@+id/contentRecti5" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="18dp" android:paddingBottom="18dp" android:visibility="visible">
+
+                        <LinearLayout
+                            android:id="@+id/contentRecti5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
                             <TextView style="@style/FieldLabel" android:text="Type Rectifier #5" />
                             <Spinner android:id="@+id/spTypeRectifier5" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -1788,14 +1934,24 @@
                                     <Spinner android:id="@+id/spJumlahModulRusak5" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
                                 </LinearLayout>
                             </LinearLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Jenis Baterai #5" />
                             <Spinner android:id="@+id/spJenisBaterai5" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Merk Baterai #5" />
-                            <Spinner android:id="@+id/spMerkBaterai5" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+                            <Spinner
+                                android:id="@+id/spMerkBaterai5"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/merk_baterai_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery5" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Status Belting 5" />
-                            <Spinner android:id="@+id/spBatteryRecti5" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+                            <Spinner
+                                android:id="@+id/spBatteryRecti5"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/balting_options" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:id="@+id/switchStatusBatteryNotAktif5"
@@ -1816,48 +1972,176 @@
                                 <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
                                 <Spinner android:id="@+id/spJumlahBankNotAktif5" style="@style/SpinnerFieldModern" />
                             </LinearLayout>
+
                             <TextView style="@style/FieldLabel" android:text="MCB Battery Recty #5" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etMcbBatteryRecti5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="MCB Battery Recty"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #5" />
                             <Spinner android:id="@+id/spKondisiArester5" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBusVoltage5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Bus Voltage"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Load A" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Load A" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etLoadA5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Load A"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung5" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPerangkatTerhubung5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:focusable="false"
+                                    android:hint="Pilih Perangkat (Multi-select)"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                         </LinearLayout>
+
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- SECTION: RECTI 6 -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardRecti6"
+                    style="@style/ZamanCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardBackgroundColor="@color/card_bg"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-                        <LinearLayout android:id="@+id/headerRecti6" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="18dp" android:clickable="true" android:focusable="true" android:background="?attr/selectableItemBackground">
-                            <androidx.cardview.widget.CardView android:layout_width="36dp" android:layout_height="36dp" app:cardCornerRadius="10dp" app:cardBackgroundColor="@color/brand_accent_light">
-                                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_manage" app:tint="@color/brand_primary" />
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/headerRecti6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_manage"
+                                    app:tint="@color/brand_primary" />
                             </androidx.cardview.widget.CardView>
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:text="RECTI 6" android:textColor="@color/brand_primary" android:textSize="16sp" android:textStyle="bold" />
-                            <ImageView android:id="@+id/icToggleRecti6" android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/arrow_up_float" app:tint="@color/brand_primary" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_weight="1"
+                                android:text="RECTI 6"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/icToggleRecti6"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
                         </LinearLayout>
-                        <LinearLayout android:id="@+id/contentRecti6" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="18dp" android:paddingBottom="18dp" android:visibility="visible">
+
+                        <LinearLayout
+                            android:id="@+id/contentRecti6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
                             <TextView style="@style/FieldLabel" android:text="Type Rectifier #6" />
                             <Spinner android:id="@+id/spTypeRectifier6" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -1868,14 +2152,24 @@
                                     <Spinner android:id="@+id/spJumlahModulRusak6" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
                                 </LinearLayout>
                             </LinearLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Jenis Baterai #6" />
                             <Spinner android:id="@+id/spJenisBaterai6" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Merk Baterai #6" />
-                            <Spinner android:id="@+id/spMerkBaterai6" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+                            <Spinner
+                                android:id="@+id/spMerkBaterai6"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/merk_baterai_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery6" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Status Belting 6" />
-                            <Spinner android:id="@+id/spBatteryRecti6" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+                            <Spinner
+                                android:id="@+id/spBatteryRecti6"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/balting_options" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:id="@+id/switchStatusBatteryNotAktif6"
@@ -1896,48 +2190,176 @@
                                 <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
                                 <Spinner android:id="@+id/spJumlahBankNotAktif6" style="@style/SpinnerFieldModern" />
                             </LinearLayout>
+
                             <TextView style="@style/FieldLabel" android:text="MCB Battery Recty #6" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti6" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etMcbBatteryRecti6"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="MCB Battery Recty"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #6" />
                             <Spinner android:id="@+id/spKondisiArester6" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage6" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBusVoltage6"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Bus Voltage"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Load A" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA6" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Load A" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etLoadA6"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Load A"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung6" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPerangkatTerhubung6"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:focusable="false"
+                                    android:hint="Pilih Perangkat (Multi-select)"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                         </LinearLayout>
+
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- SECTION: RECTI 7 -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardRecti7"
+                    style="@style/ZamanCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardBackgroundColor="@color/card_bg"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-                        <LinearLayout android:id="@+id/headerRecti7" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="18dp" android:clickable="true" android:focusable="true" android:background="?attr/selectableItemBackground">
-                            <androidx.cardview.widget.CardView android:layout_width="36dp" android:layout_height="36dp" app:cardCornerRadius="10dp" app:cardBackgroundColor="@color/brand_accent_light">
-                                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:layout_gravity="center" android:src="@android:drawable/ic_menu_manage" app:tint="@color/brand_primary" />
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/headerRecti7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="18dp">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                app:cardBackgroundColor="@color/brand_accent_light"
+                                app:cardCornerRadius="10dp">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_manage"
+                                    app:tint="@color/brand_primary" />
                             </androidx.cardview.widget.CardView>
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:text="RECTI 7" android:textColor="@color/brand_primary" android:textSize="16sp" android:textStyle="bold" />
-                            <ImageView android:id="@+id/icToggleRecti7" android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/arrow_up_float" app:tint="@color/brand_primary" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_weight="1"
+                                android:text="RECTI 7"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/icToggleRecti7"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/arrow_up_float"
+                                app:tint="@color/brand_primary" />
                         </LinearLayout>
-                        <LinearLayout android:id="@+id/contentRecti7" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="18dp" android:paddingBottom="18dp" android:visibility="visible">
+
+                        <LinearLayout
+                            android:id="@+id/contentRecti7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="18dp"
+                            android:paddingBottom="18dp"
+                            android:visibility="visible">
+
                             <TextView style="@style/FieldLabel" android:text="Type Rectifier #7" />
                             <Spinner android:id="@+id/spTypeRectifier7" style="@style/SpinnerFieldModern" android:entries="@array/type_rectifier_options" />
+
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -1948,14 +2370,24 @@
                                     <Spinner android:id="@+id/spJumlahModulRusak7" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_modul_options" />
                                 </LinearLayout>
                             </LinearLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Jenis Baterai #7" />
                             <Spinner android:id="@+id/spJenisBaterai7" style="@style/SpinnerFieldModern" android:entries="@array/jenis_baterai_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Merk Baterai #7" />
-                            <Spinner android:id="@+id/spMerkBaterai7" style="@style/SpinnerFieldModern" android:entries="@array/merk_baterai_options" />
+                            <Spinner
+                                android:id="@+id/spMerkBaterai7"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/merk_baterai_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Jumlah Battery (P)" />
                             <Spinner android:id="@+id/spJumlahBattery7" style="@style/SpinnerFieldModern" android:entries="@array/jumlah_battery_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Status Belting 7" />
-                            <Spinner android:id="@+id/spBatteryRecti7" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
+                            <Spinner
+                                android:id="@+id/spBatteryRecti7"
+                                style="@style/SpinnerFieldModern"
+                                android:entries="@array/balting_options" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:id="@+id/switchStatusBatteryNotAktif7"
@@ -1976,25 +2408,105 @@
                                 <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
                                 <Spinner android:id="@+id/spJumlahBankNotAktif7" style="@style/SpinnerFieldModern" />
                             </LinearLayout>
+
                             <TextView style="@style/FieldLabel" android:text="MCB Battery Recty #7" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etMcbBatteryRecti7"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="MCB Battery Recty"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #7" />
                             <Spinner android:id="@+id/spKondisiArester7" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBusVoltage7"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Bus Voltage"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Load A" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etLoadA7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Load A" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etLoadA7"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Load A"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView style="@style/FieldLabel" android:text="Perangkat Terhubung" />
-                            <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkatTerhubung7" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="10dp"
+                                app:boxCornerRadiusBottomStart="10dp"
+                                app:boxCornerRadiusTopEnd="10dp"
+                                app:boxCornerRadiusTopStart="10dp"
+                                app:boxStrokeColor="@color/brand_primary">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etPerangkatTerhubung7"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:focusable="false"
+                                    android:hint="Pilih Perangkat (Multi-select)"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
+
                         </LinearLayout>
+
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -2035,9 +2547,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="vertical"
-                android:padding="32dp"
-                android:gravity="center">
+                android:padding="32dp">
 
                 <ProgressBar
                     android:layout_width="56dp"
@@ -2049,11 +2561,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:fontFamily="sans-serif-medium"
                     android:text="Menyimpan data..."
                     android:textColor="@color/text_primary"
                     android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -2067,10 +2579,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:letterSpacing="0.3"
                     android:text="•••"
                     android:textColor="@color/text_secondary"
-                    android:textSize="18sp"
-                    android:letterSpacing="0.3" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -2088,7 +2600,7 @@
         android:elevation="6dp"
         android:enabled="false"
         android:paddingVertical="16dp"
-        android:text="UPDATE DATA"
+        android:text="UPDATE DATA SITE"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"

@@ -165,9 +165,93 @@ class EditDataActivity : AppCompatActivity() {
     fun applyNoRetry60s(request: Request<*>) {
         request.retryPolicy = DefaultRetryPolicy(60_000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
     }
+    override fun onResume() {
+        super.onResume()
+        setupSpinners()
+    }
+
     private fun setupSpinners() {
-        val adapterMcbKwh = ArrayAdapter.createFromResource(this, R.array.mcb_kwh_options, android.R.layout.simple_spinner_dropdown_item)
-        binding.spMcbKwh.adapter = adapterMcbKwh
+        val selectedMcbKwh = binding.spMcbKwh.selectedItem?.toString()
+        val selectedMainsFail = binding.spMainsFail.selectedItem?.toString()
+        val selectedRectyFail = binding.spRectyFail.selectedItem?.toString()
+        val selectedStolen = binding.spStolen.selectedItem?.toString()
+        val selectedLowBatt = binding.spLowBatt.selectedItem?.toString()
+        val selectedEngRun = binding.spEngRun.selectedItem?.toString()
+
+        val selectedMerkGenset1 = binding.spMerkGenset1.selectedItem?.toString()
+        val selectedStatusGenset1 = binding.spStatusGenset1.selectedItem?.toString()
+        val selectedMerkGenset2 = binding.spMerkGenset2.selectedItem?.toString()
+        val selectedStatusGenset2 = binding.spStatusGenset2.selectedItem?.toString()
+
+        val optionsEas = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_EAS)
+        val adapterStatus = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsEas)
+
+        binding.spMainsFail.adapter = adapterStatus
+        binding.spRectyFail.adapter = adapterStatus
+        binding.spStolen.adapter = adapterStatus
+        binding.spLowBatt.adapter = adapterStatus
+        binding.spEngRun.adapter = adapterStatus
+
+        val optionsMcbKwh = ArrayAdapter.createFromResource(this, R.array.mcb_kwh_options, android.R.layout.simple_spinner_dropdown_item)
+        binding.spMcbKwh.adapter = optionsMcbKwh
+
+        val optionsMerkGenset = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_MERK_GENSET)
+        val adapterMerkGenset = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsMerkGenset)
+        binding.spMerkGenset1.adapter = adapterMerkGenset
+        binding.spMerkGenset2.adapter = adapterMerkGenset
+
+        val optionsStatusGenset = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_STATUS_GENSET)
+        val adapterStatusGenset = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsStatusGenset)
+        binding.spStatusGenset1.adapter = adapterStatusGenset
+        binding.spStatusGenset2.adapter = adapterStatusGenset
+
+        val optionsTypeRecti = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_TYPE_RECTIFIER)
+        val adapterTypeRecti = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsTypeRecti)
+        val adapterAngka = ArrayAdapter.createFromResource(this, R.array.jumlah_modul_options, android.R.layout.simple_spinner_dropdown_item)
+        val optionsJenisBat = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_JENIS_BATERAI)
+        val adapterJenisBat = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsJenisBat)
+        val optionsBalting = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_BALTING)
+        val adapterBalting = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsBalting)
+        val adapterArester = ArrayAdapter.createFromResource(this, R.array.arester_options, android.R.layout.simple_spinner_dropdown_item)
+        val optionsBankNotAktif = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_JUMLAH_BANK_NOT_AKTIF)
+        val adapterBankNotAktif = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsBankNotAktif)
+
+        fun setupRectiSpinners(spType: Spinner, spMod: Spinner, spModRusak: Spinner, spBalting: Spinner, spArester: Spinner, spNotAktif: Spinner) {
+            spType.adapter = adapterTypeRecti
+            spMod.adapter = adapterAngka
+            spModRusak.adapter = adapterAngka
+            spBalting.adapter = adapterBalting
+            spArester.adapter = adapterArester
+            spNotAktif.adapter = adapterBankNotAktif
+        }
+
+        binding.spJenisBaterai1.adapter = adapterJenisBat
+        binding.spJenisBaterai2.adapter = adapterJenisBat
+        binding.spJenisBaterai3.adapter = adapterJenisBat
+        binding.spJenisBaterai4.adapter = adapterJenisBat
+        binding.spJenisBaterai5.adapter = adapterJenisBat
+        binding.spJenisBaterai6.adapter = adapterJenisBat
+        binding.spJenisBaterai7.adapter = adapterJenisBat
+
+        setupRectiSpinners(binding.spTypeRectifier1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spBatteryRecti1, binding.spKondisiArester1, binding.spJumlahBankNotAktif1)
+        setupRectiSpinners(binding.spTypeRectifier2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spBatteryRecti2, binding.spKondisiArester2, binding.spJumlahBankNotAktif2)
+        setupRectiSpinners(binding.spTypeRectifier3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spBatteryRecti3, binding.spKondisiArester3, binding.spJumlahBankNotAktif3)
+        setupRectiSpinners(binding.spTypeRectifier4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.spJumlahBankNotAktif4)
+        setupRectiSpinners(binding.spTypeRectifier5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.spJumlahBankNotAktif5)
+        setupRectiSpinners(binding.spTypeRectifier6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.spJumlahBankNotAktif6)
+        setupRectiSpinners(binding.spTypeRectifier7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.spJumlahBankNotAktif7)
+
+        selectedMcbKwh?.let { setSpinnerValueSafe(binding.spMcbKwh, it) }
+        selectedMainsFail?.let { setSpinnerValueSafe(binding.spMainsFail, it) }
+        selectedRectyFail?.let { setSpinnerValueSafe(binding.spRectyFail, it) }
+        selectedStolen?.let { setSpinnerValueSafe(binding.spStolen, it) }
+        selectedLowBatt?.let { setSpinnerValueSafe(binding.spLowBatt, it) }
+        selectedEngRun?.let { setSpinnerValueSafe(binding.spEngRun, it) }
+
+        selectedMerkGenset1?.let { setSpinnerValueSafe(binding.spMerkGenset1, it) }
+        selectedStatusGenset1?.let { setSpinnerValueSafe(binding.spStatusGenset1, it) }
+        selectedMerkGenset2?.let { setSpinnerValueSafe(binding.spMerkGenset2, it) }
+        selectedStatusGenset2?.let { setSpinnerValueSafe(binding.spStatusGenset2, it) }
     }
 
     private fun requestNotificationPermission() {
@@ -1337,17 +1421,47 @@ class EditDataActivity : AppCompatActivity() {
                 params["s_a"] = binding.etSA.text.toString().trim()
                 params["t_a"] = binding.etTA.text.toString().trim()
 
-                params["merk_genset_1"] = binding.spMerkGenset1.selectedItem?.toString() ?: ""
-                params["capacity_genset_1"] = binding.etCapacityGenset1.text.toString().trim()
-                params["status_genset_1"] = binding.spStatusGenset1.selectedItem?.toString() ?: ""
-                params["remark_genset_1"] = binding.etRemarkGenset1.text.toString().trim()
+                val hasGensetCard = binding.cardGenset.visibility == View.VISIBLE
+                val hasGenset2Container = binding.layoutGenset2EditContainer.visibility == View.VISIBLE
 
-                params["merk_genset_2"] = binding.spMerkGenset2.selectedItem?.toString() ?: ""
-                params["capacity_genset_2"] = binding.etCapacityGenset2.text.toString().trim()
-                params["status_genset_2"] = binding.spStatusGenset2.selectedItem?.toString() ?: ""
-                params["remark_genset_2"] = binding.etRemarkGenset2.text.toString().trim()
+                params["merk_genset_1"] = if (hasGensetCard) binding.spMerkGenset1.selectedItem?.toString() ?: "" else ""
+                params["capacity_genset_1"] = if (hasGensetCard) binding.etCapacityGenset1.text.toString().trim() else ""
+                params["status_genset_1"] = if (hasGensetCard) binding.spStatusGenset1.selectedItem?.toString() ?: "" else ""
+                params["remark_genset_1"] = if (hasGensetCard) binding.etRemarkGenset1.text.toString().trim() else ""
 
-                fun putRectiParams(idx: Int, spType: Spinner, spMod: Spinner, spModRusak: Spinner, spJenisBat: Spinner, spMerkBat: Spinner, spJmlBat: Spinner, spBalting: Spinner, spArester: Spinner, swNotAktif: SwitchMaterial, spNotAktif: Spinner, etMcb: TextInputEditText, etVolt: TextInputEditText, etLoad: TextInputEditText, etPerangkat: TextInputEditText, etRemark: TextInputEditText? = null) {
+                params["merk_genset_2"] = if (hasGensetCard && hasGenset2Container) binding.spMerkGenset2.selectedItem?.toString() ?: "" else ""
+                params["capacity_genset_2"] = if (hasGensetCard && hasGenset2Container) binding.etCapacityGenset2.text.toString().trim() else ""
+                params["status_genset_2"] = if (hasGensetCard && hasGenset2Container) binding.spStatusGenset2.selectedItem?.toString() ?: "" else ""
+                params["remark_genset_2"] = if (hasGensetCard && hasGenset2Container) binding.etRemarkGenset2.text.toString().trim() else ""
+
+                fun putRectiParams(
+                    idx: Int,
+                    cardView: View,
+                    spType: Spinner, spMod: Spinner, spModRusak: Spinner,
+                    spJenisBat: Spinner, spMerkBat: Spinner, spJmlBat: Spinner,
+                    spBalting: Spinner, spArester: Spinner, swNotAktif: SwitchMaterial,
+                    spNotAktif: Spinner, etMcb: TextInputEditText, etVolt: TextInputEditText,
+                    etLoad: TextInputEditText, etPerangkat: TextInputEditText,
+                    etRemark: TextInputEditText? = null
+                ) {
+                    if (cardView.visibility != View.VISIBLE) {
+                        params["type_rectifier_$idx"] = ""
+                        params["jumlah_modul_$idx"] = ""
+                        params["jumlah_modul_rusak_$idx"] = ""
+                        params["jenis_baterai_$idx"] = ""
+                        params["merk_baterai_$idx"] = ""
+                        params[if (idx == 1) "jumlah_battery_p" else "jumlah_battery_p_$idx"] = ""
+                        params["battery_recti_$idx"] = ""
+                        params["jumlah_bank_not_aktif_$idx"] = ""
+                        params["mcb_battery_recti_$idx"] = ""
+                        params["kondisi_arester_$idx"] = ""
+                        params["bus_voltage_$idx"] = ""
+                        params["load_a_$idx"] = ""
+                        params["perangkat_terhubung_$idx"] = ""
+                        if (etRemark != null) params["remark_$idx"] = ""
+                        return
+                    }
+
                     params["type_rectifier_$idx"] = spType.selectedItem?.toString() ?: ""
                     params["jumlah_modul_$idx"] = spMod.selectedItem?.toString() ?: ""
                     params["jumlah_modul_rusak_$idx"] = spModRusak.selectedItem?.toString() ?: ""
@@ -1364,13 +1478,13 @@ class EditDataActivity : AppCompatActivity() {
                     if (etRemark != null) params["remark_$idx"] = etRemark.text.toString().trim()
                 }
 
-                putRectiParams(1, binding.spTypeRectifier1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spJenisBaterai1, binding.spMerkBaterai1, binding.spJumlahBattery1, binding.spBatteryRecti1, binding.spKondisiArester1, binding.switchStatusBatteryNotAktif1, binding.spJumlahBankNotAktif1, binding.etMcbBatteryRecti1, binding.etBusVoltage1, binding.etLoadA1, binding.etPerangkatTerhubung1, binding.etRemark1)
-                putRectiParams(2, binding.spTypeRectifier2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spJenisBaterai2, binding.spMerkBaterai2, binding.spJumlahBattery2, binding.spBatteryRecti2, binding.spKondisiArester2, binding.switchStatusBatteryNotAktif2, binding.spJumlahBankNotAktif2, binding.etMcbBatteryRecti2, binding.etBusVoltage2, binding.etLoadA2, binding.etPerangkatTerhubung2, binding.etRemark2)
-                putRectiParams(3, binding.spTypeRectifier3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spJenisBaterai3, binding.spMerkBaterai3, binding.spJumlahBattery3, binding.spBatteryRecti3, binding.spKondisiArester3, binding.switchStatusBatteryNotAktif3, binding.spJumlahBankNotAktif3, binding.etMcbBatteryRecti3, binding.etBusVoltage3, binding.etLoadA3, binding.etPerangkatTerhubung3)
-                putRectiParams(4, binding.spTypeRectifier4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJenisBaterai4, binding.spMerkBaterai4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.switchStatusBatteryNotAktif4, binding.spJumlahBankNotAktif4, binding.etMcbBatteryRecti4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkatTerhubung4)
-                putRectiParams(5, binding.spTypeRectifier5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJenisBaterai5, binding.spMerkBaterai5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.switchStatusBatteryNotAktif5, binding.spJumlahBankNotAktif5, binding.etMcbBatteryRecti5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkatTerhubung5)
-                putRectiParams(6, binding.spTypeRectifier6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.switchStatusBatteryNotAktif6, binding.spJumlahBankNotAktif6, binding.etMcbBatteryRecti6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkatTerhubung6)
-                putRectiParams(7, binding.spTypeRectifier7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spJenisBaterai7, binding.spMerkBaterai7, binding.spJumlahBattery7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.switchStatusBatteryNotAktif7, binding.spJumlahBankNotAktif7, binding.etMcbBatteryRecti7, binding.etBusVoltage7, binding.etLoadA7, binding.etPerangkatTerhubung7)
+                putRectiParams(1, binding.cardRecti1, binding.spTypeRectifier1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spJenisBaterai1, binding.spMerkBaterai1, binding.spJumlahBattery1, binding.spBatteryRecti1, binding.spKondisiArester1, binding.switchStatusBatteryNotAktif1, binding.spJumlahBankNotAktif1, binding.etMcbBatteryRecti1, binding.etBusVoltage1, binding.etLoadA1, binding.etPerangkatTerhubung1, binding.etRemark1)
+                putRectiParams(2, binding.cardRecti2, binding.spTypeRectifier2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spJenisBaterai2, binding.spMerkBaterai2, binding.spJumlahBattery2, binding.spBatteryRecti2, binding.spKondisiArester2, binding.switchStatusBatteryNotAktif2, binding.spJumlahBankNotAktif2, binding.etMcbBatteryRecti2, binding.etBusVoltage2, binding.etLoadA2, binding.etPerangkatTerhubung2, binding.etRemark2)
+                putRectiParams(3, binding.cardRecti3, binding.spTypeRectifier3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spJenisBaterai3, binding.spMerkBaterai3, binding.spJumlahBattery3, binding.spBatteryRecti3, binding.spKondisiArester3, binding.switchStatusBatteryNotAktif3, binding.spJumlahBankNotAktif3, binding.etMcbBatteryRecti3, binding.etBusVoltage3, binding.etLoadA3, binding.etPerangkatTerhubung3)
+                putRectiParams(4, binding.cardRecti4, binding.spTypeRectifier4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJenisBaterai4, binding.spMerkBaterai4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.switchStatusBatteryNotAktif4, binding.spJumlahBankNotAktif4, binding.etMcbBatteryRecti4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkatTerhubung4)
+                putRectiParams(5, binding.cardRecti5, binding.spTypeRectifier5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJenisBaterai5, binding.spMerkBaterai5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.switchStatusBatteryNotAktif5, binding.spJumlahBankNotAktif5, binding.etMcbBatteryRecti5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkatTerhubung5)
+                putRectiParams(6, binding.cardRecti6, binding.spTypeRectifier6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.switchStatusBatteryNotAktif6, binding.spJumlahBankNotAktif6, binding.etMcbBatteryRecti6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkatTerhubung6)
+                putRectiParams(7, binding.cardRecti7, binding.spTypeRectifier7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spJenisBaterai7, binding.spMerkBaterai7, binding.spJumlahBattery7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.switchStatusBatteryNotAktif7, binding.spJumlahBankNotAktif7, binding.etMcbBatteryRecti7, binding.etBusVoltage7, binding.etLoadA7, binding.etPerangkatTerhubung7)
 
                 return params
             }
