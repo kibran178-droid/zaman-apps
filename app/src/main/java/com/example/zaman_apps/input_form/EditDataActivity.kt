@@ -7,22 +7,30 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
+import android.view.animation.OvershootInterpolator
 import android.view.animation.RotateAnimation
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import com.google.android.material.textfield.TextInputLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -85,7 +93,7 @@ class EditDataActivity : AppCompatActivity() {
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            if (pendingPhotoSlotEdit in 0 until photoItemsEdit.size) {
+            if (pendingPhotoSlotEdit in photoItemsEdit.indices) {
                 photoItemsEdit[pendingPhotoSlotEdit] = it.toString()
                 prosesCompressBase64(it, pendingPhotoSlotEdit)
             } else if (photoItemsEdit.size < 10) {
@@ -152,6 +160,17 @@ class EditDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initBinding()
         setupToolbar()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (!isUpdating) {
+                    showBackConfirmation()
+                } else {
+                    showSnackbar("Mohon tunggu proses selesai", isError = true)
+                }
+            }
+        })
+
         notificationHelper = NotificationHelper(this)
         notificationHelper.createNotificationChannel()
         requestNotificationPermission()
@@ -280,6 +299,9 @@ class EditDataActivity : AppCompatActivity() {
                 setDisplayHomeAsUpEnabled(true)
                 setDisplayShowHomeEnabled(true)
             }
+            binding.toolbar.setNavigationOnClickListener {
+                if (!isUpdating) showBackConfirmation()
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Error setting toolbar: ${e.message}", e)
         }
@@ -321,20 +343,33 @@ class EditDataActivity : AppCompatActivity() {
             if (contentView.visibility == View.VISIBLE) {
                 contentView.animate()
                     .alpha(0f)
-                    .setDuration(200)
+                    .translationY(-15f)
+                    .setDuration(220)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
                     .withEndAction {
                         contentView.visibility = View.GONE
                     }
                     .start()
-                iconView.animate().rotation(0f).setDuration(200).start()
+                iconView.animate()
+                    .rotation(0f)
+                    .setDuration(220)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .start()
             } else {
                 contentView.visibility = View.VISIBLE
                 contentView.alpha = 0f
+                contentView.translationY = -15f
                 contentView.animate()
                     .alpha(1f)
-                    .setDuration(250)
+                    .translationY(0f)
+                    .setDuration(280)
+                    .setInterpolator(OvershootInterpolator(1.1f))
                     .start()
-                iconView.animate().rotation(180f).setDuration(250).start()
+                iconView.animate()
+                    .rotation(180f)
+                    .setDuration(280)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .start()
             }
         }
     }
@@ -367,6 +402,16 @@ class EditDataActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        val tilSiteId = binding.actvSiteIdList.parent?.parent as? TextInputLayout
+        tilSiteId?.setEndIconOnClickListener {
+            // Hanya menghapus teks di kolom input, TIDAK menutup/menghapus form data site yang sedang dimuat
+            binding.actvSiteIdList.setText("")
+            binding.actvSiteIdList.requestFocus()
+            try {
+                if (siteIdsList.isNotEmpty()) binding.actvSiteIdList.showDropDown()
+            } catch (_: Exception) {}
+        }
+
         binding.actvSiteIdList.setOnItemClickListener { _, _, position, _ ->
             try {
                 val selected = binding.actvSiteIdList.adapter?.getItem(position).toString()
@@ -380,24 +425,22 @@ class EditDataActivity : AppCompatActivity() {
             }
         }
 
-        binding.actvSiteIdList.setOnFocusChangeListener { _, hasFocus ->
-            try {
-                if (!hasFocus) {
-                    val text = binding.actvSiteIdList.text.toString().trim()
-                    if (text.isNotEmpty() && !isLoading) {
-                        if (siteIdsList.contains(text)) {
-                            selectedSiteId = text
-                            loadDetailSite(text)
-                        } else {
-                            showSnackbar("Site ID '$text' tidak ditemukan", isError = true)
-                            binding.layoutFormEdit.visibility = View.GONE
-                            binding.btnUpdate.isEnabled = false
-                        }
+        binding.actvSiteIdList.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                actionId == EditorInfo.IME_ACTION_DONE) {
+                val text = binding.actvSiteIdList.text.toString().trim()
+                if (text.isNotEmpty()) {
+                    val found = siteIdsList.firstOrNull { it.equals(text, ignoreCase = true) }
+                    if (found != null) {
+                        selectedSiteId = found
+                        loadDetailSite(found)
+                        binding.actvSiteIdList.clearFocus()
+                    } else {
+                        showSnackbar("Site ID '$text' tidak terdaftar", isError = true)
                     }
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error on focus change: ${e.message}", e)
-            }
+                true
+            } else false
         }
 
         binding.actvSiteIdList.setOnClickListener {
@@ -702,9 +745,11 @@ class EditDataActivity : AppCompatActivity() {
 
     private fun isNetworkAvailable(): Boolean {
         return try {
-            val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkInfo = connectivityManager.activeNetworkInfo
-            networkInfo != null && networkInfo.isConnected
+            val cm = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+            val caps = cm.getNetworkCapabilities(cm.activeNetwork)
+            caps != null && (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                    caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
         } catch (e: Exception) {
             Log.e(TAG, "Error checking network: ${e.message}", e)
             true
@@ -720,20 +765,82 @@ class EditDataActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onBackPressed() {
-        if (isUpdating) {
-            showSnackbar("Mohon tunggu proses selesai", isError = true)
-            return
+    private fun tampilkanFormEditDenganAnimasi() {
+        if (binding.layoutFormEdit.visibility != View.VISIBLE) {
+            binding.layoutFormEdit.visibility = View.VISIBLE
+            binding.layoutFormEdit.alpha = 0f
+            binding.layoutFormEdit.translationY = 60f
+            binding.layoutFormEdit.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(450)
+                .setInterpolator(OvershootInterpolator(1.1f))
+                .start()
+        } else {
+            binding.layoutFormEdit.visibility = View.VISIBLE
         }
-        showBackConfirmation()
     }
 
     private fun showBackConfirmation() {
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
+        root.setPadding(24, 20, 24, 16)
+
+        val headerCard = MaterialCardView(this)
+        headerCard.radius = 14f
+        headerCard.cardElevation = 0f
+        headerCard.setCardBackgroundColor(ContextCompat.getColor(this, R.color.brand_accent_light))
+        val cardParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { bottomMargin = 16 }
+        headerCard.layoutParams = cardParams
+
+        val headerRow = LinearLayout(this)
+        headerRow.orientation = LinearLayout.HORIZONTAL
+        headerRow.gravity = Gravity.CENTER_VERTICAL
+        headerRow.setPadding(18, 14, 18, 14)
+
+        val ivWarn = ImageView(this)
+        ivWarn.setImageResource(android.R.drawable.ic_dialog_alert)
+        ivWarn.setColorFilter(ContextCompat.getColor(this, R.color.brand_primary))
+        val ivParams = LinearLayout.LayoutParams(36, 36)
+        ivWarn.layoutParams = ivParams
+        headerRow.addView(ivWarn)
+
+        val textCol = LinearLayout(this)
+        textCol.orientation = LinearLayout.VERTICAL
+        textCol.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+            marginStart = 14
+        }
+
+        val tvTitle = TextView(this)
+        tvTitle.text = "Konfirmasi Keluar Menu Edit"
+        tvTitle.textSize = 16f
+        tvTitle.setTypeface(null, Typeface.BOLD)
+        tvTitle.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
+        textCol.addView(tvTitle)
+
+        val tvSub = TextView(this)
+        tvSub.text = "Perubahan yang belum disimpan akan hilang"
+        tvSub.textSize = 12f
+        tvSub.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+        textCol.addView(tvSub)
+
+        headerRow.addView(textCol)
+        headerCard.addView(headerRow)
+        root.addView(headerCard)
+
+        val tvMsg = TextView(this)
+        tvMsg.text = "Apakah Anda yakin ingin keluar dan kembali ke Menu Utama?\n\nSemua perubahan data atau foto yang belum diperbarui ke server akan dibatalkan."
+        tvMsg.textSize = 14f
+        tvMsg.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        tvMsg.setLineSpacing(4f, 1f)
+        root.addView(tvMsg)
+
         AlertDialog.Builder(this)
-            .setTitle("Konfirmasi")
-            .setMessage("Apakah Anda yakin ingin keluar? Perubahan yang belum disimpan akan hilang.")
-            .setPositiveButton("Ya") { _, _ -> finish() }
-            .setNegativeButton("Batal", null)
+            .setView(root)
+            .setPositiveButton("Ya, Keluar") { _, _ -> finish() }
+            .setNegativeButton("Lanjutkan Edit", null)
             .show()
     }
 
@@ -841,7 +948,8 @@ class EditDataActivity : AppCompatActivity() {
                         }
                         val adapter = ArrayAdapter(
                             this@EditDataActivity,
-                            android.R.layout.simple_dropdown_item_1line,
+                            R.layout.item_dropdown_site_id,
+                            R.id.tvSiteIdItem,
                             siteIdsList
                         )
                         binding.actvSiteIdList.setAdapter(adapter)
@@ -887,7 +995,7 @@ class EditDataActivity : AppCompatActivity() {
 
     private fun retryLoadSiteIds() {
         retryCount++
-        showSnackbar("Mencoba ulang... (${retryCount}/$maxRetries)")
+        showSnackbar("Mencoba ulang... ($retryCount/$maxRetries)")
         Handler(Looper.getMainLooper()).postDelayed({ loadSiteIdList() }, 2000)
     }
 
@@ -929,13 +1037,13 @@ class EditDataActivity : AppCompatActivity() {
                         val data = json.getJSONObject("data")
                         dataCache[siteId] = data
                         isiFormDariData(data)
-                        binding.layoutFormEdit.visibility = View.VISIBLE
+                        tampilkanFormEditDenganAnimasi()
                         binding.btnUpdate.isEnabled = true
                         showSnackbar("✅ Data Site $siteId berhasil dimuat")
                     } else {
                         val msg = json.optString("message", "Data tidak ditemukan")
                         showSnackbar("❌ $msg", isError = true)
-                        binding.layoutFormEdit.visibility = View.VISIBLE
+                        tampilkanFormEditDenganAnimasi()
                         binding.btnUpdate.isEnabled = false
                     }
                 } catch (e: Exception) {
@@ -985,7 +1093,7 @@ class EditDataActivity : AppCompatActivity() {
                         val data = json.getJSONObject("data")
                         dataCache[siteId] = data
                         isiFormDariData(data)
-                        binding.layoutFormEdit.visibility = View.VISIBLE
+                        tampilkanFormEditDenganAnimasi()
                         binding.btnUpdate.isEnabled = true
                         showSnackbar("✅ Data Site $siteId berhasil dimuat ulang")
                     } else {
@@ -994,7 +1102,7 @@ class EditDataActivity : AppCompatActivity() {
                         val cachedData = dataCache[siteId]
                         if (cachedData != null) {
                             isiFormDariData(cachedData)
-                            binding.layoutFormEdit.visibility = View.VISIBLE
+                            tampilkanFormEditDenganAnimasi()
                             binding.btnUpdate.isEnabled = true
                             showSnackbar("⚠️ Menampilkan data cache", isError = true)
                         }
@@ -1241,7 +1349,7 @@ class EditDataActivity : AppCompatActivity() {
         }
     }
 
-    private fun setSpinnerValueSafe(spinner: Spinner, value: String, debugTag: String = "") {
+    private fun setSpinnerValueSafe(spinner: Spinner, value: String) {
         if (value.isEmpty()) return
         val adapter = spinner.adapter ?: return
         for (i in 0 until adapter.count) {
@@ -1496,7 +1604,7 @@ class EditDataActivity : AppCompatActivity() {
 
     private fun showSnackbar(message: String, isError: Boolean = false) {
         val snackbar = Snackbar.make(binding.main, message, Snackbar.LENGTH_LONG)
-        snackbar.anchorView = binding.btnUpdate
+        snackbar.anchorView = binding.bottomNavCardEdit
         if (isError) {
             snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.error))
             snackbar.setTextColor(ContextCompat.getColor(this, R.color.white))
