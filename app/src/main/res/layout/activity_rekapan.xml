@@ -112,6 +112,98 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- TOTAL STATS ROW (TOTAL INPUT & TOTAL EDIT) -->
+                <LinearLayout
+                    android:id="@+id/layoutTotalStats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- Card 1: Total Input -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/brand_accent_light"
+                        app:strokeColor="@color/brand_primary"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingVertical="12dp"
+                            android:paddingHorizontal="8dp">
+
+                            <TextView
+                                android:id="@+id/tvTotalInputCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="TOTAL INPUT"
+                                android:textColor="@color/brand_primary"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.05" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Card 2: Total Edit -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/warning_soft"
+                        app:strokeColor="@color/warning"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingVertical="12dp"
+                            android:paddingHorizontal="8dp">
+
+                            <TextView
+                                android:id="@+id/tvTotalEditCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/warning"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="TOTAL EDIT"
+                                android:textColor="@color/warning"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.05" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
                 <!-- CARI USER -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

@@ -146,6 +146,7 @@ class RekapanActivity : AppCompatActivity() {
                         }
 
                         cachedRekapArray = rekapArray
+                        updateOverallStats()
                         binding.tvTotalAktivitas.text = "Total ${detailArrayGlobal?.length() ?: 0} aktivitas • ${rekapArray?.length() ?: 0} user aktif"
                         filterUserList(binding.etSearchUser.text?.toString() ?: "")
                     } else {
@@ -584,9 +585,27 @@ class RekapanActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateOverallStats() {
+        var totalInputs = 0
+        var totalEdits = 0
+
+        cachedRekapArray?.let { array ->
+            for (i in 0 until array.length()) {
+                val item = array.getJSONObject(i)
+                totalInputs += item.optInt("input")
+                totalEdits += item.optInt("update")
+            }
+        }
+
+        binding.tvTotalInputCount.text = totalInputs.toString()
+        binding.tvTotalEditCount.text = totalEdits.toString()
+    }
+
     private fun tampilkanPesanError(message: String) {
         binding.containerRingkasan.removeAllViews()
         binding.cardPagination.visibility = View.GONE
+        binding.tvTotalInputCount.text = "0"
+        binding.tvTotalEditCount.text = "0"
         val tv = TextView(this).apply {
             text = "❌ $message"
             gravity = Gravity.CENTER
