@@ -4,8 +4,10 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.animation.OvershootInterpolator
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
@@ -43,6 +45,8 @@ class KelolaDropdownActivity : AppCompatActivity() {
     )
 
     private var currentCategoryKey = categoryKeys[0]
+    private var currentPage = 1
+    private val itemsPerPage = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,18 +65,27 @@ class KelolaDropdownActivity : AppCompatActivity() {
             "${index + 1}. ${DropdownOptionsHelper.getCategoryName(key)}"
         }
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, categoryNames)
-        binding.spKategoriDropdown.adapter = adapter
+        val adapter = ArrayAdapter(this, R.layout.item_dropdown_site_id, R.id.tvSiteIdItem, categoryNames)
+        binding.actvKategoriDropdown.setAdapter(adapter)
 
-        binding.spKategoriDropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position in categoryKeys.indices) {
-                    currentCategoryKey = categoryKeys[position]
-                    loadAndRenderOptions()
-                }
+        if (categoryNames.isNotEmpty()) {
+            binding.actvKategoriDropdown.setText(categoryNames[0], false)
+        }
+
+        binding.actvKategoriDropdown.setOnItemClickListener { _, _, position, _ ->
+            if (position in categoryKeys.indices) {
+                currentCategoryKey = categoryKeys[position]
+                currentPage = 1
+                loadAndRenderOptions()
             }
+        }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        binding.actvKategoriDropdown.setOnClickListener {
+            try {
+                binding.actvKategoriDropdown.showDropDown()
+            } catch (e: Exception) {
+                Log.e("KelolaDropdown", "Error showing dropdown: ${e.message}")
+            }
         }
     }
 
@@ -87,11 +100,24 @@ class KelolaDropdownActivity : AppCompatActivity() {
                 .setMessage("Yakin ingin mengembalikan opsi kategori ini ke daftar default bawaan?")
                 .setPositiveButton("Reset") { _, _ ->
                     DropdownOptionsHelper.resetToDefault(this, currentCategoryKey)
+                    currentPage = 1
                     loadAndRenderOptions()
                     Toast.makeText(this, "Berhasil di-reset ke default", Toast.LENGTH_SHORT).show()
                 }
                 .setNegativeButton("Batal", null)
                 .show()
+        }
+
+        binding.btnPrevPage.setOnClickListener {
+            if (currentPage > 1) {
+                currentPage--
+                loadAndRenderOptions()
+            }
+        }
+
+        binding.btnNextPage.setOnClickListener {
+            currentPage++
+            loadAndRenderOptions()
         }
     }
 
@@ -108,9 +134,15 @@ class KelolaDropdownActivity : AppCompatActivity() {
         binding.btnResetDefault.visibility = View.VISIBLE
 
         val options = DropdownOptionsHelper.getOptions(this, currentCategoryKey)
-        binding.tvOptionCount.text = "${options.size} Opsi"
+        val totalItems = options.size
+        val totalPages = maxOf(1, Math.ceil(totalItems.toDouble() / itemsPerPage).toInt())
+
+        if (currentPage > totalPages) currentPage = totalPages
+        if (currentPage < 1) currentPage = 1
 
         if (options.isEmpty()) {
+            binding.tvOptionCount.text = "0 Opsi Terdaftar"
+            binding.cardPagination.visibility = View.GONE
             val tvEmpty = TextView(this)
             tvEmpty.text = "Belum ada opsi pada kategori ini."
             tvEmpty.gravity = Gravity.CENTER
@@ -120,8 +152,24 @@ class KelolaDropdownActivity : AppCompatActivity() {
             return
         }
 
-        options.forEachIndexed { index, item ->
-            val card = buatCardOptionItem(index, item)
+        val startIndex = (currentPage - 1) * itemsPerPage
+        val endIndex = minOf(startIndex + itemsPerPage, totalItems)
+        val pageItems = options.subList(startIndex, endIndex)
+
+        binding.tvOptionCount.text = "Menampilkan ${startIndex + 1} - $endIndex dari $totalItems Opsi"
+
+        if (totalPages > 1) {
+            binding.cardPagination.visibility = View.VISIBLE
+            binding.tvPageIndicator.text = "Halaman $currentPage dari $totalPages"
+            binding.btnPrevPage.isEnabled = (currentPage > 1)
+            binding.btnNextPage.isEnabled = (currentPage < totalPages)
+        } else {
+            binding.cardPagination.visibility = View.GONE
+        }
+
+        pageItems.forEachIndexed { relativeIndex, item ->
+            val globalIndex = startIndex + relativeIndex
+            val card = buatCardOptionItem(globalIndex, item)
             binding.containerOptionList.addView(card)
         }
     }
@@ -131,9 +179,15 @@ class KelolaDropdownActivity : AppCompatActivity() {
         binding.btnResetDefault.visibility = View.GONE
 
         val jenisList = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_JENIS_BATERAI).filter { it.isNotBlank() }
-        binding.tvOptionCount.text = "${jenisList.size} Jenis Baterai"
+        val totalItems = jenisList.size
+        val totalPages = maxOf(1, Math.ceil(totalItems.toDouble() / itemsPerPage).toInt())
+
+        if (currentPage > totalPages) currentPage = totalPages
+        if (currentPage < 1) currentPage = 1
 
         if (jenisList.isEmpty()) {
+            binding.tvOptionCount.text = "0 Jenis Baterai"
+            binding.cardPagination.visibility = View.GONE
             val tvEmpty = TextView(this)
             tvEmpty.text = "Belum ada jenis baterai terdaftar. Silakan tambahkan Jenis Baterai terlebih dahulu."
             tvEmpty.gravity = Gravity.CENTER
@@ -143,11 +197,27 @@ class KelolaDropdownActivity : AppCompatActivity() {
             return
         }
 
-        jenisList.forEachIndexed { index, jenisName ->
+        val startIndex = (currentPage - 1) * itemsPerPage
+        val endIndex = minOf(startIndex + itemsPerPage, totalItems)
+        val pageItems = jenisList.subList(startIndex, endIndex)
+
+        binding.tvOptionCount.text = "Menampilkan ${startIndex + 1} - $endIndex dari $totalItems Jenis Baterai"
+
+        if (totalPages > 1) {
+            binding.cardPagination.visibility = View.VISIBLE
+            binding.tvPageIndicator.text = "Halaman $currentPage dari $totalPages"
+            binding.btnPrevPage.isEnabled = (currentPage > 1)
+            binding.btnNextPage.isEnabled = (currentPage < totalPages)
+        } else {
+            binding.cardPagination.visibility = View.GONE
+        }
+
+        pageItems.forEachIndexed { relativeIndex, jenisName ->
+            val globalIndex = startIndex + relativeIndex
             val mappedMerks = DropdownOptionsHelper.getMerkMappingForJenis(this, jenisName)
             val mappedJumlahs = DropdownOptionsHelper.getJumlahMappingForJenis(this, jenisName)
 
-            val card = buatCardMappingItem(index, jenisName, mappedMerks, mappedJumlahs)
+            val card = buatCardMappingItem(globalIndex, jenisName, mappedMerks, mappedJumlahs)
             binding.containerOptionList.addView(card)
         }
     }
@@ -289,17 +359,18 @@ class KelolaDropdownActivity : AppCompatActivity() {
         val card = MaterialCardView(this)
         val cardParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply { bottomMargin = 16 }
+        ).apply { bottomMargin = 14 }
         card.layoutParams = cardParams
         card.radius = 16f
-        card.cardElevation = 2f
+        card.cardElevation = 3f
         card.strokeWidth = 1
         card.strokeColor = ContextCompat.getColor(this, R.color.divider)
+        card.setCardBackgroundColor(ContextCompat.getColor(this, R.color.card_bg))
 
         val root = LinearLayout(this)
         root.orientation = LinearLayout.HORIZONTAL
         root.gravity = Gravity.CENTER_VERTICAL
-        root.setPadding(24, 16, 16, 16)
+        root.setPadding(20, 16, 16, 16)
 
         // Index Badge
         val tvIndex = TextView(this)
@@ -314,7 +385,7 @@ class KelolaDropdownActivity : AppCompatActivity() {
         // Option Text
         val tvText = TextView(this)
         tvText.text = if (text.isEmpty()) "(Kosong / Blank)" else text
-        tvText.textSize = 14f
+        tvText.textSize = 15f
         tvText.setTypeface(null, Typeface.BOLD)
         tvText.setTextColor(ContextCompat.getColor(this, if (text.isEmpty()) R.color.text_secondary else R.color.text_primary))
         val textParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
@@ -328,12 +399,15 @@ class KelolaDropdownActivity : AppCompatActivity() {
         actionRow.orientation = LinearLayout.HORIZONTAL
         actionRow.gravity = Gravity.CENTER_VERTICAL
 
-        // Edit Button (Text)
+        // Edit Button (Icon + Text)
         val btnEdit = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle)
         btnEdit.text = "Edit"
         btnEdit.textSize = 13f
         btnEdit.setTypeface(null, Typeface.BOLD)
         btnEdit.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
+        btnEdit.setIconResource(R.drawable.ic_edit)
+        btnEdit.iconTint = ContextCompat.getColorStateList(this, R.color.brand_primary)
+        btnEdit.iconSize = (18 * resources.displayMetrics.density).toInt()
         btnEdit.setOnClickListener {
             dialogEditOption(index, text)
         }
@@ -352,6 +426,18 @@ class KelolaDropdownActivity : AppCompatActivity() {
 
         root.addView(actionRow)
         card.addView(root)
+
+        // Animasi muncul berurutan
+        card.alpha = 0f
+        card.translationY = 40f
+        card.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(350)
+            .setStartDelay(50L * (index % 8))
+            .setInterpolator(OvershootInterpolator(1.1f))
+            .start()
+
         return card
     }
 
