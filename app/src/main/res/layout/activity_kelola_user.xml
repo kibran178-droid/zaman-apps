@@ -401,7 +401,7 @@
                             android:insetBottom="0dp"
                             android:paddingHorizontal="12dp"
                             android:paddingVertical="0dp"
-                            android:text="◀ Sebelum"
+                            android:text="◀ Previous"
                             android:textSize="12sp"
                             app:strokeColor="@color/brand_primary" />
 
@@ -425,7 +425,7 @@
                             android:insetBottom="0dp"
                             android:paddingHorizontal="12dp"
                             android:paddingVertical="0dp"
-                            android:text="Lanjut ▶"
+                            android:text="Next ▶"
                             android:textSize="12sp"
                             app:strokeColor="@color/brand_primary" />
 

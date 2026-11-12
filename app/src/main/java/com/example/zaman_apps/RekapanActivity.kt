@@ -1,7 +1,6 @@
 package com.example.zaman_apps
 
 import android.animation.ObjectAnimator
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
@@ -12,6 +11,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -38,6 +38,11 @@ class RekapanActivity : AppCompatActivity() {
     private var detailArrayGlobal: JSONArray? = null
     private var cachedRekapArray: JSONArray? = null
 
+    // Pagination State
+    private var currentPage = 1
+    private val pageSize = 10
+    private var currentSortedList = listOf<JSONObject>()
+
     private val namaBulanList = listOf(
         "Januari", "Februari", "Maret", "April", "Mei", "Juni",
         "Juli", "Agustus", "September", "Oktober", "November", "Desember"
@@ -60,21 +65,7 @@ class RekapanActivity : AppCompatActivity() {
 
         setupFilterSpinner()
         updateHeaderBulan()
-
-        binding.btnTerapkanFilter.setOnClickListener {
-            selectedBulan = binding.spinnerBulan.selectedItemPosition + 1
-            selectedTahun = (binding.spinnerTahun.selectedItem as String).toInt()
-            updateHeaderBulan()
-            loadRekap()
-        }
-
-        binding.etSearchUser.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterUserList(s?.toString() ?: "")
-            }
-            override fun afterTextChanged(s: Editable?) {}
-        })
+        setupListeners()
 
         loadRekap()
     }
@@ -100,6 +91,39 @@ class RekapanActivity : AppCompatActivity() {
         binding.tvHeaderBulan.text = "REKAP ${namaBulan.uppercase()} $selectedTahun"
     }
 
+    private fun setupListeners() {
+        binding.btnTerapkanFilter.setOnClickListener {
+            selectedBulan = binding.spinnerBulan.selectedItemPosition + 1
+            selectedTahun = (binding.spinnerTahun.selectedItem as String).toInt()
+            updateHeaderBulan()
+            loadRekap()
+        }
+
+        binding.etSearchUser.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterUserList(s?.toString() ?: "")
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        // Pagination Navigation
+        binding.btnPrevPage.setOnClickListener {
+            if (currentPage > 1) {
+                currentPage--
+                renderPageItems()
+            }
+        }
+
+        binding.btnNextPage.setOnClickListener {
+            val totalPages = Math.ceil(currentSortedList.size.toDouble() / pageSize).toInt()
+            if (currentPage < totalPages) {
+                currentPage++
+                renderPageItems()
+            }
+        }
+    }
+
     private fun loadRekap(isManualRefresh: Boolean = false) {
         if (!isManualRefresh) {
             binding.overlayLoading.visibility = View.VISIBLE
@@ -117,8 +141,6 @@ class RekapanActivity : AppCompatActivity() {
                         detailArrayGlobal = json.optJSONArray("detail")
                         var rekapArray = json.optJSONArray("rekap")
 
-                        // 🔥 Fallback: jika rekapArray dari server kosong tapi detailArrayGlobal ada,
-                        // hitung rekap secara lokal dari detail!
                         if ((rekapArray == null || rekapArray.length() == 0) && detailArrayGlobal != null && detailArrayGlobal!!.length() > 0) {
                             rekapArray = hitungRekapDariDetail(detailArrayGlobal!!)
                         }
@@ -143,7 +165,6 @@ class RekapanActivity : AppCompatActivity() {
                 val params = HashMap<String, String>()
                 params["action"] = "get_rekap"
                 params["requester_role"] = SessionHelper.getRole(this@RekapanActivity)
-                // Kirim berbagai variasi format bulan & tahun agar pasti cocok dengan pemicu di Google Apps Script
                 params["bulan"] = selectedBulan.toString()
                 params["bulan_pad"] = String.format(Locale.US, "%02d", selectedBulan)
                 params["month"] = String.format(Locale.US, "%02d", selectedBulan)
@@ -254,110 +275,207 @@ class RekapanActivity : AppCompatActivity() {
     }
 
     private fun tampilkanRingkasan(rekapArray: JSONArray?) {
-        binding.containerRingkasan.removeAllViews()
         if (rekapArray == null || rekapArray.length() == 0) {
-            val tv = TextView(this)
-            tv.text = "📭 Belum ada aktivitas pada ${namaBulanList[selectedBulan - 1]} $selectedTahun.\n\nPastikan pilihan Tahun ($selectedTahun) sudah sesuai dengan tanggal data tersimpan."
-            tv.textSize = 14f
-            tv.gravity = Gravity.CENTER
-            tv.setPadding(32, 64, 32, 64)
-            tv.setTextColor(Color.parseColor("#888888"))
-            binding.containerRingkasan.addView(tv)
+            currentSortedList = emptyList()
+            currentPage = 1
+            renderPageItems()
             return
         }
 
         val items = mutableListOf<JSONObject>()
         for (i in 0 until rekapArray.length()) items.add(rekapArray.getJSONObject(i))
 
+        // Sort descending by total activity
         items.sortByDescending { it.optInt("input") + it.optInt("update") }
+        currentSortedList = items
+        currentPage = 1
+        renderPageItems()
+    }
 
-        items.forEachIndexed { index, item ->
+    private fun renderPageItems() {
+        binding.containerRingkasan.removeAllViews()
+
+        if (currentSortedList.isEmpty()) {
+            binding.cardPagination.visibility = View.GONE
+            val tvEmpty = TextView(this).apply {
+                text = "Belum ada aktivitas pada ${namaBulanList[selectedBulan - 1]} $selectedTahun.\n\nPastikan pilihan Tahun ($selectedTahun) sudah sesuai dengan tanggal data."
+                textSize = 14f
+                gravity = Gravity.CENTER
+                setPadding(32, 64, 32, 64)
+                setTextColor(ContextCompat.getColor(this@RekapanActivity, R.color.text_secondary))
+            }
+            binding.containerRingkasan.addView(tvEmpty)
+            return
+        }
+
+        val totalPages = Math.ceil(currentSortedList.size.toDouble() / pageSize).toInt().coerceAtLeast(1)
+        if (currentPage > totalPages) currentPage = totalPages
+
+        val startIndex = (currentPage - 1) * pageSize
+        val endIndex = minOf(startIndex + pageSize, currentSortedList.size)
+        val pageItems = currentSortedList.subList(startIndex, endIndex)
+
+        pageItems.forEachIndexed { indexOnPage, item ->
+            val globalRank = startIndex + indexOnPage + 1
             val username = item.optString("username")
             val input = item.optInt("input")
             val update = item.optInt("update")
 
-            val card = buatCardUser(username, input, update, index + 1)
+            val card = buatCardUser(username, input, update, globalRank)
 
             card.alpha = 0f
-            card.translationY = 80f
+            card.translationY = 50f
             card.animate()
                 .alpha(1f)
                 .translationY(0f)
-                .setDuration(400)
-                .setStartDelay((index * 60).toLong())
-                .setInterpolator(OvershootInterpolator(1.2f))
+                .setDuration(300)
+                .setStartDelay((indexOnPage * 40).toLong())
+                .setInterpolator(OvershootInterpolator(1.1f))
                 .start()
 
             binding.containerRingkasan.addView(card)
         }
+
+        // Update Pagination Controls
+        if (currentSortedList.size > pageSize) {
+            binding.cardPagination.visibility = View.VISIBLE
+            binding.tvPageIndicator.text = "Halaman $currentPage dari $totalPages"
+
+            binding.btnPrevPage.isEnabled = currentPage > 1
+            binding.btnPrevPage.alpha = if (currentPage > 1) 1.0f else 0.4f
+
+            binding.btnNextPage.isEnabled = currentPage < totalPages
+            binding.btnNextPage.alpha = if (currentPage < totalPages) 1.0f else 0.4f
+        } else {
+            binding.cardPagination.visibility = View.GONE
+        }
     }
 
     private fun buatCardUser(username: String, input: Int, edit: Int, ranking: Int): View {
-        val card = MaterialCardView(this)
-        card.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply { bottomMargin = 28 }
-        card.radius = 28f
-        card.cardElevation = 6f
-        card.strokeWidth = 0
-        card.strokeColor = Color.parseColor("#EEEEEE")
-        card.rippleColor = ColorStateList.valueOf(Color.parseColor("#20000000"))
+        val density = resources.displayMetrics.density
 
-        val outer = LinearLayout(this)
-        outer.orientation = LinearLayout.VERTICAL
-        outer.setPadding(36, 30, 36, 30)
-
-        val row = LinearLayout(this)
-        row.orientation = LinearLayout.HORIZONTAL
-        row.gravity = Gravity.CENTER_VERTICAL
-
-        val badge = TextView(this)
-        badge.text = "$ranking"
-        badge.setTextColor(Color.WHITE)
-        badge.textSize = 14f
-        badge.setTypeface(null, Typeface.BOLD)
-        badge.gravity = Gravity.CENTER
-        badge.layoutParams = LinearLayout.LayoutParams(72, 72)
-        val bg = GradientDrawable()
-        bg.shape = GradientDrawable.OVAL
-        bg.setColor(warnaBadge(ranking))
-        badge.background = bg
-        row.addView(badge)
-
-        val infoCol = LinearLayout(this)
-        infoCol.orientation = LinearLayout.VERTICAL
-        infoCol.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-            marginStart = 28
+        val card = MaterialCardView(this).apply {
+            radius = 16 * density
+            cardElevation = 3 * density
+            strokeWidth = (1 * density).toInt()
+            strokeColor = ContextCompat.getColor(this@RekapanActivity, R.color.divider)
+            setCardBackgroundColor(ContextCompat.getColor(this@RekapanActivity, R.color.card_bg))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = (12 * density).toInt()
+            }
         }
 
-        val tvName = TextView(this)
-        tvName.text = username
-        tvName.textSize = 15f
-        tvName.setTypeface(null, Typeface.BOLD)
-        tvName.setTextColor(Color.parseColor("#1A1A1A"))
+        val outer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding((16 * density).toInt(), (14 * density).toInt(), (16 * density).toInt(), (14 * density).toInt())
+        }
+
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+
+        // Ranking Badge Bulat (Gold #1, Silver #2, Bronze #3, Brand #4+)
+        val badgeCard = MaterialCardView(this).apply {
+            radius = 18 * density
+            cardElevation = 0f
+            setCardBackgroundColor(warnaBadge(ranking))
+            layoutParams = LinearLayout.LayoutParams((36 * density).toInt(), (36 * density).toInt())
+        }
+
+        val tvBadge = TextView(this).apply {
+            text = "$ranking"
+            textSize = 14f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(if (ranking <= 3) Color.WHITE else ContextCompat.getColor(this@RekapanActivity, R.color.brand_primary))
+            gravity = Gravity.CENTER
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+        badgeCard.addView(tvBadge)
+        row.addView(badgeCard)
+
+        // User Info Column
+        val infoCol = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
+            ).apply {
+                marginStart = (14 * density).toInt()
+                marginEnd = (8 * density).toInt()
+            }
+        }
+
+        val tvName = TextView(this).apply {
+            text = username
+            textSize = 15f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@RekapanActivity, R.color.text_primary))
+        }
         infoCol.addView(tvName)
 
-        val tvStats = TextView(this)
-        tvStats.text = "➕ $input input   ✏️ $edit edit"
-        tvStats.textSize = 12.5f
-        tvStats.setTextColor(Color.parseColor("#777777"))
-        tvStats.setPadding(0, 6, 0, 0)
-        infoCol.addView(tvStats)
+        // Clean Stat Badges Row (Teks & Badge Bersih)
+        val statsRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, (6 * density).toInt(), 0, 0)
+        }
 
+        // Badge Input
+        val tvInputBadge = TextView(this).apply {
+            text = "INPUT: $input"
+            textSize = 10f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@RekapanActivity, R.color.brand_primary))
+            val bgInput = GradientDrawable().apply {
+                cornerRadius = 6 * density
+                setColor(ContextCompat.getColor(this@RekapanActivity, R.color.brand_accent_light))
+            }
+            background = bgInput
+            setPadding((8 * density).toInt(), (3 * density).toInt(), (8 * density).toInt(), (3 * density).toInt())
+        }
+        statsRow.addView(tvInputBadge)
+
+        // Badge Edit
+        val tvEditBadge = TextView(this).apply {
+            text = "EDIT: $edit"
+            textSize = 10f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@RekapanActivity, R.color.warning))
+            val bgEdit = GradientDrawable().apply {
+                cornerRadius = 6 * density
+                setColor(ContextCompat.getColor(this@RekapanActivity, R.color.warning_soft))
+            }
+            background = bgEdit
+            setPadding((8 * density).toInt(), (3 * density).toInt(), (8 * density).toInt(), (3 * density).toInt())
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                marginStart = (6 * density).toInt()
+            }
+        }
+        statsRow.addView(tvEditBadge)
+
+        infoCol.addView(statsRow)
         row.addView(infoCol)
 
-        val ivArrow = ImageView(this)
-        ivArrow.layoutParams = LinearLayout.LayoutParams(48, 48)
-        ivArrow.setImageResource(android.R.drawable.arrow_down_float)
-        ivArrow.setColorFilter(Color.parseColor("#999999"))
+        val ivArrow = ImageView(this).apply {
+            layoutParams = LinearLayout.LayoutParams((24 * density).toInt(), (24 * density).toInt())
+            setImageResource(android.R.drawable.arrow_down_float)
+            setColorFilter(ContextCompat.getColor(this@RekapanActivity, R.color.text_secondary))
+        }
         row.addView(ivArrow)
 
         outer.addView(row)
 
-        val detailContainer = LinearLayout(this)
-        detailContainer.orientation = LinearLayout.VERTICAL
-        detailContainer.visibility = View.GONE
-        detailContainer.setPadding(0, 24, 0, 0)
+        val detailContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            visibility = View.GONE
+            setPadding(0, (14 * density).toInt(), 0, 0)
+        }
         outer.addView(detailContainer)
 
         card.addView(outer)
@@ -379,20 +497,24 @@ class RekapanActivity : AppCompatActivity() {
 
     private fun warnaBadge(ranking: Int): Int {
         return when (ranking) {
-            1 -> Color.parseColor("#FFB300")
-            2 -> Color.parseColor("#9E9E9E")
-            3 -> Color.parseColor("#D2691E")
-            else -> ContextCompat.getColor(this, R.color.brand_primary)
+            1 -> Color.parseColor("#FFB300") // Gold
+            2 -> Color.parseColor("#9E9E9E") // Silver
+            3 -> Color.parseColor("#CD7F32") // Bronze
+            else -> ContextCompat.getColor(this, R.color.brand_accent_light)
         }
     }
 
     private fun isiDetailUser(container: LinearLayout, username: String) {
         val detailArray = detailArrayGlobal ?: return
+        val density = resources.displayMetrics.density
         var found = false
 
-        val divider = View(this)
-        divider.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
-        divider.setBackgroundColor(Color.parseColor("#F0F0F0"))
+        val divider = View(this).apply {
+            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (1 * density).toInt()).apply {
+                bottomMargin = (8 * density).toInt()
+            }
+            setBackgroundColor(ContextCompat.getColor(this@RekapanActivity, R.color.divider))
+        }
         container.addView(divider)
 
         for (i in 0 until detailArray.length()) {
@@ -403,40 +525,48 @@ class RekapanActivity : AppCompatActivity() {
             val siteId = item.optString("site_id")
             val actionType = item.optString("action_type")
             val timestamp = item.optString("timestamp")
-            val isInput = actionType == "INPUT"
+            val isInput = actionType.equals("INPUT", ignoreCase = true)
 
-            val itemRow = LinearLayout(this)
-            itemRow.orientation = LinearLayout.HORIZONTAL
-            itemRow.gravity = Gravity.CENTER_VERTICAL
-            itemRow.setPadding(4, 18, 4, 18)
+            val itemRow = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
+                setPadding(0, (8 * density).toInt(), 0, (8 * density).toInt())
+            }
 
-            val tag = TextView(this)
-            tag.text = if (isInput) " INPUT " else " EDIT "
-            tag.textSize = 10f
-            tag.setTypeface(null, Typeface.BOLD)
-            tag.setTextColor(Color.WHITE)
-            val tagBg = GradientDrawable()
-            tagBg.cornerRadius = 20f
-            tagBg.setColor(if (isInput) Color.parseColor("#4CAF50") else Color.parseColor("#FF9800"))
-            tag.background = tagBg
-            tag.setPadding(14, 6, 14, 6)
+            val tag = TextView(this).apply {
+                text = if (isInput) "INPUT" else "EDIT"
+                textSize = 9.5f
+                setTypeface(null, Typeface.BOLD)
+                setTextColor(Color.WHITE)
+                val tagBg = GradientDrawable().apply {
+                    cornerRadius = 6 * density
+                    setColor(ContextCompat.getColor(this@RekapanActivity, if (isInput) R.color.brand_primary else R.color.warning))
+                }
+                background = tagBg
+                setPadding((10 * density).toInt(), (3 * density).toInt(), (10 * density).toInt(), (3 * density).toInt())
+            }
             itemRow.addView(tag)
 
-            val textCol = LinearLayout(this)
-            textCol.orientation = LinearLayout.VERTICAL
-            textCol.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                marginStart = 20
+            val textCol = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                    marginStart = (12 * density).toInt()
+                }
             }
-            val tvSite = TextView(this)
-            tvSite.text = siteId
-            tvSite.textSize = 13.5f
-            tvSite.setTypeface(null, Typeface.BOLD)
+
+            val tvSite = TextView(this).apply {
+                text = siteId
+                textSize = 13f
+                setTypeface(null, Typeface.BOLD)
+                setTextColor(ContextCompat.getColor(this@RekapanActivity, R.color.text_primary))
+            }
             textCol.addView(tvSite)
 
-            val tvTime = TextView(this)
-            tvTime.text = timestamp
-            tvTime.textSize = 11.5f
-            tvTime.setTextColor(Color.parseColor("#999999"))
+            val tvTime = TextView(this).apply {
+                text = timestamp
+                textSize = 11f
+                setTextColor(ContextCompat.getColor(this@RekapanActivity, R.color.text_secondary))
+            }
             textCol.addView(tvTime)
 
             itemRow.addView(textCol)
@@ -444,19 +574,26 @@ class RekapanActivity : AppCompatActivity() {
         }
 
         if (!found) {
-            val tv = TextView(this)
-            tv.text = "Tidak ada detail."
-            tv.setPadding(4, 16, 4, 16)
+            val tv = TextView(this).apply {
+                text = "Tidak ada detail aktivitas."
+                textSize = 12f
+                setTextColor(ContextCompat.getColor(this@RekapanActivity, R.color.text_secondary))
+                setPadding(0, (8 * density).toInt(), 0, (8 * density).toInt())
+            }
             container.addView(tv)
         }
     }
 
     private fun tampilkanPesanError(message: String) {
         binding.containerRingkasan.removeAllViews()
-        val tv = TextView(this)
-        tv.text = "❌ $message"
-        tv.gravity = Gravity.CENTER
-        tv.setPadding(0, 48, 0, 48)
+        binding.cardPagination.visibility = View.GONE
+        val tv = TextView(this).apply {
+            text = "❌ $message"
+            gravity = Gravity.CENTER
+            textSize = 14f
+            setTextColor(ContextCompat.getColor(this@RekapanActivity, R.color.error))
+            setPadding(0, 48, 0, 48)
+        }
         binding.containerRingkasan.addView(tv)
     }
 }
