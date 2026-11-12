@@ -131,6 +131,9 @@ class EditDataActivity : AppCompatActivity() {
                     prosesCompressBase64(uri, photoItemsEdit.size - 1)
                 }
                 updatePhotoCountBadge()
+                if (currentPopupEditDialog?.isShowing == true) {
+                    showPopupLihatFotoEdit()
+                }
                 showSnackbar("Berhasil menambahkan ${toAdd.size} foto")
             } else {
                 showSnackbar("Maksimal 10 foto sudah tercapai", isError = true)
@@ -150,6 +153,9 @@ class EditDataActivity : AppCompatActivity() {
                     prosesCompressBase64(uri, photoItemsEdit.size - 1)
                 }
                 updatePhotoCountBadge()
+                if (currentPopupEditDialog?.isShowing == true) {
+                    showPopupLihatFotoEdit()
+                }
                 showSnackbar("Berhasil menambahkan ${toAdd.size} foto")
             } else {
                 showSnackbar("Maksimal 10 foto sudah tercapai", isError = true)
@@ -635,6 +641,7 @@ class EditDataActivity : AppCompatActivity() {
                     (160 * density).toInt(), (140 * density).toInt()
                 )
                 setOnClickListener {
+                    pendingPhotoSlotEdit = -1
                     showDialogOpsiTambahFotoEdit()
                 }
             }
@@ -823,6 +830,7 @@ class EditDataActivity : AppCompatActivity() {
                         showSnackbar("Maksimal 10 foto dokumentasi sudah tercapai", isError = true)
                         return@setOnClickListener
                     }
+                    pendingPhotoSlotEdit = -1
                     showDialogOpsiTambahFotoEdit()
                 }
             }
@@ -1023,7 +1031,7 @@ class EditDataActivity : AppCompatActivity() {
         }
 
         val tvGaleriTitle = TextView(this).apply {
-            text = "Pilih dari Galeri"
+            text = if (isEditingExistingSlot) "Pilih dari Galeri" else "Pilih Foto dari Galeri (Multi-Select)"
             textSize = 14f
             setTypeface(null, Typeface.BOLD)
             setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_primary))
@@ -1031,7 +1039,7 @@ class EditDataActivity : AppCompatActivity() {
         colGaleriText.addView(tvGaleriTitle)
 
         val tvGaleriSub = TextView(this).apply {
-            text = "Pilih foto dari galeri perangkat"
+            text = if (isEditingExistingSlot) "Pilih foto pengganti dari galeri" else "Pilih satu atau beberapa foto sekaligus dari galeri"
             textSize = 11f
             setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_secondary))
             setPadding(0, (2 * density).toInt(), 0, 0)
@@ -1657,6 +1665,7 @@ class EditDataActivity : AppCompatActivity() {
                     showSnackbar("Maksimal 10 foto dokumentasi sudah tercapai", isError = true)
                     return@setOnClickListener
                 }
+                pendingPhotoSlotEdit = -1
                 showDialogOpsiTambahFotoEdit()
             }
         }
