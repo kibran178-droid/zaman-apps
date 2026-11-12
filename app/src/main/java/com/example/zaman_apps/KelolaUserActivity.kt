@@ -6,11 +6,13 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.ArrayAdapter
-import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
@@ -42,6 +44,11 @@ class KelolaUserActivity : AppCompatActivity() {
     private var userList = listOf<UserItem>()
     private var filteredList = listOf<UserItem>()
 
+    // State Filter & Pagination
+    private var selectedFilter = "ALL" // ALL, ADMIN, TEKNISI
+    private var currentPage = 1
+    private val pageSize = 10
+
     data class UserItem(
         val username: String,
         val name: String,
@@ -56,10 +63,70 @@ class KelolaUserActivity : AppCompatActivity() {
 
         binding.toolbar.setNavigationOnClickListener { finish() }
 
+        setupFilterChips()
         setupSearch()
         setupListeners()
 
         loadUsers()
+    }
+
+    // ==================== FILTER CHIPS BINDING & STYLING ====================
+    private fun setupFilterChips() {
+        updateFilterChipsUI()
+
+        binding.chipFilterSemua.setOnClickListener {
+            if (selectedFilter != "ALL") {
+                selectedFilter = "ALL"
+                updateFilterChipsUI()
+                filterUsers(binding.etSearchUser.text?.toString() ?: "")
+            }
+        }
+
+        binding.chipFilterAdmin.setOnClickListener {
+            if (selectedFilter != "ADMIN") {
+                selectedFilter = "ADMIN"
+                updateFilterChipsUI()
+                filterUsers(binding.etSearchUser.text?.toString() ?: "")
+            }
+        }
+
+        binding.chipFilterTeknisi.setOnClickListener {
+            if (selectedFilter != "TEKNISI") {
+                selectedFilter = "TEKNISI"
+                updateFilterChipsUI()
+                filterUsers(binding.etSearchUser.text?.toString() ?: "")
+            }
+        }
+    }
+
+    private fun updateFilterChipsUI() {
+        styleChip(binding.chipFilterSemua, selectedFilter == "ALL")
+        styleChip(binding.chipFilterAdmin, selectedFilter == "ADMIN")
+        styleChip(binding.chipFilterTeknisi, selectedFilter == "TEKNISI")
+    }
+
+    private fun styleChip(button: MaterialButton, isActive: Boolean) {
+        if (isActive) {
+            button.setBackgroundColor(ContextCompat.getColor(this, R.color.brand_primary))
+            button.setTextColor(ContextCompat.getColor(this, R.color.white))
+            button.strokeWidth = 0
+        } else {
+            button.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            button.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
+            button.setStrokeColor(ContextCompat.getColorStateList(this, R.color.brand_primary))
+            button.strokeWidth = (1 * resources.displayMetrics.density).toInt()
+        }
+    }
+
+    // ==================== HEADER STAT COUNTERS ====================
+    private fun updateStatCounters() {
+        val total = userList.size
+        val admin = userList.count { it.role.equals("admin", ignoreCase = true) }
+        val teknisi = userList.count { !it.role.equals("admin", ignoreCase = true) }
+
+        binding.tvStatTotalCount.text = total.toString()
+        binding.tvStatAdminCount.text = admin.toString()
+        binding.tvStatTeknisiCount.text = teknisi.toString()
     }
 
     private fun setupSearch() {
@@ -79,6 +146,22 @@ class KelolaUserActivity : AppCompatActivity() {
 
         binding.fabTambahUser.setOnClickListener {
             dialogTambahUser()
+        }
+
+        // Pagination controls
+        binding.btnPrevPageUser.setOnClickListener {
+            if (currentPage > 1) {
+                currentPage--
+                renderUsers()
+            }
+        }
+
+        binding.btnNextPageUser.setOnClickListener {
+            val totalPages = Math.ceil(filteredList.size.toDouble() / pageSize).toInt()
+            if (currentPage < totalPages) {
+                currentPage++
+                renderUsers()
+            }
         }
     }
 
@@ -109,6 +192,7 @@ class KelolaUserActivity : AppCompatActivity() {
                     val json = JSONObject(response)
                     if (json.optString("status") == "success") {
                         userList = json.optJSONArray("users")?.let { parseUsers(it) } ?: emptyList()
+                        updateStatCounters()
                         filterUsers(binding.etSearchUser.text?.toString() ?: "")
                     } else {
                         Toast.makeText(this, json.optString("message"), Toast.LENGTH_SHORT).show()
@@ -168,126 +252,289 @@ class KelolaUserActivity : AppCompatActivity() {
         return list
     }
 
+    // ==================== FILTERING LOGIC ====================
     private fun filterUsers(query: String) {
         val q = query.trim().lowercase()
-        filteredList = if (q.isEmpty()) {
-            userList
-        } else {
-            userList.filter {
-                it.username.lowercase().contains(q) || it.name.lowercase().contains(q)
+        filteredList = userList.filter { user ->
+            val matchesRole = when (selectedFilter) {
+                "ADMIN" -> user.role.equals("admin", ignoreCase = true)
+                "TEKNISI" -> !user.role.equals("admin", ignoreCase = true)
+                else -> true
             }
+
+            val matchesQuery = q.isEmpty() ||
+                    user.username.lowercase().contains(q) ||
+                    user.name.lowercase().contains(q)
+
+            matchesRole && matchesQuery
         }
+
+        currentPage = 1
         renderUsers()
     }
 
+    // ==================== RENDER USERS (LIST PER BARIS) & PAGINATION ====================
     private fun renderUsers() {
-        binding.containerUsers.removeAllViews()
+        binding.containerUsersGrid.removeAllViews()
         binding.tvTotalUsers.text = "${filteredList.size} User"
 
         if (filteredList.isEmpty()) {
-            val tvEmpty = TextView(this)
-            tvEmpty.text = if (userList.isEmpty()) "Belum ada user terdaftar." else "Tidak ada user yang cocok."
-            tvEmpty.gravity = Gravity.CENTER
-            tvEmpty.setPadding(0, 64, 0, 64)
-            tvEmpty.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
-            binding.containerUsers.addView(tvEmpty)
+            binding.cardPaginationUser.visibility = View.GONE
+            val tvEmpty = TextView(this).apply {
+                text = if (userList.isEmpty()) "Belum ada user terdaftar." else "Tidak ada user yang cocok."
+                gravity = Gravity.CENTER
+                setPadding(0, 64, 0, 64)
+                setTextColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.text_secondary))
+                textSize = 14f
+            }
+            binding.containerUsersGrid.addView(tvEmpty)
             return
         }
 
-        filteredList.forEach { user ->
-            val card = buatCardUser(user)
-            binding.containerUsers.addView(card)
+        val totalPages = Math.ceil(filteredList.size.toDouble() / pageSize).toInt().coerceAtLeast(1)
+        if (currentPage > totalPages) currentPage = totalPages
+
+        val startIndex = (currentPage - 1) * pageSize
+        val endIndex = minOf(startIndex + pageSize, filteredList.size)
+        val pageItems = filteredList.subList(startIndex, endIndex)
+
+        // Render List Items per Baris (1 item per row)
+        pageItems.forEachIndexed { index, user ->
+            val card = buatCardUserList(index, user)
+            binding.containerUsersGrid.addView(card)
+        }
+
+        // Update Pagination Controls UI
+        if (filteredList.size > pageSize) {
+            binding.cardPaginationUser.visibility = View.VISIBLE
+            binding.tvPageIndicatorUser.text = "Halaman $currentPage dari $totalPages"
+
+            binding.btnPrevPageUser.isEnabled = currentPage > 1
+            binding.btnPrevPageUser.alpha = if (currentPage > 1) 1.0f else 0.4f
+
+            binding.btnNextPageUser.isEnabled = currentPage < totalPages
+            binding.btnNextPageUser.alpha = if (currentPage < totalPages) 1.0f else 0.4f
+        } else {
+            binding.cardPaginationUser.visibility = View.GONE
         }
     }
 
-    private fun buatCardUser(user: UserItem): View {
-        val card = MaterialCardView(this)
-        val cardParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply { bottomMargin = 16 }
-        card.layoutParams = cardParams
-        card.radius = 16f
-        card.cardElevation = 2f
-        card.strokeWidth = 1
-        card.strokeColor = ContextCompat.getColor(this, R.color.divider)
+    // ==================== EXECUTIVE DIGITAL PASS USER CARD (PER BARIS) ====================
+    private fun buatCardUserList(index: Int, user: UserItem): View {
+        val density = resources.displayMetrics.density
+        val isRoleAdmin = user.role.equals("admin", ignoreCase = true)
 
-        val root = LinearLayout(this)
-        root.orientation = LinearLayout.HORIZONTAL
-        root.gravity = Gravity.CENTER_VERTICAL
-        root.setPadding(24, 20, 20, 20)
+        // Outer Card
+        val card = MaterialCardView(this).apply {
+            radius = 16 * density
+            cardElevation = 3 * density
+            strokeWidth = (1 * density).toInt()
+            strokeColor = ContextCompat.getColor(this@KelolaUserActivity, R.color.divider)
+            setCardBackgroundColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.card_bg))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = (12 * density).toInt()
+            }
+        }
 
-        // Column Text Info
-        val infoCol = LinearLayout(this)
-        infoCol.orientation = LinearLayout.VERTICAL
-        infoCol.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        // Main Card Row Container
+        val rootRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            minimumHeight = (80 * density).toInt()
+        }
 
-        val tvName = TextView(this)
-        tvName.text = user.name
-        tvName.textSize = 15f
-        tvName.setTypeface(null, Typeface.BOLD)
-        tvName.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        // 1. Left Vertical Accent Strip (Indikator warna role khas ZAMAN)
+        val leftAccentStrip = View(this).apply {
+            val stripColor = ContextCompat.getColor(
+                this@KelolaUserActivity,
+                if (isRoleAdmin) R.color.brand_primary else R.color.brand_primary_light
+            )
+            val bgStrip = GradientDrawable().apply {
+                setColor(stripColor)
+                cornerRadii = floatArrayOf(
+                    16 * density, 16 * density, // top-left
+                    0f, 0f,                     // top-right
+                    0f, 0f,                     // bottom-right
+                    16 * density, 16 * density  // bottom-left
+                )
+            }
+            background = bgStrip
+            layoutParams = LinearLayout.LayoutParams(
+                (6 * density).toInt(), LinearLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+        rootRow.addView(leftAccentStrip)
+
+        // 2. Content Inner Row (Avatar + User Info + Action Buttons)
+        val innerContent = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding((14 * density).toInt(), (14 * density).toInt(), (14 * density).toInt(), (14 * density).toInt())
+            layoutParams = LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
+            )
+        }
+
+        // Avatar Inisial Bulat
+        val avatarCard = MaterialCardView(this).apply {
+            radius = 22 * density
+            cardElevation = 0f
+            setCardBackgroundColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.brand_accent_light))
+            layoutParams = LinearLayout.LayoutParams((44 * density).toInt(), (44 * density).toInt())
+        }
+
+        val initialLetter = user.name.trim().take(1).uppercase().ifEmpty { "U" }
+        val tvAvatar = TextView(this).apply {
+            text = initialLetter
+            textSize = 17f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.brand_primary))
+            gravity = Gravity.CENTER
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+        avatarCard.addView(tvAvatar)
+        innerContent.addView(avatarCard)
+
+        // User Info Column (Nama, @username, Role Badge)
+        val infoCol = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
+            ).apply {
+                marginStart = (14 * density).toInt()
+                marginEnd = (8 * density).toInt()
+            }
+        }
+
+        val tvName = TextView(this).apply {
+            text = user.name
+            textSize = 15f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.text_primary))
+            maxLines = 1
+            ellipsize = TextUtils.TruncateAt.END
+        }
         infoCol.addView(tvName)
 
-        val tvUsername = TextView(this)
-        tvUsername.text = "@${user.username}"
-        tvUsername.textSize = 13f
-        tvUsername.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
-        tvUsername.setPadding(0, 2, 0, 6)
+        val tvUsername = TextView(this).apply {
+            text = "@${user.username}"
+            textSize = 12f
+            setTextColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.text_secondary))
+            maxLines = 1
+            ellipsize = TextUtils.TruncateAt.END
+            setPadding(0, (2 * density).toInt(), 0, (6 * density).toInt())
+        }
         infoCol.addView(tvUsername)
 
-        val badgeRow = LinearLayout(this)
-        badgeRow.orientation = LinearLayout.HORIZONTAL
-        badgeRow.gravity = Gravity.CENTER_VERTICAL
-
-        // Role Badge (ADMIN / USER)
-        val tvRole = TextView(this)
-        val isRoleAdmin = user.role.equals("admin", ignoreCase = true)
-        tvRole.text = if (isRoleAdmin) "ADMIN" else "TEKNISI"
-        tvRole.textSize = 10f
-        tvRole.setTypeface(null, Typeface.BOLD)
-        tvRole.setTextColor(Color.WHITE)
-        val bgRole = GradientDrawable()
-        bgRole.cornerRadius = 10f
-        bgRole.setColor(ContextCompat.getColor(this, if (isRoleAdmin) R.color.brand_primary else R.color.brand_accent_light))
-        tvRole.background = bgRole
-        tvRole.setPadding(14, 4, 14, 4)
-        badgeRow.addView(tvRole)
-
-        infoCol.addView(badgeRow)
-        root.addView(infoCol)
-
-        // Action Buttons Row (Edit & Hapus)
-        val actionRow = LinearLayout(this)
-        actionRow.orientation = LinearLayout.HORIZONTAL
-        actionRow.gravity = Gravity.CENTER_VERTICAL
-
-        // Edit Button (Text)
-        val btnEdit = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle)
-        btnEdit.text = "Edit"
-        btnEdit.textSize = 13f
-        btnEdit.setTypeface(null, Typeface.BOLD)
-        btnEdit.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
-        btnEdit.setOnClickListener {
-            dialogEditUser(user)
+        // Role Badge Tag (Teks bersih TANPA ICON)
+        val tvRoleBadge = TextView(this).apply {
+            text = if (isRoleAdmin) "ADMIN" else "TEKNISI"
+            textSize = 10f
+            setTypeface(null, Typeface.BOLD)
+            if (isRoleAdmin) {
+                setTextColor(Color.WHITE)
+                background = GradientDrawable().apply {
+                    cornerRadius = 6 * density
+                    setColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.brand_primary))
+                }
+            } else {
+                setTextColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.brand_primary))
+                background = GradientDrawable().apply {
+                    cornerRadius = 6 * density
+                    setColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.brand_accent_light))
+                    setStroke((1 * density).toInt(), ContextCompat.getColor(this@KelolaUserActivity, R.color.brand_primary))
+                }
+            }
+            setPadding((10 * density).toInt(), (3 * density).toInt(), (10 * density).toInt(), (3 * density).toInt())
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         }
-        actionRow.addView(btnEdit)
+        infoCol.addView(tvRoleBadge)
+        innerContent.addView(infoCol)
 
-        // Hapus Button (Text - hanya jika bukan akun diri sendiri)
+        // Action Buttons Row (Edit & Hapus) - Compact & Berdempet
+        val actionCol = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+
+        val btnEdit = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
+            text = "Edit"
+            textSize = 11f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.brand_primary))
+            val editBg = GradientDrawable().apply {
+                cornerRadius = 8 * density
+                setColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.brand_accent_light))
+            }
+            background = editBg
+            insetTop = 0
+            insetBottom = 0
+            minWidth = 0
+            minHeight = 0
+            minimumWidth = 0
+            minimumHeight = 0
+            setPadding((8 * density).toInt(), 0, (8 * density).toInt(), 0)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, (32 * density).toInt()
+            ).apply {
+                marginEnd = (4 * density).toInt()
+            }
+            setOnClickListener {
+                dialogEditUser(user)
+            }
+        }
+        actionCol.addView(btnEdit)
+
         val currentUsername = SessionHelper.getUsername(this)
         if (!user.username.equals(currentUsername, ignoreCase = true)) {
-            val btnDelete = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle)
-            btnDelete.text = "Hapus"
-            btnDelete.textSize = 13f
-            btnDelete.setTypeface(null, Typeface.BOLD)
-            btnDelete.setTextColor(ContextCompat.getColor(this, R.color.error))
-            btnDelete.setOnClickListener {
-                konfirmasiHapus(user)
+            val btnDelete = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
+                text = "Hapus"
+                textSize = 11f
+                setTypeface(null, Typeface.BOLD)
+                setTextColor(ContextCompat.getColor(this@KelolaUserActivity, R.color.error))
+                val deleteBg = GradientDrawable().apply {
+                    cornerRadius = 8 * density
+                    setColor(Color.parseColor("#FEE2E2"))
+                }
+                background = deleteBg
+                insetTop = 0
+                insetBottom = 0
+                minWidth = 0
+                minHeight = 0
+                minimumWidth = 0
+                minimumHeight = 0
+                setPadding((8 * density).toInt(), 0, (8 * density).toInt(), 0)
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, (32 * density).toInt()
+                )
+                setOnClickListener {
+                    konfirmasiHapus(user)
+                }
             }
-            actionRow.addView(btnDelete)
+            actionCol.addView(btnDelete)
         }
 
-        root.addView(actionRow)
-        card.addView(root)
+        innerContent.addView(actionCol)
+        rootRow.addView(innerContent)
+        card.addView(rootRow)
+
+        // Smooth Entrance Animation (Slide up & Alpha fade)
+        card.translationY = 40f * density
+        card.alpha = 0f
+        card.animate()
+            .translationY(0f)
+            .alpha(1.0f)
+            .setDuration(280)
+            .setStartDelay(index * 45L)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+
         return card
     }
 
@@ -527,7 +774,6 @@ class KelolaUserActivity : AppCompatActivity() {
                 }
 
                 if (!newUsername.equals(user.username, ignoreCase = true)) {
-                    // Jika username diubah, kirim rename dulu lalu update
                     kirimRenameUser(user.username, newUsername) { sukses ->
                         if (sukses) {
                             if (user.username.equals(SessionHelper.getUsername(this), ignoreCase = true)) {
