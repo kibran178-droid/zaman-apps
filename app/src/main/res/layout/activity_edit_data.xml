@@ -351,26 +351,139 @@
                                     android:id="@+id/tvCountFotoEdit"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/badge_welcome_bg"
+                                    android:background="@drawable/bg_badge"
                                     android:paddingHorizontal="10dp"
                                     android:paddingVertical="4dp"
                                     android:text="0 / 10"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/brand_primary"
                                     android:textSize="12sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
+
+                            <!-- HORIZONTAL SLIDER DIREK FOTO SITE -->
+                            <HorizontalScrollView
+                                android:id="@+id/scrollFotoEdit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:clipToPadding="false"
+                                android:scrollbars="none">
+
+                                <LinearLayout
+                                    android:id="@+id/containerSlotsFotoEdit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal" />
+                            </HorizontalScrollView>
+
+                            <!-- BATCH ACTION CARD MULTI-SELECT FOTO -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cardMultiSelectFotoEdit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:visibility="gone"
+                                app:cardCornerRadius="16dp"
+                                app:cardElevation="3dp"
+                                app:cardBackgroundColor="@color/brand_primary_lightest"
+                                app:strokeColor="@color/brand_primary"
+                                app:strokeWidth="1dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="14dp">
+
+                                    <!-- BARIS 1: STATUS TERPILIH & TOMBOL BATAL PILIH -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:layout_marginBottom="10dp">
+
+                                        <TextView
+                                            android:id="@+id/tvMultiSelectCountEdit"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text="0 / 10 Foto Terpilih"
+                                            android:textColor="@color/brand_primary"
+                                            android:textSize="13sp"
+                                            android:textStyle="bold" />
+
+                                        <com.google.android.material.button.MaterialButton
+                                            android:id="@+id/btnCancelMultiSelectFotoEdit"
+                                            style="@style/ZamanButtonOutlined"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="32dp"
+                                            android:insetTop="0dp"
+                                            android:insetBottom="0dp"
+                                            android:paddingHorizontal="10dp"
+                                            android:paddingVertical="0dp"
+                                            android:text="✕ Batal Pilih"
+                                            android:textSize="12sp"
+                                            app:cornerRadius="10dp"
+                                            app:strokeColor="@color/text_secondary" />
+
+                                    </LinearLayout>
+
+                                    <!-- BARIS 2: TOMBOL AKSI (PILIH SEMUA & HAPUS) -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal">
+
+                                        <com.google.android.material.button.MaterialButton
+                                            android:id="@+id/btnSelectAllFotoEdit"
+                                            style="@style/ZamanButtonOutlined"
+                                            android:layout_width="0dp"
+                                            android:layout_height="40dp"
+                                            android:layout_weight="1"
+                                            android:layout_marginEnd="6dp"
+                                            android:insetTop="0dp"
+                                            android:insetBottom="0dp"
+                                            android:paddingHorizontal="8dp"
+                                            android:paddingVertical="0dp"
+                                            android:text="Pilih Semua"
+                                            android:textSize="12sp"
+                                            app:cornerRadius="10dp"
+                                            app:strokeColor="@color/brand_primary" />
+
+                                        <com.google.android.material.button.MaterialButton
+                                            android:id="@+id/btnHapusMultiFotoEdit"
+                                            style="@style/ZamanButton"
+                                            android:layout_width="0dp"
+                                            android:layout_height="40dp"
+                                            android:layout_weight="1"
+                                            android:layout_marginStart="6dp"
+                                            android:insetTop="0dp"
+                                            android:insetBottom="0dp"
+                                            android:paddingHorizontal="8dp"
+                                            android:paddingVertical="0dp"
+                                            android:text="🗑️ Hapus"
+                                            android:textSize="12sp"
+                                            app:cornerRadius="10dp"
+                                            app:backgroundTint="@color/error" />
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnKelolaFotoEdit"
                                 style="@style/ZamanButtonOutlined"
                                 android:layout_width="match_parent"
-                                android:layout_height="48dp"
-                                android:layout_marginTop="12dp"
+                                android:layout_height="44dp"
+                                android:layout_marginTop="10dp"
                                 android:insetTop="0dp"
                                 android:insetBottom="0dp"
                                 android:paddingVertical="0dp"
-                                android:text="Kelola &amp; Lihat Foto Site"
-                                android:textSize="13sp"
+                                android:text="Kelola &amp; Lihat Foto"
+                                android:textSize="12sp"
                                 app:icon="@android:drawable/ic_menu_gallery"
                                 app:iconGravity="textStart"
                                 app:iconTint="@color/brand_primary" />

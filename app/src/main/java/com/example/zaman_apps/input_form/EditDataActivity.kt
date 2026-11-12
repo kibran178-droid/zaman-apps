@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -16,6 +17,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
@@ -25,11 +27,13 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.PickVisualMediaRequest
 import com.google.android.material.textfield.TextInputLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -89,23 +93,52 @@ class EditDataActivity : AppCompatActivity() {
     private var cameraUriEdit: Uri? = null
     private var currentPopupEditDialog: Dialog? = null
 
+    // State Multi-Select Foto
+    private var isMultiSelectModeEdit = false
+    private val selectedPhotoIndicesEdit = mutableSetOf<Int>()
+
     private val pickPhotoEditLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            if (pendingPhotoSlotEdit in photoItemsEdit.indices) {
+            val slotToPreview = if (pendingPhotoSlotEdit in photoItemsEdit.indices) {
                 photoItemsEdit[pendingPhotoSlotEdit] = it.toString()
                 prosesCompressBase64(it, pendingPhotoSlotEdit)
+                pendingPhotoSlotEdit
             } else if (photoItemsEdit.size < 10) {
                 photoItemsEdit.add(it.toString())
                 prosesCompressBase64(it, photoItemsEdit.size - 1)
+                photoItemsEdit.size - 1
+            } else {
+                -1
             }
             updatePhotoCountBadge()
-            showPopupLihatFotoEdit()
+            if (slotToPreview in photoItemsEdit.indices) {
+                showPreviewFotoDialog(slotToPreview)
+            }
         }
     }
 
     private val addMultiplePhotosEditLauncher = registerForActivityResult(
+        ActivityResultContracts.PickMultipleVisualMedia(10)
+    ) { uris: List<Uri> ->
+        if (uris.isNotEmpty()) {
+            val spaceLeft = 10 - photoItemsEdit.size
+            if (spaceLeft > 0) {
+                val toAdd = uris.take(spaceLeft)
+                toAdd.forEach { uri ->
+                    photoItemsEdit.add(uri.toString())
+                    prosesCompressBase64(uri, photoItemsEdit.size - 1)
+                }
+                updatePhotoCountBadge()
+                showSnackbar("Berhasil menambahkan ${toAdd.size} foto")
+            } else {
+                showSnackbar("Maksimal 10 foto sudah tercapai", isError = true)
+            }
+        }
+    }
+
+    private val getMultipleContentsEditLauncher = registerForActivityResult(
         ActivityResultContracts.GetMultipleContents()
     ) { uris: List<Uri> ->
         if (uris.isNotEmpty()) {
@@ -117,11 +150,20 @@ class EditDataActivity : AppCompatActivity() {
                     prosesCompressBase64(uri, photoItemsEdit.size - 1)
                 }
                 updatePhotoCountBadge()
-                showPopupLihatFotoEdit()
                 showSnackbar("Berhasil menambahkan ${toAdd.size} foto")
             } else {
                 showSnackbar("Maksimal 10 foto sudah tercapai", isError = true)
             }
+        }
+    }
+
+    private fun bukaGaleriMultiSelect() {
+        try {
+            addMultiplePhotosEditLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
+        } catch (_: Exception) {
+            getMultipleContentsEditLauncher.launch("image/*")
         }
     }
 
@@ -130,15 +172,21 @@ class EditDataActivity : AppCompatActivity() {
     ) { success ->
         if (success && cameraUriEdit != null) {
             val uri = cameraUriEdit!!
-            if (pendingPhotoSlotEdit in 0 until photoItemsEdit.size) {
+            val slotToPreview = if (pendingPhotoSlotEdit in 0 until photoItemsEdit.size) {
                 photoItemsEdit[pendingPhotoSlotEdit] = uri.toString()
                 prosesCompressBase64(uri, pendingPhotoSlotEdit)
+                pendingPhotoSlotEdit
             } else if (photoItemsEdit.size < 10) {
                 photoItemsEdit.add(uri.toString())
                 prosesCompressBase64(uri, photoItemsEdit.size - 1)
+                photoItemsEdit.size - 1
+            } else {
+                -1
             }
             updatePhotoCountBadge()
-            showPopupLihatFotoEdit()
+            if (slotToPreview in photoItemsEdit.indices) {
+                showPreviewFotoDialog(slotToPreview)
+            }
         }
     }
 
@@ -474,6 +522,47 @@ class EditDataActivity : AppCompatActivity() {
             showPopupLihatFotoEdit()
         }
 
+        binding.btnSelectAllFotoEdit.setOnClickListener {
+            if (selectedPhotoIndicesEdit.size == photoItemsEdit.size) {
+                selectedPhotoIndicesEdit.clear()
+                isMultiSelectModeEdit = false
+            } else {
+                selectedPhotoIndicesEdit.clear()
+                selectedPhotoIndicesEdit.addAll(photoItemsEdit.indices)
+                isMultiSelectModeEdit = true
+            }
+            updateMultiSelectUI()
+            renderPhotosDirectly()
+        }
+
+        binding.btnCancelMultiSelectFotoEdit.setOnClickListener {
+            selectedPhotoIndicesEdit.clear()
+            isMultiSelectModeEdit = false
+            updateMultiSelectUI()
+            renderPhotosDirectly()
+        }
+
+        binding.btnHapusMultiFotoEdit.setOnClickListener {
+            if (selectedPhotoIndicesEdit.isEmpty()) {
+                showSnackbar("Pilih minimal 1 foto untuk dihapus", isError = true)
+                return@setOnClickListener
+            }
+            val countToDelete = selectedPhotoIndicesEdit.size
+            showKonfirmasiHapusMultiFotoEdit(countToDelete) {
+                val sortedIndices = selectedPhotoIndicesEdit.sortedDescending()
+                sortedIndices.forEach { index ->
+                    if (index in photoItemsEdit.indices) {
+                        photoItemsEdit.removeAt(index)
+                        base64CacheEdit.remove(index)
+                    }
+                }
+                selectedPhotoIndicesEdit.clear()
+                isMultiSelectModeEdit = false
+                updatePhotoCountBadge()
+                showSnackbar("$countToDelete foto berhasil dihapus")
+            }
+        }
+
         binding.switchStatusBatteryNotAktif1.setOnCheckedChangeListener { _, isChecked -> binding.layoutJumlahBankNotAktif1.visibility = if (isChecked) View.VISIBLE else View.GONE }
         binding.switchStatusBatteryNotAktif2.setOnCheckedChangeListener { _, isChecked -> binding.layoutJumlahBankNotAktif2.visibility = if (isChecked) View.VISIBLE else View.GONE }
         binding.switchStatusBatteryNotAktif3.setOnCheckedChangeListener { _, isChecked -> binding.layoutJumlahBankNotAktif3.visibility = if (isChecked) View.VISIBLE else View.GONE }
@@ -512,6 +601,947 @@ class EditDataActivity : AppCompatActivity() {
     private fun updatePhotoCountBadge() {
         val count = photoItemsEdit.size
         binding.tvCountFotoEdit.text = "$count / 10"
+        binding.tvCountFotoEdit.setBackgroundResource(R.drawable.bg_badge)
+        binding.tvCountFotoEdit.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
+        updateMultiSelectUI()
+        renderPhotosDirectly()
+    }
+
+    private fun updateMultiSelectUI() {
+        if (isMultiSelectModeEdit && photoItemsEdit.isNotEmpty()) {
+            binding.cardMultiSelectFotoEdit.visibility = View.VISIBLE
+            binding.tvMultiSelectCountEdit.text = "${selectedPhotoIndicesEdit.size} / ${photoItemsEdit.size} Foto Terpilih"
+            binding.btnSelectAllFotoEdit.text = if (selectedPhotoIndicesEdit.size == photoItemsEdit.size) "Batal Semua" else "Pilih Semua"
+            binding.btnHapusMultiFotoEdit.text = "🗑️ Hapus (${selectedPhotoIndicesEdit.size})"
+        } else {
+            isMultiSelectModeEdit = false
+            selectedPhotoIndicesEdit.clear()
+            binding.cardMultiSelectFotoEdit.visibility = View.GONE
+        }
+    }
+
+    private fun renderPhotosDirectly() {
+        binding.containerSlotsFotoEdit.removeAllViews()
+        val density = resources.displayMetrics.density
+
+        if (photoItemsEdit.isEmpty()) {
+            val emptyCard = MaterialCardView(this).apply {
+                radius = 12 * density
+                cardElevation = 0f
+                setCardBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.section_bg))
+                strokeWidth = (1.5f * density).toInt()
+                strokeColor = ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary_lightest)
+                layoutParams = LinearLayout.LayoutParams(
+                    (160 * density).toInt(), (140 * density).toInt()
+                )
+                setOnClickListener {
+                    showDialogOpsiTambahFotoEdit()
+                }
+            }
+
+            val emptyCol = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                gravity = Gravity.CENTER
+                setPadding((12 * density).toInt(), (12 * density).toInt(), (12 * density).toInt(), (12 * density).toInt())
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+                )
+            }
+
+            val ivCam = ImageView(this).apply {
+                setImageResource(android.R.drawable.ic_menu_camera)
+                setColorFilter(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+                layoutParams = LinearLayout.LayoutParams((32 * density).toInt(), (32 * density).toInt())
+            }
+            emptyCol.addView(ivCam)
+
+            val tvEmptyText = TextView(this).apply {
+                text = "Tambah Foto"
+                textSize = 12f
+                gravity = Gravity.CENTER
+                setTypeface(null, Typeface.BOLD)
+                setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+                setPadding(0, (6 * density).toInt(), 0, 0)
+            }
+            emptyCol.addView(tvEmptyText)
+
+            emptyCard.addView(emptyCol)
+            binding.containerSlotsFotoEdit.addView(emptyCard)
+            return
+        }
+
+        photoItemsEdit.forEachIndexed { index, itemStr ->
+            val isSelected = selectedPhotoIndicesEdit.contains(index)
+
+            val photoCard = MaterialCardView(this).apply {
+                radius = 12 * density
+                cardElevation = if (isSelected) 4 * density else 2 * density
+                setCardBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
+                strokeWidth = ((if (isSelected) 2.5f else 1f) * density).toInt()
+                strokeColor = ContextCompat.getColor(
+                    this@EditDataActivity,
+                    if (isSelected) R.color.brand_primary else R.color.divider
+                )
+                layoutParams = LinearLayout.LayoutParams(
+                    (140 * density).toInt(), (150 * density).toInt()
+                ).apply {
+                    marginEnd = (10 * density).toInt()
+                }
+
+                setOnClickListener {
+                    if (isMultiSelectModeEdit) {
+                        if (selectedPhotoIndicesEdit.contains(index)) {
+                            selectedPhotoIndicesEdit.remove(index)
+                        } else {
+                            selectedPhotoIndicesEdit.add(index)
+                        }
+                        if (selectedPhotoIndicesEdit.isEmpty()) {
+                            isMultiSelectModeEdit = false
+                        }
+                        updateMultiSelectUI()
+                        renderPhotosDirectly()
+                    } else {
+                        showPreviewFotoDialog(index)
+                    }
+                }
+
+                setOnLongClickListener {
+                    isMultiSelectModeEdit = true
+                    if (selectedPhotoIndicesEdit.contains(index)) {
+                        selectedPhotoIndicesEdit.remove(index)
+                    } else {
+                        selectedPhotoIndicesEdit.add(index)
+                    }
+                    updateMultiSelectUI()
+                    renderPhotosDirectly()
+                    true
+                }
+            }
+
+            val rootFrame = FrameLayout(this)
+
+            val iv = ImageView(this).apply {
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+                )
+                scaleType = ImageView.ScaleType.CENTER_CROP
+            }
+
+            val progressSpinner = CircularProgressDrawable(this).apply {
+                strokeWidth = 4f
+                centerRadius = 24f
+                setColorSchemeColors(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+                start()
+            }
+
+            if (itemStr.startsWith("http")) {
+                val fileIdMatch = Regex("/d/([a-zA-Z0-9_-]+)").find(itemStr)
+                val directUrl = if (fileIdMatch != null) {
+                    "https://drive.google.com/uc?export=view&id=${fileIdMatch.groupValues[1]}"
+                } else {
+                    itemStr
+                }
+                Glide.with(this)
+                    .load(directUrl)
+                    .placeholder(progressSpinner)
+                    .error(android.R.drawable.ic_menu_report_image)
+                    .into(iv)
+            } else {
+                try {
+                    val uri = Uri.parse(itemStr)
+                    val thumb = ImageHelper.decodeThumbnailFromUri(this, uri, 300, 300)
+                    if (thumb != null) {
+                        iv.setImageBitmap(thumb)
+                    } else {
+                        iv.setImageURI(uri)
+                    }
+                } catch (_: Exception) {
+                    iv.setImageResource(android.R.drawable.ic_menu_gallery)
+                }
+            }
+            rootFrame.addView(iv)
+
+            val labelBg = GradientDrawable().apply {
+                setColor(Color.parseColor("#99000000"))
+            }
+            val tvLabel = TextView(this).apply {
+                text = "Foto #${index + 1}"
+                textSize = 10f
+                setTypeface(null, Typeface.BOLD)
+                setTextColor(Color.WHITE)
+                background = labelBg
+                setPadding((8 * density).toInt(), (4 * density).toInt(), (8 * density).toInt(), (4 * density).toInt())
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM
+                )
+            }
+            rootFrame.addView(tvLabel)
+
+            if (isMultiSelectModeEdit) {
+                val tvCheck = TextView(this).apply {
+                    text = if (isSelected) "✓" else "○"
+                    textSize = 12f
+                    setTypeface(null, Typeface.BOLD)
+                    setTextColor(Color.WHITE)
+                    gravity = Gravity.CENTER
+                    val checkBg = GradientDrawable().apply {
+                        shape = GradientDrawable.OVAL
+                        setColor(
+                            if (isSelected) ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary)
+                            else Color.parseColor("#80000000")
+                        )
+                        setStroke((1 * density).toInt(), Color.WHITE)
+                    }
+                    background = checkBg
+                    layoutParams = FrameLayout.LayoutParams(
+                        (24 * density).toInt(), (24 * density).toInt(), Gravity.TOP or Gravity.END
+                    ).apply {
+                        topMargin = (6 * density).toInt()
+                        marginEnd = (6 * density).toInt()
+                    }
+                }
+                rootFrame.addView(tvCheck)
+            }
+
+            photoCard.addView(rootFrame)
+            binding.containerSlotsFotoEdit.addView(photoCard)
+        }
+
+        if (photoItemsEdit.size < 10) {
+            val addCard = MaterialCardView(this).apply {
+                radius = 12 * density
+                cardElevation = 0f
+                setCardBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.brand_accent_light))
+                strokeWidth = (1 * density).toInt()
+                strokeColor = ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary)
+                layoutParams = LinearLayout.LayoutParams(
+                    (100 * density).toInt(), (150 * density).toInt()
+                )
+                setOnClickListener {
+                    if (photoItemsEdit.size >= 10) {
+                        showSnackbar("Maksimal 10 foto dokumentasi sudah tercapai", isError = true)
+                        return@setOnClickListener
+                    }
+                    showDialogOpsiTambahFotoEdit()
+                }
+            }
+
+            val addCol = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                gravity = Gravity.CENTER
+                setPadding((8 * density).toInt(), (8 * density).toInt(), (8 * density).toInt(), (8 * density).toInt())
+                layoutParams = FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+                )
+            }
+
+            val ivAdd = ImageView(this).apply {
+                setImageResource(android.R.drawable.ic_input_add)
+                setColorFilter(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+                layoutParams = LinearLayout.LayoutParams((28 * density).toInt(), (28 * density).toInt())
+            }
+            addCol.addView(ivAdd)
+
+            val tvAddText = TextView(this).apply {
+                text = "Tambah"
+                textSize = 11f
+                gravity = Gravity.CENTER
+                setTypeface(null, Typeface.BOLD)
+                setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+                setPadding(0, (4 * density).toInt(), 0, 0)
+            }
+            addCol.addView(tvAddText)
+
+            addCard.addView(addCol)
+            binding.containerSlotsFotoEdit.addView(addCard)
+        }
+    }
+
+    private fun showDialogOpsiTambahFotoEdit() {
+        val density = resources.displayMetrics.density
+
+        val root = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding((24 * density).toInt(), (22 * density).toInt(), (24 * density).toInt(), (22 * density).toInt())
+            setBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
+        }
+
+        // Header Section
+        val headerRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = (16 * density).toInt()
+            }
+        }
+
+        val iconCard = MaterialCardView(this).apply {
+            radius = 12 * density
+            cardElevation = 0f
+            setCardBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.brand_accent_light))
+            layoutParams = LinearLayout.LayoutParams((44 * density).toInt(), (44 * density).toInt())
+        }
+
+        val ivIcon = ImageView(this).apply {
+            setImageResource(android.R.drawable.ic_input_add)
+            setColorFilter(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+            setPadding((10 * density).toInt(), (10 * density).toInt(), (10 * density).toInt(), (10 * density).toInt())
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+        iconCard.addView(ivIcon)
+        headerRow.addView(iconCard)
+
+        val titleCol = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                marginStart = (14 * density).toInt()
+            }
+        }
+
+        val isEditingExistingSlot = pendingPhotoSlotEdit in photoItemsEdit.indices
+
+        val tvTitle = TextView(this).apply {
+            text = if (isEditingExistingSlot) "Edit Foto #${pendingPhotoSlotEdit + 1}" else "Tambah Foto Dokumentasi"
+            textSize = 16f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+        }
+        titleCol.addView(tvTitle)
+
+        val tvSub = TextView(this).apply {
+            text = if (isEditingExistingSlot) "Pilih sumber foto pengganti" else "Terlampir ${photoItemsEdit.size} / 10 foto"
+            textSize = 12f
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_secondary))
+            setPadding(0, (2 * density).toInt(), 0, 0)
+        }
+        titleCol.addView(tvSub)
+
+        headerRow.addView(titleCol)
+        root.addView(headerRow)
+
+        val divider = View(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, (1 * density).toInt()
+            ).apply {
+                bottomMargin = (16 * density).toInt()
+            }
+            setBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.divider))
+        }
+        root.addView(divider)
+
+        // Option 1: Kamera Card
+        val cardKamera = MaterialCardView(this).apply {
+            radius = 14 * density
+            cardElevation = 2 * density
+            strokeWidth = (1.5f * density).toInt()
+            strokeColor = ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary)
+            setCardBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.brand_accent_light))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = (12 * density).toInt()
+            }
+        }
+
+        val rowKamera = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding((16 * density).toInt(), (14 * density).toInt(), (16 * density).toInt(), (14 * density).toInt())
+        }
+
+        val ivKamera = ImageView(this).apply {
+            setImageResource(android.R.drawable.ic_menu_camera)
+            setColorFilter(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+            layoutParams = LinearLayout.LayoutParams((32 * density).toInt(), (32 * density).toInt())
+        }
+        rowKamera.addView(ivKamera)
+
+        val colKameraText = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                marginStart = (14 * density).toInt()
+            }
+        }
+
+        val tvKameraTitle = TextView(this).apply {
+            text = "Ambil dari Kamera"
+            textSize = 14f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+        }
+        colKameraText.addView(tvKameraTitle)
+
+        val tvKameraSub = TextView(this).apply {
+            text = "Buka kamera untuk mengambil foto baru"
+            textSize = 11f
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_secondary))
+            setPadding(0, (2 * density).toInt(), 0, 0)
+        }
+        colKameraText.addView(tvKameraSub)
+
+        rowKamera.addView(colKameraText)
+        cardKamera.addView(rowKamera)
+        root.addView(cardKamera)
+
+        // Option 2: Galeri Card
+        val cardGaleri = MaterialCardView(this).apply {
+            radius = 14 * density
+            cardElevation = 2 * density
+            strokeWidth = (1 * density).toInt()
+            strokeColor = ContextCompat.getColor(this@EditDataActivity, R.color.divider)
+            setCardBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = (16 * density).toInt()
+            }
+        }
+
+        val rowGaleri = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding((16 * density).toInt(), (14 * density).toInt(), (16 * density).toInt(), (14 * density).toInt())
+        }
+
+        val ivGaleri = ImageView(this).apply {
+            setImageResource(android.R.drawable.ic_menu_gallery)
+            setColorFilter(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+            layoutParams = LinearLayout.LayoutParams((32 * density).toInt(), (32 * density).toInt())
+        }
+        rowGaleri.addView(ivGaleri)
+
+        val colGaleriText = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                marginStart = (14 * density).toInt()
+            }
+        }
+
+        val tvGaleriTitle = TextView(this).apply {
+            text = "Pilih dari Galeri"
+            textSize = 14f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_primary))
+        }
+        colGaleriText.addView(tvGaleriTitle)
+
+        val tvGaleriSub = TextView(this).apply {
+            text = "Pilih foto dari galeri perangkat"
+            textSize = 11f
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_secondary))
+            setPadding(0, (2 * density).toInt(), 0, 0)
+        }
+        colGaleriText.addView(tvGaleriSub)
+
+        rowGaleri.addView(colGaleriText)
+        cardGaleri.addView(rowGaleri)
+        root.addView(cardGaleri)
+
+        // Button Batal
+        val btnBatal = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
+            text = "Batal"
+            textSize = 13f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_secondary))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, (44 * density).toInt()
+            )
+        }
+        root.addView(btnBatal)
+
+        val dialogCard = MaterialCardView(this).apply {
+            radius = 20 * density
+            cardElevation = 8 * density
+            setCardBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
+        }
+        dialogCard.addView(root)
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialogCard)
+            .create()
+
+        alertDialog.window?.apply {
+            setBackgroundDrawableResource(android.R.color.transparent)
+            setWindowAnimations(R.style.CustomDialogAnimation)
+        }
+
+        cardKamera.setOnClickListener {
+            alertDialog.dismiss()
+            bukaKameraEdit()
+        }
+
+        cardGaleri.setOnClickListener {
+            alertDialog.dismiss()
+            if (isEditingExistingSlot) {
+                pickPhotoEditLauncher.launch("image/*")
+            } else {
+                bukaGaleriMultiSelect()
+            }
+        }
+
+        btnBatal.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+
+    private fun showKonfirmasiHapusFotoEdit(index: Int, onKonfirmasi: () -> Unit) {
+        val density = resources.displayMetrics.density
+
+        val root = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding((24 * density).toInt(), (22 * density).toInt(), (24 * density).toInt(), (22 * density).toInt())
+            setBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
+        }
+
+        // Header Warning Card
+        val headerCard = MaterialCardView(this).apply {
+            radius = 14 * density
+            cardElevation = 0f
+            setCardBackgroundColor(Color.parseColor("#FEE2E2"))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = (16 * density).toInt()
+            }
+        }
+
+        val headerRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding((16 * density).toInt(), (14 * density).toInt(), (16 * density).toInt(), (14 * density).toInt())
+        }
+
+        val ivWarn = ImageView(this).apply {
+            setImageResource(android.R.drawable.ic_dialog_alert)
+            setColorFilter(ContextCompat.getColor(this@EditDataActivity, R.color.error))
+            layoutParams = LinearLayout.LayoutParams((32 * density).toInt(), (32 * density).toInt())
+        }
+        headerRow.addView(ivWarn)
+
+        val titleCol = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                marginStart = (12 * density).toInt()
+            }
+        }
+
+        val tvTitle = TextView(this).apply {
+            text = "Hapus Foto #${index + 1}?"
+            textSize = 16f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.error))
+        }
+        titleCol.addView(tvTitle)
+
+        val tvSub = TextView(this).apply {
+            text = "Tindakan ini tidak dapat dibatalkan"
+            textSize = 11.5f
+            setTextColor(Color.parseColor("#991B1B"))
+            setPadding(0, (2 * density).toInt(), 0, 0)
+        }
+        titleCol.addView(tvSub)
+
+        headerRow.addView(titleCol)
+        headerCard.addView(headerRow)
+        root.addView(headerCard)
+
+        // Description Message
+        val tvMsg = TextView(this).apply {
+            text = "Apakah Anda yakin ingin menghapus foto dokumentasi ke-${index + 1} ini?\n\nFoto akan terhapus dari daftar perubahan site."
+            textSize = 13.5f
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_primary))
+            setLineSpacing(4f, 1f)
+            setPadding(0, 0, 0, (20 * density).toInt())
+        }
+        root.addView(tvMsg)
+
+        // Action Buttons Row
+        val actionRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        // Button Ya, Hapus Foto
+        val btnDelete = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle).apply {
+            text = "Ya, Hapus Foto"
+            textSize = 13f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            backgroundTintList = ContextCompat.getColorStateList(this@EditDataActivity, R.color.error)
+            cornerRadius = (12 * density).toInt()
+            layoutParams = LinearLayout.LayoutParams(
+                0, (48 * density).toInt(), 1f
+            ).apply {
+                marginEnd = (8 * density).toInt()
+            }
+        }
+        actionRow.addView(btnDelete)
+
+        // Button Batal
+        val btnBatal = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
+            text = "Batal"
+            textSize = 13f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_secondary))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, (48 * density).toInt()
+            )
+        }
+        actionRow.addView(btnBatal)
+
+        root.addView(actionRow)
+
+        val dialogCard = MaterialCardView(this).apply {
+            radius = 20 * density
+            cardElevation = 8 * density
+            setCardBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
+        }
+        dialogCard.addView(root)
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialogCard)
+            .create()
+
+        alertDialog.window?.apply {
+            setBackgroundDrawableResource(android.R.color.transparent)
+            setWindowAnimations(R.style.CustomDialogAnimation)
+        }
+
+        btnDelete.setOnClickListener {
+            alertDialog.dismiss()
+            onKonfirmasi()
+        }
+
+        btnBatal.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+
+    private fun showKonfirmasiHapusMultiFotoEdit(count: Int, onKonfirmasi: () -> Unit) {
+        val density = resources.displayMetrics.density
+
+        val root = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding((24 * density).toInt(), (22 * density).toInt(), (24 * density).toInt(), (22 * density).toInt())
+            setBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
+        }
+
+        // Header Warning Card
+        val headerCard = MaterialCardView(this).apply {
+            radius = 14 * density
+            cardElevation = 0f
+            setCardBackgroundColor(Color.parseColor("#FEE2E2"))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = (16 * density).toInt()
+            }
+        }
+
+        val headerRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding((16 * density).toInt(), (14 * density).toInt(), (16 * density).toInt(), (14 * density).toInt())
+        }
+
+        val ivWarn = ImageView(this).apply {
+            setImageResource(android.R.drawable.ic_dialog_alert)
+            setColorFilter(ContextCompat.getColor(this@EditDataActivity, R.color.error))
+            layoutParams = LinearLayout.LayoutParams((32 * density).toInt(), (32 * density).toInt())
+        }
+        headerRow.addView(ivWarn)
+
+        val titleCol = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                marginStart = (12 * density).toInt()
+            }
+        }
+
+        val tvTitle = TextView(this).apply {
+            text = "Hapus $count Foto Terpilih?"
+            textSize = 16f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.error))
+        }
+        titleCol.addView(tvTitle)
+
+        val tvSub = TextView(this).apply {
+            text = "Tindakan ini tidak dapat dibatalkan"
+            textSize = 11.5f
+            setTextColor(Color.parseColor("#991B1B"))
+            setPadding(0, (2 * density).toInt(), 0, 0)
+        }
+        titleCol.addView(tvSub)
+
+        headerRow.addView(titleCol)
+        headerCard.addView(headerRow)
+        root.addView(headerCard)
+
+        val tvMsg = TextView(this).apply {
+            text = "Apakah Anda yakin ingin menghapus $count foto dokumentasi terpilih sekaligus?\n\nFoto-foto tersebut akan terhapus dari daftar perubahan site."
+            textSize = 13.5f
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_primary))
+            setLineSpacing(4f, 1f)
+            setPadding(0, 0, 0, (20 * density).toInt())
+        }
+        root.addView(tvMsg)
+
+        val actionRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        val btnDelete = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle).apply {
+            text = "Ya, Hapus $count Foto"
+            textSize = 13f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            backgroundTintList = ContextCompat.getColorStateList(this@EditDataActivity, R.color.error)
+            cornerRadius = (12 * density).toInt()
+            layoutParams = LinearLayout.LayoutParams(
+                0, (48 * density).toInt(), 1f
+            ).apply {
+                marginEnd = (8 * density).toInt()
+            }
+        }
+        actionRow.addView(btnDelete)
+
+        val btnBatal = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
+            text = "Batal"
+            textSize = 13f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_secondary))
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, (48 * density).toInt()
+            )
+        }
+        actionRow.addView(btnBatal)
+
+        root.addView(actionRow)
+
+        val dialogCard = MaterialCardView(this).apply {
+            radius = 20 * density
+            cardElevation = 8 * density
+            setCardBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
+        }
+        dialogCard.addView(root)
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialogCard)
+            .create()
+
+        alertDialog.window?.apply {
+            setBackgroundDrawableResource(android.R.color.transparent)
+            setWindowAnimations(R.style.CustomDialogAnimation)
+        }
+
+        btnDelete.setOnClickListener {
+            alertDialog.dismiss()
+            onKonfirmasi()
+        }
+
+        btnBatal.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+
+    private fun showPreviewFotoDialog(index: Int) {
+        if (index !in photoItemsEdit.indices) return
+
+        currentPopupEditDialog?.dismiss()
+
+        val dialog = Dialog(this, R.style.DialogEditTheme)
+        currentPopupEditDialog = dialog
+
+        dialog.window?.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary_dark)
+            setWindowAnimations(R.style.CustomDialogAnimation)
+        }
+
+        val density = resources.displayMetrics.density
+        val itemStr = photoItemsEdit[index]
+
+        val root = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
+        }
+
+        // Header Bar dengan Gradient Hijau Brand ZAMAN
+        val headerRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            background = ContextCompat.getDrawable(this@EditDataActivity, R.drawable.toolbar_gradient)
+            setPadding((16 * density).toInt(), (14 * density).toInt(), (16 * density).toInt(), (14 * density).toInt())
+        }
+
+        val tvTitle = TextView(this).apply {
+            text = "Foto Dokumentasi #${index + 1} (${index + 1} / ${photoItemsEdit.size})"
+            textSize = 16f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        }
+        headerRow.addView(tvTitle)
+
+        val btnClose = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
+            text = "✕ Tutup"
+            textSize = 12f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            minWidth = 0
+            minHeight = 0
+            minimumWidth = 0
+            minimumHeight = 0
+            setPadding((8 * density).toInt(), 0, (8 * density).toInt(), 0)
+            setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+        headerRow.addView(btnClose)
+        root.addView(headerRow)
+
+        // Body Container (Padding)
+        val bodyContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding((16 * density).toInt(), (16 * density).toInt(), (16 * density).toInt(), (16 * density).toInt())
+        }
+
+        // Large Photo Preview Container (Card)
+        val previewCard = MaterialCardView(this).apply {
+            radius = 16 * density
+            cardElevation = 2 * density
+            strokeWidth = (1 * density).toInt()
+            strokeColor = ContextCompat.getColor(this@EditDataActivity, R.color.divider)
+            setCardBackgroundColor(Color.BLACK)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, (360 * density).toInt()
+            ).apply {
+                bottomMargin = (16 * density).toInt()
+            }
+        }
+
+        val ivLarge = ImageView(this).apply {
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            scaleType = ImageView.ScaleType.FIT_CENTER
+        }
+
+        val progressSpinner = CircularProgressDrawable(this).apply {
+            strokeWidth = 6f
+            centerRadius = 36f
+            setColorSchemeColors(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+            start()
+        }
+
+        if (itemStr.startsWith("http")) {
+            val fileIdMatch = Regex("/d/([a-zA-Z0-9_-]+)").find(itemStr)
+            val directUrl = if (fileIdMatch != null) {
+                "https://drive.google.com/uc?export=view&id=${fileIdMatch.groupValues[1]}"
+            } else {
+                itemStr
+            }
+            Glide.with(this)
+                .load(directUrl)
+                .placeholder(progressSpinner)
+                .error(android.R.drawable.ic_menu_report_image)
+                .into(ivLarge)
+        } else {
+            try {
+                val uri = Uri.parse(itemStr)
+                val thumb = ImageHelper.decodeThumbnailFromUri(this, uri, 1080, 1080)
+                if (thumb != null) {
+                    ivLarge.setImageBitmap(thumb)
+                } else {
+                    ivLarge.setImageURI(uri)
+                }
+            } catch (_: Exception) {
+                ivLarge.setImageResource(android.R.drawable.ic_menu_gallery)
+            }
+        }
+        previewCard.addView(ivLarge)
+        bodyContainer.addView(previewCard)
+
+        // Action Buttons Row (Edit Foto & Hapus)
+        val actionRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        // Button Edit Foto
+        val btnEdit = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle).apply {
+            text = "✏️ Edit Foto"
+            textSize = 13f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            backgroundTintList = ContextCompat.getColorStateList(this@EditDataActivity, R.color.brand_primary)
+            cornerRadius = (12 * density).toInt()
+            layoutParams = LinearLayout.LayoutParams(
+                0, (48 * density).toInt(), 1f
+            ).apply {
+                marginEnd = (8 * density).toInt()
+            }
+            setOnClickListener {
+                pendingPhotoSlotEdit = index
+                showDialogOpsiTambahFotoEdit()
+            }
+        }
+        actionRow.addView(btnEdit)
+
+        // Button Hapus Foto
+        val btnDelete = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
+            text = "🗑️ Hapus"
+            textSize = 13f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.error))
+            val deleteBg = GradientDrawable().apply {
+                cornerRadius = 12 * density
+                setColor(Color.parseColor("#FEE2E2"))
+            }
+            background = deleteBg
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, (48 * density).toInt()
+            )
+            setOnClickListener {
+                showKonfirmasiHapusFotoEdit(index) {
+                    if (index in 0 until photoItemsEdit.size) {
+                        photoItemsEdit.removeAt(index)
+                        base64CacheEdit.remove(index)
+                        updatePhotoCountBadge()
+                        dialog.dismiss()
+                        showSnackbar("Foto #${index + 1} berhasil dihapus")
+                    }
+                }
+            }
+        }
+        actionRow.addView(btnDelete)
+
+        bodyContainer.addView(actionRow)
+        root.addView(bodyContainer)
+        dialog.setContentView(root)
+        dialog.show()
     }
 
     private fun bukaKameraEdit() {
@@ -543,92 +1573,159 @@ class EditDataActivity : AppCompatActivity() {
         val dialog = Dialog(this, R.style.DialogEditTheme)
         currentPopupEditDialog = dialog
 
-        val root = LinearLayout(this)
-        root.orientation = LinearLayout.VERTICAL
-        root.setPadding(32, 32, 32, 32)
-        root.setBackgroundColor(ContextCompat.getColor(this, R.color.section_bg))
-
-        val tvTitle = TextView(this)
-        tvTitle.text = "Dokumentasi Foto Site (${photoItemsEdit.size} / 10 Foto)"
-        tvTitle.textSize = 18f
-        tvTitle.setTypeface(null, Typeface.BOLD)
-        tvTitle.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
-        tvTitle.setPadding(0, 0, 0, 16)
-        root.addView(tvTitle)
-
-        val btnAdd = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle)
-        btnAdd.text = "Tambah Foto Dokumentasi Baru"
-        btnAdd.textSize = 14f
-        btnAdd.setTypeface(null, Typeface.BOLD)
-        btnAdd.setTextColor(ContextCompat.getColor(this, R.color.white))
-        btnAdd.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_primary)
-        btnAdd.cornerRadius = (16 * resources.displayMetrics.density).toInt()
-        val btnAddParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, (50 * resources.displayMetrics.density).toInt()
-        ).apply { bottomMargin = 16 }
-        btnAdd.layoutParams = btnAddParams
-        btnAdd.setOnClickListener {
-            if (photoItemsEdit.size >= 10) {
-                showSnackbar("Maksimal 10 foto dokumentasi sudah tercapai", isError = true)
-                return@setOnClickListener
-            }
-            pendingPhotoSlotEdit = -1
-            val opsi = arrayOf("📷 Ambil dari Kamera", "🖼️ Pilih dari Galeri")
-            AlertDialog.Builder(this)
-                .setTitle("Tambah Foto Dokumentasi")
-                .setItems(opsi) { _, optIdx ->
-                    when (optIdx) {
-                        0 -> bukaKameraEdit()
-                        1 -> addMultiplePhotosEditLauncher.launch("image/*")
-                    }
-                }
-                .show()
+        dialog.window?.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary_dark)
+            setWindowAnimations(R.style.CustomDialogAnimation)
         }
-        root.addView(btnAdd)
 
-        val scrollView = NestedScrollView(this)
-        val scrollParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f
-        )
-        scrollView.layoutParams = scrollParams
+        val density = resources.displayMetrics.density
 
-        val listContainer = LinearLayout(this)
-        listContainer.orientation = LinearLayout.VERTICAL
+        val root = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.section_bg))
+        }
+
+        // Header Bar dengan Gradient Hijau Brand ZAMAN
+        val headerRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            background = ContextCompat.getDrawable(this@EditDataActivity, R.drawable.toolbar_gradient)
+            setPadding((16 * density).toInt(), (14 * density).toInt(), (16 * density).toInt(), (14 * density).toInt())
+        }
+
+        val tvTitle = TextView(this).apply {
+            text = "Kelola Foto Site (${photoItemsEdit.size} / 10 Foto)"
+            textSize = 16f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        }
+        headerRow.addView(tvTitle)
+
+        val btnClose = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
+            text = "✕ Tutup"
+            textSize = 12f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            minWidth = 0
+            minHeight = 0
+            minimumWidth = 0
+            minimumHeight = 0
+            setPadding((8 * density).toInt(), 0, (8 * density).toInt(), 0)
+            setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+        headerRow.addView(btnClose)
+        root.addView(headerRow)
+
+        // Body Content Container
+        val bodyContent = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding((16 * density).toInt(), (16 * density).toInt(), (16 * density).toInt(), (16 * density).toInt())
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+
+        val isMaxPhotos = photoItemsEdit.size >= 10
+
+        val btnAdd = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle).apply {
+            if (isMaxPhotos) {
+                text = "Maksimal 10 Foto Tercapai"
+                isEnabled = false
+                alpha = 0.5f
+                backgroundTintList = ContextCompat.getColorStateList(this@EditDataActivity, R.color.text_secondary)
+            } else {
+                text = "+ Tambah Foto Dokumentasi Baru"
+                isEnabled = true
+                alpha = 1.0f
+                backgroundTintList = ContextCompat.getColorStateList(this@EditDataActivity, R.color.brand_primary)
+            }
+            textSize = 14f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            cornerRadius = (16 * density).toInt()
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, (50 * density).toInt()
+            ).apply {
+                bottomMargin = (16 * density).toInt()
+            }
+            setOnClickListener {
+                if (isMaxPhotos) {
+                    showSnackbar("Maksimal 10 foto dokumentasi sudah tercapai", isError = true)
+                    return@setOnClickListener
+                }
+                showDialogOpsiTambahFotoEdit()
+            }
+        }
+        bodyContent.addView(btnAdd)
+
+        val scrollView = NestedScrollView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f
+            )
+        }
+
+        val listContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+        }
 
         if (photoItemsEdit.isEmpty()) {
-            val tvEmpty = TextView(this)
-            tvEmpty.text = "Belum ada foto terpilih untuk site ini."
-            tvEmpty.setPadding(0, 48, 0, 48)
-            tvEmpty.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+            val tvEmpty = TextView(this).apply {
+                text = "Belum ada foto terpilih untuk site ini."
+                gravity = Gravity.CENTER
+                setPadding(0, (48 * density).toInt(), 0, (48 * density).toInt())
+                setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.text_secondary))
+                textSize = 14f
+            }
             listContainer.addView(tvEmpty)
         } else {
             photoItemsEdit.forEachIndexed { index, itemStr ->
-                val card = MaterialCardView(this)
-                card.radius = 16f
-                card.cardElevation = 4f
-                val cardParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply { bottomMargin = 20 }
-                card.layoutParams = cardParams
+                val card = MaterialCardView(this).apply {
+                    radius = 16 * density
+                    cardElevation = 3 * density
+                    strokeWidth = (1 * density).toInt()
+                    strokeColor = ContextCompat.getColor(this@EditDataActivity, R.color.divider)
+                    setCardBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        bottomMargin = (16 * density).toInt()
+                    }
+                }
 
-                val cardContent = LinearLayout(this)
-                cardContent.orientation = LinearLayout.VERTICAL
-                cardContent.setPadding(20, 20, 20, 20)
+                val cardContent = LinearLayout(this).apply {
+                    orientation = LinearLayout.VERTICAL
+                    setPadding((16 * density).toInt(), (16 * density).toInt(), (16 * density).toInt(), (16 * density).toInt())
+                }
 
-                val tvLabel = TextView(this)
-                tvLabel.text = "Foto Dokumentasi #${index + 1}"
-                tvLabel.textSize = 14f
-                tvLabel.setTypeface(null, Typeface.BOLD)
-                tvLabel.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
-                tvLabel.setPadding(0, 0, 0, 12)
+                val tvLabel = TextView(this).apply {
+                    text = "Foto Dokumentasi #${index + 1}"
+                    textSize = 14f
+                    setTypeface(null, Typeface.BOLD)
+                    setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
+                    setPadding(0, 0, 0, (10 * density).toInt())
+                }
                 cardContent.addView(tvLabel)
 
-                val iv = ImageView(this)
-                val imgParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, 450
-                )
-                iv.layoutParams = imgParams
-                iv.scaleType = ImageView.ScaleType.CENTER_CROP
+                val ivCard = MaterialCardView(this).apply {
+                    radius = 12 * density
+                    cardElevation = 0f
+                    strokeWidth = (1 * density).toInt()
+                    strokeColor = ContextCompat.getColor(this@EditDataActivity, R.color.divider)
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, (220 * density).toInt()
+                    )
+                }
+
+                val iv = ImageView(this).apply {
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+                    )
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                }
 
                 val progressSpinner = CircularProgressDrawable(this).apply {
                     strokeWidth = 6f
@@ -662,44 +1759,51 @@ class EditDataActivity : AppCompatActivity() {
                         iv.setImageResource(android.R.drawable.ic_menu_gallery)
                     }
                 }
-                cardContent.addView(iv)
+                ivCard.addView(iv)
+                cardContent.addView(ivCard)
 
-                val rowBtn = LinearLayout(this)
-                rowBtn.orientation = LinearLayout.HORIZONTAL
-                rowBtn.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply { topMargin = 16 }
+                val rowBtn = LinearLayout(this).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    gravity = Gravity.CENTER_VERTICAL
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        topMargin = (12 * density).toInt()
+                    }
+                }
 
-                val btnGanti = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle)
-                btnGanti.text = "✏️ Ganti Foto"
-                btnGanti.textSize = 12f
-                btnGanti.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
-                btnGanti.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-                btnGanti.setOnClickListener {
-                    pendingPhotoSlotEdit = index
-                    val opsi = arrayOf("📷 Ambil dari Kamera", "🖼️ Pilih dari Galeri")
-                    AlertDialog.Builder(this)
-                        .setTitle("Ganti Foto #${index + 1}")
-                        .setItems(opsi) { _, optIdx ->
-                            when (optIdx) {
-                                0 -> bukaKameraEdit()
-                                1 -> pickPhotoEditLauncher.launch("image/*")
-                            }
-                        }
-                        .show()
+                val btnGanti = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle).apply {
+                    text = "✏️ Edit Foto"
+                    textSize = 12f
+                    setTypeface(null, Typeface.BOLD)
+                    setTextColor(Color.WHITE)
+                    backgroundTintList = ContextCompat.getColorStateList(this@EditDataActivity, R.color.brand_primary)
+                    cornerRadius = (10 * density).toInt()
+                    layoutParams = LinearLayout.LayoutParams(0, (40 * density).toInt(), 1f).apply {
+                        marginEnd = (8 * density).toInt()
+                    }
+                    setOnClickListener {
+                        pendingPhotoSlotEdit = index
+                        showDialogOpsiTambahFotoEdit()
+                    }
                 }
                 rowBtn.addView(btnGanti)
 
-                val btnHapus = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle)
-                btnHapus.text = "🗑️ Hapus"
-                btnHapus.textSize = 12f
-                btnHapus.setTextColor(ContextCompat.getColor(this, R.color.error))
-                btnHapus.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-                btnHapus.setOnClickListener {
-                    AlertDialog.Builder(this)
-                        .setTitle("Hapus Foto #${index + 1}?")
-                        .setMessage("Yakin ingin menghapus foto dokumentasi ke-${index + 1} ini?")
-                        .setPositiveButton("Hapus") { _, _ ->
+                val btnHapus = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
+                    text = "🗑️ Hapus"
+                    textSize = 12f
+                    setTypeface(null, Typeface.BOLD)
+                    setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.error))
+                    val deleteBg = GradientDrawable().apply {
+                        cornerRadius = 10 * density
+                        setColor(Color.parseColor("#FEE2E2"))
+                    }
+                    background = deleteBg
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, (40 * density).toInt()
+                    )
+                    setOnClickListener {
+                        showKonfirmasiHapusFotoEdit(index) {
                             if (index in 0 until photoItemsEdit.size) {
                                 photoItemsEdit.removeAt(index)
                                 base64CacheEdit.remove(index)
@@ -708,8 +1812,7 @@ class EditDataActivity : AppCompatActivity() {
                                 showSnackbar("Foto #${index + 1} berhasil dihapus")
                             }
                         }
-                        .setNegativeButton("Batal", null)
-                        .show()
+                    }
                 }
                 rowBtn.addView(btnHapus)
 
@@ -720,30 +1823,10 @@ class EditDataActivity : AppCompatActivity() {
         }
 
         scrollView.addView(listContainer)
-        root.addView(scrollView)
-
-        val btnClose = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle)
-        btnClose.text = "Tutup"
-        btnClose.textSize = 14f
-        btnClose.setTypeface(null, Typeface.BOLD)
-        btnClose.setTextColor(ContextCompat.getColor(this, R.color.white))
-        btnClose.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_primary)
-        btnClose.cornerRadius = (16 * resources.displayMetrics.density).toInt()
-        btnClose.setOnClickListener { dialog.dismiss() }
-        val btnParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, (50 * resources.displayMetrics.density).toInt()
-        ).apply { topMargin = 16 }
-        btnClose.layoutParams = btnParams
-        root.addView(btnClose)
-
+        bodyContent.addView(scrollView)
+        root.addView(bodyContent)
         dialog.setContentView(root)
-        dialog.setCancelable(true)
         dialog.show()
-
-        dialog.window?.setLayout(
-            (resources.displayMetrics.widthPixels * 0.92).toInt(),
-            (resources.displayMetrics.heightPixels * 0.85).toInt()
-        )
     }
 
     private fun isNetworkAvailable(): Boolean {
