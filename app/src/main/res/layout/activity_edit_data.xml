@@ -964,9 +964,6 @@
                             <TextView style="@style/FieldLabel" android:text="Status Rectifier #1" />
                             <Spinner android:id="@+id/spStatusRectifier1" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Backup Time #1" />
-                            <Spinner android:id="@+id/spBackupTime1" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -1041,6 +1038,9 @@
 
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #1" />
                             <Spinner android:id="@+id/spKondisiArester1" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Backup Time #1" />
+                            <Spinner android:id="@+id/spBackupTime1" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
                             <com.google.android.material.textfield.TextInputLayout
@@ -1213,9 +1213,6 @@
                             <TextView style="@style/FieldLabel" android:text="Status Rectifier #2" />
                             <Spinner android:id="@+id/spStatusRectifier2" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Backup Time #2" />
-                            <Spinner android:id="@+id/spBackupTime2" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -1290,6 +1287,9 @@
 
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #2" />
                             <Spinner android:id="@+id/spKondisiArester2" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Backup Time #2" />
+                            <Spinner android:id="@+id/spBackupTime2" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
                             <com.google.android.material.textfield.TextInputLayout
@@ -1462,9 +1462,6 @@
                             <TextView style="@style/FieldLabel" android:text="Status Rectifier #3" />
                             <Spinner android:id="@+id/spStatusRectifier3" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Backup Time #3" />
-                            <Spinner android:id="@+id/spBackupTime3" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -1539,6 +1536,9 @@
 
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #3" />
                             <Spinner android:id="@+id/spKondisiArester3" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Backup Time #3" />
+                            <Spinner android:id="@+id/spBackupTime3" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
                             <com.google.android.material.textfield.TextInputLayout
@@ -1687,9 +1687,6 @@
                             <TextView style="@style/FieldLabel" android:text="Status Rectifier #4" />
                             <Spinner android:id="@+id/spStatusRectifier4" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Backup Time #4" />
-                            <Spinner android:id="@+id/spBackupTime4" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -1764,6 +1761,9 @@
 
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #4" />
                             <Spinner android:id="@+id/spKondisiArester4" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Backup Time #4" />
+                            <Spinner android:id="@+id/spBackupTime4" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
                             <com.google.android.material.textfield.TextInputLayout
@@ -1912,9 +1912,6 @@
                             <TextView style="@style/FieldLabel" android:text="Status Rectifier #5" />
                             <Spinner android:id="@+id/spStatusRectifier5" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Backup Time #5" />
-                            <Spinner android:id="@+id/spBackupTime5" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -1989,6 +1986,9 @@
 
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #5" />
                             <Spinner android:id="@+id/spKondisiArester5" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Backup Time #5" />
+                            <Spinner android:id="@+id/spBackupTime5" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
                             <com.google.android.material.textfield.TextInputLayout
@@ -2137,9 +2137,6 @@
                             <TextView style="@style/FieldLabel" android:text="Status Rectifier #6" />
                             <Spinner android:id="@+id/spStatusRectifier6" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Backup Time #6" />
-                            <Spinner android:id="@+id/spBackupTime6" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -2214,6 +2211,9 @@
 
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #6" />
                             <Spinner android:id="@+id/spKondisiArester6" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Backup Time #6" />
+                            <Spinner android:id="@+id/spBackupTime6" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
                             <com.google.android.material.textfield.TextInputLayout
@@ -2362,9 +2362,6 @@
                             <TextView style="@style/FieldLabel" android:text="Status Rectifier #7" />
                             <Spinner android:id="@+id/spStatusRectifier7" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                            <TextView style="@style/FieldLabel" android:text="Backup Time #7" />
-                            <Spinner android:id="@+id/spBackupTime7" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                     <TextView style="@style/FieldLabel" android:text="Jumlah Modul" />
@@ -2439,6 +2436,9 @@
 
                             <TextView style="@style/FieldLabel" android:text="Kondisi Arester #7" />
                             <Spinner android:id="@+id/spKondisiArester7" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                            <TextView style="@style/FieldLabel" android:text="Backup Time #7" />
+                            <Spinner android:id="@+id/spBackupTime7" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                             <TextView style="@style/FieldLabel" android:text="Bus Voltage" />
                             <com.google.android.material.textfield.TextInputLayout

@@ -675,9 +675,6 @@
                         <TextView style="@style/FieldLabel" android:text="Status Rectifier #1" />
                         <Spinner android:id="@+id/spStatusRectifier1" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                        <TextView style="@style/FieldLabel" android:text="Backup Time #1" />
-                        <Spinner android:id="@+id/spBackupTime1" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                 <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #1" />
@@ -729,6 +726,9 @@
 
                         <TextView style="@style/FieldLabel" android:text="Kondisi Arester #1" />
                         <Spinner android:id="@+id/spKondisiArester1" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Backup Time #1" />
+                        <Spinner android:id="@+id/spBackupTime1" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage1" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage (V)" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -816,9 +816,6 @@
                         <TextView style="@style/FieldLabel" android:text="Status Rectifier #2" />
                         <Spinner android:id="@+id/spStatusRectifier2" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                        <TextView style="@style/FieldLabel" android:text="Backup Time #2" />
-                        <Spinner android:id="@+id/spBackupTime2" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                 <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #2" />
@@ -870,6 +867,9 @@
 
                         <TextView style="@style/FieldLabel" android:text="Kondisi Arester #2" />
                         <Spinner android:id="@+id/spKondisiArester2" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Backup Time #2" />
+                        <Spinner android:id="@+id/spBackupTime2" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage (V)" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -957,9 +957,6 @@
                         <TextView style="@style/FieldLabel" android:text="Status Rectifier #3" />
                         <Spinner android:id="@+id/spStatusRectifier3" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                        <TextView style="@style/FieldLabel" android:text="Backup Time #3" />
-                        <Spinner android:id="@+id/spBackupTime3" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                 <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #3" />
@@ -1011,6 +1008,9 @@
 
                         <TextView style="@style/FieldLabel" android:text="Kondisi Arester #3" />
                         <Spinner android:id="@+id/spKondisiArester3" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Backup Time #3" />
+                        <Spinner android:id="@+id/spBackupTime3" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage (V)" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -1094,9 +1094,6 @@
                         <TextView style="@style/FieldLabel" android:text="Status Rectifier #4" />
                         <Spinner android:id="@+id/spStatusRectifier4" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                        <TextView style="@style/FieldLabel" android:text="Backup Time #4" />
-                        <Spinner android:id="@+id/spBackupTime4" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                 <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #4" />
@@ -1148,6 +1145,9 @@
 
                         <TextView style="@style/FieldLabel" android:text="Kondisi Arester #4" />
                         <Spinner android:id="@+id/spKondisiArester4" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Backup Time #4" />
+                        <Spinner android:id="@+id/spBackupTime4" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage (V)" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -1231,9 +1231,6 @@
                         <TextView style="@style/FieldLabel" android:text="Status Rectifier #5" />
                         <Spinner android:id="@+id/spStatusRectifier5" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                        <TextView style="@style/FieldLabel" android:text="Backup Time #5" />
-                        <Spinner android:id="@+id/spBackupTime5" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                 <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #5" />
@@ -1285,6 +1282,9 @@
 
                         <TextView style="@style/FieldLabel" android:text="Kondisi Arester #5" />
                         <Spinner android:id="@+id/spKondisiArester5" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Backup Time #5" />
+                        <Spinner android:id="@+id/spBackupTime5" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage (V)" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -1368,9 +1368,6 @@
                         <TextView style="@style/FieldLabel" android:text="Status Rectifier #6" />
                         <Spinner android:id="@+id/spStatusRectifier6" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                        <TextView style="@style/FieldLabel" android:text="Backup Time #6" />
-                        <Spinner android:id="@+id/spBackupTime6" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                 <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #6" />
@@ -1422,6 +1419,9 @@
 
                         <TextView style="@style/FieldLabel" android:text="Kondisi Arester #6" />
                         <Spinner android:id="@+id/spKondisiArester6" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Backup Time #6" />
+                        <Spinner android:id="@+id/spBackupTime6" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage6" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage (V)" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -1505,9 +1505,6 @@
                         <TextView style="@style/FieldLabel" android:text="Status Rectifier #7" />
                         <Spinner android:id="@+id/spStatusRectifier7" style="@style/SpinnerFieldModern" android:entries="@array/status_rectifier_options" />
 
-                        <TextView style="@style/FieldLabel" android:text="Backup Time #7" />
-                        <Spinner android:id="@+id/spBackupTime7" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
-
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1" android:orientation="vertical">
                                 <TextView style="@style/FieldLabel" android:maxLines="1" android:text="Jml Modul #7" />
@@ -1559,6 +1556,9 @@
 
                         <TextView style="@style/FieldLabel" android:text="Kondisi Arester #7" />
                         <Spinner android:id="@+id/spKondisiArester7" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
+
+                        <TextView style="@style/FieldLabel" android:text="Backup Time #7" />
+                        <Spinner android:id="@+id/spBackupTime7" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBusVoltage7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Bus Voltage (V)" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
