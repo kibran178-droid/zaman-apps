@@ -179,9 +179,63 @@ class InputanActivity : AppCompatActivity() {
     }
 
     private fun showKonfirmasiKeluarDialog() {
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
+        root.setPadding(24, 20, 24, 16)
+
+        val headerCard = MaterialCardView(this)
+        headerCard.radius = 14f
+        headerCard.cardElevation = 0f
+        headerCard.setCardBackgroundColor(ContextCompat.getColor(this, R.color.brand_accent_light))
+        val cardParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { bottomMargin = 16 }
+        headerCard.layoutParams = cardParams
+
+        val headerRow = LinearLayout(this)
+        headerRow.orientation = LinearLayout.HORIZONTAL
+        headerRow.gravity = Gravity.CENTER_VERTICAL
+        headerRow.setPadding(18, 14, 18, 14)
+
+        val ivWarn = ImageView(this)
+        ivWarn.setImageResource(android.R.drawable.ic_dialog_alert)
+        ivWarn.setColorFilter(ContextCompat.getColor(this, R.color.brand_primary))
+        val ivParams = LinearLayout.LayoutParams(36, 36)
+        ivWarn.layoutParams = ivParams
+        headerRow.addView(ivWarn)
+
+        val textCol = LinearLayout(this)
+        textCol.orientation = LinearLayout.VERTICAL
+        textCol.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+            marginStart = 14
+        }
+
+        val tvTitle = TextView(this)
+        tvTitle.text = "Konfirmasi Keluar Input Data"
+        tvTitle.textSize = 16f
+        tvTitle.setTypeface(null, Typeface.BOLD)
+        tvTitle.setTextColor(ContextCompat.getColor(this, R.color.brand_primary))
+        textCol.addView(tvTitle)
+
+        val tvSub = TextView(this)
+        tvSub.text = "Data yang sudah diisi akan hilang"
+        tvSub.textSize = 12f
+        tvSub.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+        textCol.addView(tvSub)
+
+        headerRow.addView(textCol)
+        headerCard.addView(headerRow)
+        root.addView(headerCard)
+
+        val tvMsg = TextView(this)
+        tvMsg.text = "Apakah Anda yakin ingin membatalkan dan kembali ke Menu Utama?\n\nSemua data dapot site yang sudah diisi atau foto yang telah diambil pada form input baru ini akan dibatalkan."
+        tvMsg.textSize = 14f
+        tvMsg.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        tvMsg.setLineSpacing(4f, 1f)
+        root.addView(tvMsg)
+
         AlertDialog.Builder(this)
-            .setTitle("Batalkan Input Data?")
-            .setMessage("Data yang sudah diisi atau foto yang sudah dipilih akan hilang jika Anda keluar.\n\nYakin ingin membatalkan dan kembali ke menu utama?")
+            .setView(root)
             .setPositiveButton("Ya, Keluar") { _, _ -> finish() }
             .setNegativeButton("Lanjutkan Input", null)
             .show()
@@ -721,6 +775,10 @@ class InputanActivity : AppCompatActivity() {
 
         val optionsTypeRecti = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_TYPE_RECTIFIER)
         val adapterTypeRecti = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsTypeRecti)
+        val optionsStatusRecti = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_STATUS_RECTIFIER)
+        val adapterStatusRecti = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsStatusRecti)
+        val optionsBackupTime = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_BACKUP_TIME)
+        val adapterBackupTime = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsBackupTime)
         val adapterAngka = ArrayAdapter.createFromResource(this, R.array.jumlah_modul_options, android.R.layout.simple_spinner_dropdown_item)
         val optionsJenisBat = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_JENIS_BATERAI)
         val adapterJenisBat = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsJenisBat)
@@ -730,8 +788,10 @@ class InputanActivity : AppCompatActivity() {
         val optionsBankNotAktif = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_JUMLAH_BANK_NOT_AKTIF)
         val adapterBankNotAktif = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsBankNotAktif)
 
-        fun setupRectiSpinners(spType: Spinner, spMod: Spinner, spModRusak: Spinner, spBalting: Spinner, spArester: Spinner, spNotAktif: Spinner) {
+        fun setupRectiSpinners(spType: Spinner, spStatus: Spinner, spBackup: Spinner, spMod: Spinner, spModRusak: Spinner, spBalting: Spinner, spArester: Spinner, spNotAktif: Spinner) {
             spType.adapter = adapterTypeRecti
+            spStatus.adapter = adapterStatusRecti
+            spBackup.adapter = adapterBackupTime
             spMod.adapter = adapterAngka
             spModRusak.adapter = adapterAngka
             spBalting.adapter = adapterBalting
@@ -747,13 +807,13 @@ class InputanActivity : AppCompatActivity() {
         binding.spJenisBaterai6.adapter = adapterJenisBat
         binding.spJenisBaterai7.adapter = adapterJenisBat
 
-        setupRectiSpinners(binding.spTypeRectifier1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spBatteryRecti1, binding.spKondisiArester1, binding.spJumlahBankNotAktif1)
-        setupRectiSpinners(binding.spTypeRectifier2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spBatteryRecti2, binding.spKondisiArester2, binding.spJumlahBankNotAktif2)
-        setupRectiSpinners(binding.spTypeRectifier3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spBatteryRecti3, binding.spKondisiArester3, binding.spJumlahBankNotAktif3)
-        setupRectiSpinners(binding.spTypeRectifier4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.spJumlahBankNotAktif4)
-        setupRectiSpinners(binding.spTypeRectifier5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.spJumlahBankNotAktif5)
-        setupRectiSpinners(binding.spTypeRectifier6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.spJumlahBankNotAktif6)
-        setupRectiSpinners(binding.spTypeRectifier7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.spJumlahBankNotAktif7)
+        setupRectiSpinners(binding.spTypeRectifier1, binding.spStatusRectifier1, binding.spBackupTime1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spBatteryRecti1, binding.spKondisiArester1, binding.spJumlahBankNotAktif1)
+        setupRectiSpinners(binding.spTypeRectifier2, binding.spStatusRectifier2, binding.spBackupTime2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spBatteryRecti2, binding.spKondisiArester2, binding.spJumlahBankNotAktif2)
+        setupRectiSpinners(binding.spTypeRectifier3, binding.spStatusRectifier3, binding.spBackupTime3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spBatteryRecti3, binding.spKondisiArester3, binding.spJumlahBankNotAktif3)
+        setupRectiSpinners(binding.spTypeRectifier4, binding.spStatusRectifier4, binding.spBackupTime4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.spJumlahBankNotAktif4)
+        setupRectiSpinners(binding.spTypeRectifier5, binding.spStatusRectifier5, binding.spBackupTime5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.spJumlahBankNotAktif5)
+        setupRectiSpinners(binding.spTypeRectifier6, binding.spStatusRectifier6, binding.spBackupTime6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.spJumlahBankNotAktif6)
+        setupRectiSpinners(binding.spTypeRectifier7, binding.spStatusRectifier7, binding.spBackupTime7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.spJumlahBankNotAktif7)
 
         setupCascadingBateraiListeners(binding.spJenisBaterai1, binding.spMerkBaterai1, binding.spJumlahBattery1)
         setupCascadingBateraiListeners(binding.spJenisBaterai2, binding.spMerkBaterai2, binding.spJumlahBattery2)
@@ -815,6 +875,7 @@ class InputanActivity : AppCompatActivity() {
             adaGenset2 = adaGenset2,
 
             typeRectifier1 = binding.spTypeRectifier1.selectedItem?.toString() ?: "",
+            statusRectifier1 = binding.spStatusRectifier1.selectedItem?.toString() ?: "",
             jumlahModul1 = binding.spJumlahModul1.selectedItem?.toString() ?: "",
             jumlahModulRusak1 = binding.spJumlahModulRusak1.selectedItem?.toString() ?: "",
             jenisBaterai1 = binding.spJenisBaterai1.selectedItem?.toString() ?: "",
@@ -831,6 +892,7 @@ class InputanActivity : AppCompatActivity() {
             remark1 = binding.etRemark1.text.toString().trim(),
 
             typeRectifier2 = if (adaRecti2) binding.spTypeRectifier2.selectedItem?.toString() ?: "" else "",
+            statusRectifier2 = if (adaRecti2) binding.spStatusRectifier2.selectedItem?.toString() ?: "" else "",
             jumlahModul2 = if (adaRecti2) binding.spJumlahModul2.selectedItem?.toString() ?: "" else "",
             jumlahModulRusak2 = if (adaRecti2) binding.spJumlahModulRusak2.selectedItem?.toString() ?: "" else "",
             jenisBaterai2 = if (adaRecti2) binding.spJenisBaterai2.selectedItem?.toString() ?: "" else "",
@@ -847,6 +909,7 @@ class InputanActivity : AppCompatActivity() {
             remark2 = if (adaRecti2) binding.etRemark2.text.toString().trim() else "",
 
             typeRectifier3 = if (adaRecti3) binding.spTypeRectifier3.selectedItem?.toString() ?: "" else "",
+            statusRectifier3 = if (adaRecti3) binding.spStatusRectifier3.selectedItem?.toString() ?: "" else "",
             jumlahModul3 = if (adaRecti3) binding.spJumlahModul3.selectedItem?.toString() ?: "" else "",
             jumlahModulRusak3 = if (adaRecti3) binding.spJumlahModulRusak3.selectedItem?.toString() ?: "" else "",
             jenisBaterai3 = if (adaRecti3) binding.spJenisBaterai3.selectedItem?.toString() ?: "" else "",
@@ -862,6 +925,7 @@ class InputanActivity : AppCompatActivity() {
             perangkatTerhubung3 = if (adaRecti3) binding.etPerangkat3.text.toString().trim() else "",
 
             typeRectifier4 = if (adaRecti4) binding.spTypeRectifier4.selectedItem?.toString() ?: "" else "",
+            statusRectifier4 = if (adaRecti4) binding.spStatusRectifier4.selectedItem?.toString() ?: "" else "",
             jumlahModul4 = if (adaRecti4) binding.spJumlahModul4.selectedItem?.toString() ?: "" else "",
             jumlahModulRusak4 = if (adaRecti4) binding.spJumlahModulRusak4.selectedItem?.toString() ?: "" else "",
             jenisBaterai4 = if (adaRecti4) binding.spJenisBaterai4.selectedItem?.toString() ?: "" else "",
@@ -877,6 +941,8 @@ class InputanActivity : AppCompatActivity() {
             perangkatTerhubung4 = if (adaRecti4) binding.etPerangkat4.text.toString().trim() else "",
 
             typeRectifier5 = if (adaRecti5) binding.spTypeRectifier5.selectedItem?.toString() ?: "" else "",
+            statusRectifier5 = if (adaRecti5) binding.spStatusRectifier5.selectedItem?.toString() ?: "" else "",
+            backupTime5 = if (adaRecti5) binding.spBackupTime5.selectedItem?.toString() ?: "" else "",
             jumlahModul5 = if (adaRecti5) binding.spJumlahModul5.selectedItem?.toString() ?: "" else "",
             jumlahModulRusak5 = if (adaRecti5) binding.spJumlahModulRusak5.selectedItem?.toString() ?: "" else "",
             jenisBaterai5 = if (adaRecti5) binding.spJenisBaterai5.selectedItem?.toString() ?: "" else "",
@@ -892,6 +958,8 @@ class InputanActivity : AppCompatActivity() {
             perangkatTerhubung5 = if (adaRecti5) binding.etPerangkat5.text.toString().trim() else "",
 
             typeRectifier6 = if (adaRecti6) binding.spTypeRectifier6.selectedItem?.toString() ?: "" else "",
+            statusRectifier6 = if (adaRecti6) binding.spStatusRectifier6.selectedItem?.toString() ?: "" else "",
+            backupTime6 = if (adaRecti6) binding.spBackupTime6.selectedItem?.toString() ?: "" else "",
             jumlahModul6 = if (adaRecti6) binding.spJumlahModul6.selectedItem?.toString() ?: "" else "",
             jumlahModulRusak6 = if (adaRecti6) binding.spJumlahModulRusak6.selectedItem?.toString() ?: "" else "",
             jenisBaterai6 = if (adaRecti6) binding.spJenisBaterai6.selectedItem?.toString() ?: "" else "",
@@ -907,6 +975,8 @@ class InputanActivity : AppCompatActivity() {
             perangkatTerhubung6 = if (adaRecti6) binding.etPerangkat6.text.toString().trim() else "",
 
             typeRectifier7 = if (adaRecti7) binding.spTypeRectifier7.selectedItem?.toString() ?: "" else "",
+            statusRectifier7 = if (adaRecti7) binding.spStatusRectifier7.selectedItem?.toString() ?: "" else "",
+            backupTime7 = if (adaRecti7) binding.spBackupTime7.selectedItem?.toString() ?: "" else "",
             jumlahModul7 = if (adaRecti7) binding.spJumlahModul7.selectedItem?.toString() ?: "" else "",
             jumlahModulRusak7 = if (adaRecti7) binding.spJumlahModulRusak7.selectedItem?.toString() ?: "" else "",
             jenisBaterai7 = if (adaRecti7) binding.spJenisBaterai7.selectedItem?.toString() ?: "" else "",

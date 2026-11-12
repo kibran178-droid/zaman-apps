@@ -50,6 +50,29 @@
         <item>SPS</item>
     </string-array>
 
+    <!-- Status Rectifier Options -->
+    <string-array name="status_rectifier_options">
+        <item></item>
+        <item>3 pack</item>
+        <item>aktif</item>
+    </string-array>
+
+    <!-- Backup Time Options -->
+    <string-array name="backup_time_options">
+        <item></item>
+        <item>0</item>
+        <item>&lt; 10 menit</item>
+        <item>&lt; 30 menit</item>
+        <item>&lt; 1 jam</item>
+        <item>&lt; 2 jam</item>
+        <item>&lt; 3 jam</item>
+        <item>&lt; 4 jam</item>
+        <item>&gt; 2 jam</item>
+        <item>&gt; 3 jam</item>
+        <item>&gt; 4 jam</item>
+        <item>tidak backup</item>
+    </string-array>
+
     <!-- Jenis Baterai Options -->
     <string-array name="jenis_baterai_options">
         <item></item>

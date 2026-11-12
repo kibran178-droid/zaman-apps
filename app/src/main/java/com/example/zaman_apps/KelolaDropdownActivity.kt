@@ -32,6 +32,8 @@ class KelolaDropdownActivity : AppCompatActivity() {
         DropdownOptionsHelper.KEY_MERK_GENSET,
         DropdownOptionsHelper.KEY_STATUS_GENSET,
         DropdownOptionsHelper.KEY_TYPE_RECTIFIER,
+        DropdownOptionsHelper.KEY_STATUS_RECTIFIER,
+        DropdownOptionsHelper.KEY_BACKUP_TIME,
         DropdownOptionsHelper.KEY_JENIS_BATERAI,
         DropdownOptionsHelper.KEY_MERK_BATERAI,
         DropdownOptionsHelper.KEY_JUMLAH_BATTERAI,

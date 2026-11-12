@@ -35,6 +35,8 @@ data class SiteData(
     var adaGenset2: Boolean = false,
     // ===== RECTIFIER 1 =====
     var typeRectifier1: String = "",
+    var statusRectifier1: String = "",
+    var backupTime1: String = "",
     var jumlahModul1: String = "",
     var jumlahModulRusak1: String = "",
     var jenisBaterai1: String = "",
@@ -52,6 +54,8 @@ data class SiteData(
 
     // ===== RECTIFIER 2 =====
     var typeRectifier2: String = "",
+    var statusRectifier2: String = "",
+    var backupTime2: String = "",
     var jumlahModul2: String = "",
     var jumlahModulRusak2: String = "",
     var jenisBaterai2: String = "",
@@ -69,6 +73,8 @@ data class SiteData(
 
     // ===== RECTIFIER 3 =====
     var typeRectifier3: String = "",
+    var statusRectifier3: String = "",
+    var backupTime3: String = "",
     var jumlahModul3: String = "",
     var jumlahModulRusak3: String = "",
     var jenisBaterai3: String = "",
@@ -85,6 +91,8 @@ data class SiteData(
 
     // ===== RECTIFIER 4 =====
     var typeRectifier4: String = "",
+    var statusRectifier4: String = "",
+    var backupTime4: String = "",
     var jumlahModul4: String = "",
     var jumlahModulRusak4: String = "",
     var jenisBaterai4: String = "",
@@ -101,6 +109,8 @@ data class SiteData(
 
     // ===== RECTIFIER 5 =====
     var typeRectifier5: String = "",
+    var statusRectifier5: String = "",
+    var backupTime5: String = "",
     var jumlahModul5: String = "",
     var jumlahModulRusak5: String = "",
     var jenisBaterai5: String = "",
@@ -117,6 +127,8 @@ data class SiteData(
 
     // ===== RECTIFIER 6 =====
     var typeRectifier6: String = "",
+    var statusRectifier6: String = "",
+    var backupTime6: String = "",
     var jumlahModul6: String = "",
     var jumlahModulRusak6: String = "",
     var jenisBaterai6: String = "",
@@ -133,6 +145,8 @@ data class SiteData(
 
     // ===== RECTIFIER 7 =====
     var typeRectifier7: String = "",
+    var statusRectifier7: String = "",
+    var backupTime7: String = "",
     var jumlahModul7: String = "",
     var jumlahModulRusak7: String = "",
     var jenisBaterai7: String = "",

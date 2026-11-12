@@ -16,6 +16,8 @@ object DropdownOptionsHelper {
     const val KEY_MERK_GENSET = "key_merk_genset"
     const val KEY_STATUS_GENSET = "key_status_genset"
     const val KEY_TYPE_RECTIFIER = "key_type_rectifier"
+    const val KEY_STATUS_RECTIFIER = "key_status_rectifier"
+    const val KEY_BACKUP_TIME = "key_backup_time"
     const val KEY_JENIS_BATERAI = "key_jenis_baterai"
     const val KEY_MERK_BATERAI = "key_merk_baterai"
     const val KEY_JUMLAH_BATTERAI = "key_jumlah_batterai"
@@ -33,6 +35,8 @@ object DropdownOptionsHelper {
             KEY_MERK_GENSET -> R.array.merk_genset_options
             KEY_STATUS_GENSET -> R.array.status_genset_options
             KEY_TYPE_RECTIFIER -> R.array.type_rectifier_options
+            KEY_STATUS_RECTIFIER -> R.array.status_rectifier_options
+            KEY_BACKUP_TIME -> R.array.backup_time_options
             KEY_JENIS_BATERAI -> R.array.jenis_baterai_options
             KEY_MERK_BATERAI -> R.array.merk_baterai_options
             KEY_JUMLAH_BATTERAI -> R.array.jumlah_battery_options
@@ -48,6 +52,8 @@ object DropdownOptionsHelper {
             KEY_MERK_GENSET -> "Merk Genset (Genset 1 & 2)"
             KEY_STATUS_GENSET -> "Status Genset (Genset 1 & 2)"
             KEY_TYPE_RECTIFIER -> "Type Rectifier (Recti 1 - 7)"
+            KEY_STATUS_RECTIFIER -> "Status Rectifier (Recti 1 - 7)"
+            KEY_BACKUP_TIME -> "Backup Time (Recti 1 - 7)"
             KEY_JENIS_BATERAI -> "Jenis Baterai (Recti 1 - 7)"
             KEY_MERK_BATERAI -> "Merk Baterai (Recti 1 - 7)"
             KEY_JUMLAH_BATTERAI -> "Jumlah Baterai (Recti 1 - 7)"

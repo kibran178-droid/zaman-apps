@@ -1706,6 +1706,8 @@ class RingkasanActivity : AppCompatActivity() {
         }
 
         params["type_rectifier_1"] = data.typeRectifier1
+        params["status_rectifier_1"] = data.statusRectifier1
+        params["backup_time_1"] = data.backupTime1
         params["jumlah_modul_1"] = data.jumlahModul1
         params["jumlah_modul_rusak_1"] = data.jumlahModulRusak1
         params["jenis_baterai_1"] = data.jenisBaterai1
@@ -1723,6 +1725,8 @@ class RingkasanActivity : AppCompatActivity() {
         params["ada_recti_2"] = if (data.adaRecti2) "1" else "0"
         if (data.adaRecti2) {
             params["type_rectifier_2"] = data.typeRectifier2
+            params["status_rectifier_2"] = data.statusRectifier2
+            params["backup_time_2"] = data.backupTime2
             params["jumlah_modul_2"] = data.jumlahModul2
             params["jumlah_modul_rusak_2"] = data.jumlahModulRusak2
             params["jenis_baterai_2"] = data.jenisBaterai2
@@ -1738,10 +1742,12 @@ class RingkasanActivity : AppCompatActivity() {
             params["remark_2"] = data.remark2
         }
 
-        fun putRectiParams(idx: Int, enabled: Boolean, type: String, modul: String, modulRusak: String, jenisBat: String, merkBat: String, jmlBat: String, statusBat: String, notAktif: Boolean, jmlNotAktif: String, mcbBat: String, arester: String, voltage: String, load: String, perangkat: String) {
+        fun putRectiParams(idx: Int, enabled: Boolean, type: String, statusRecti: String, backupTime: String, modul: String, modulRusak: String, jenisBat: String, merkBat: String, jmlBat: String, statusBat: String, notAktif: Boolean, jmlNotAktif: String, mcbBat: String, arester: String, voltage: String, load: String, perangkat: String) {
             params["ada_recti_$idx"] = if (enabled) "1" else "0"
             if (enabled) {
                 params["type_rectifier_$idx"] = type
+                params["status_rectifier_$idx"] = statusRecti
+                params["backup_time_$idx"] = backupTime
                 params["jumlah_modul_$idx"] = modul
                 params["jumlah_modul_rusak_$idx"] = modulRusak
                 params["jenis_baterai_$idx"] = jenisBat
@@ -1757,11 +1763,11 @@ class RingkasanActivity : AppCompatActivity() {
             }
         }
 
-        putRectiParams(3, data.adaRecti3, data.typeRectifier3, data.jumlahModul3, data.jumlahModulRusak3, data.jenisBaterai3, data.merkBaterai3, data.jumlahBatteryP3, data.batteryRecti3, data.statusBatteryNotAktif3, data.jumlahBankNotAktif3, data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3, data.perangkatTerhubung3)
-        putRectiParams(4, data.adaRecti4, data.typeRectifier4, data.jumlahModul4, data.jumlahModulRusak4, data.jenisBaterai4, data.merkBaterai4, data.jumlahBatteryP4, data.batteryRecti4, data.statusBatteryNotAktif4, data.jumlahBankNotAktif4, data.mcbBatteryRecti4, data.kondisiArester4, data.busVoltage4, data.loadA4, data.perangkatTerhubung4)
-        putRectiParams(5, data.adaRecti5, data.typeRectifier5, data.jumlahModul5, data.jumlahModulRusak5, data.jenisBaterai5, data.merkBaterai5, data.jumlahBatteryP5, data.batteryRecti5, data.statusBatteryNotAktif5, data.jumlahBankNotAktif5, data.mcbBatteryRecti5, data.kondisiArester5, data.busVoltage5, data.loadA5, data.perangkatTerhubung5)
-        putRectiParams(6, data.adaRecti6, data.typeRectifier6, data.jumlahModul6, data.jumlahModulRusak6, data.jenisBaterai6, data.merkBaterai6, data.jumlahBatteryP6, data.batteryRecti6, data.statusBatteryNotAktif6, data.jumlahBankNotAktif6, data.mcbBatteryRecti6, data.kondisiArester6, data.busVoltage6, data.loadA6, data.perangkatTerhubung6)
-        putRectiParams(7, data.adaRecti7, data.typeRectifier7, data.jumlahModul7, data.jumlahModulRusak7, data.jenisBaterai7, data.merkBaterai7, data.jumlahBatteryP7, data.batteryRecti7, data.statusBatteryNotAktif7, data.jumlahBankNotAktif7, data.mcbBatteryRecti7, data.kondisiArester7, data.busVoltage7, data.loadA7, data.perangkatTerhubung7)
+        putRectiParams(3, data.adaRecti3, data.typeRectifier3, data.statusRectifier3, data.backupTime3, data.jumlahModul3, data.jumlahModulRusak3, data.jenisBaterai3, data.merkBaterai3, data.jumlahBatteryP3, data.batteryRecti3, data.statusBatteryNotAktif3, data.jumlahBankNotAktif3, data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3, data.perangkatTerhubung3)
+        putRectiParams(4, data.adaRecti4, data.typeRectifier4, data.statusRectifier4, data.backupTime4, data.jumlahModul4, data.jumlahModulRusak4, data.jenisBaterai4, data.merkBaterai4, data.jumlahBatteryP4, data.batteryRecti4, data.statusBatteryNotAktif4, data.jumlahBankNotAktif4, data.mcbBatteryRecti4, data.kondisiArester4, data.busVoltage4, data.loadA4, data.perangkatTerhubung4)
+        putRectiParams(5, data.adaRecti5, data.typeRectifier5, data.statusRectifier5, data.backupTime5, data.jumlahModul5, data.jumlahModulRusak5, data.jenisBaterai5, data.merkBaterai5, data.jumlahBatteryP5, data.batteryRecti5, data.statusBatteryNotAktif5, data.jumlahBankNotAktif5, data.mcbBatteryRecti5, data.kondisiArester5, data.busVoltage5, data.loadA5, data.perangkatTerhubung5)
+        putRectiParams(6, data.adaRecti6, data.typeRectifier6, data.statusRectifier6, data.backupTime6, data.jumlahModul6, data.jumlahModulRusak6, data.jenisBaterai6, data.merkBaterai6, data.jumlahBatteryP6, data.batteryRecti6, data.statusBatteryNotAktif6, data.jumlahBankNotAktif6, data.mcbBatteryRecti6, data.kondisiArester6, data.busVoltage6, data.loadA6, data.perangkatTerhubung6)
+        putRectiParams(7, data.adaRecti7, data.typeRectifier7, data.statusRectifier7, data.backupTime7, data.jumlahModul7, data.jumlahModulRusak7, data.jenisBaterai7, data.merkBaterai7, data.jumlahBatteryP7, data.batteryRecti7, data.statusBatteryNotAktif7, data.jumlahBankNotAktif7, data.mcbBatteryRecti7, data.kondisiArester7, data.busVoltage7, data.loadA7, data.perangkatTerhubung7)
 
         return params
     }
