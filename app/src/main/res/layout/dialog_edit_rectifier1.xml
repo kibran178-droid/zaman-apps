@@ -68,7 +68,7 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+        <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif" />
         <Spinner android:id="@+id/spJumlahBankNotAktif1" style="@style/SpinnerField" />
     </LinearLayout>
 

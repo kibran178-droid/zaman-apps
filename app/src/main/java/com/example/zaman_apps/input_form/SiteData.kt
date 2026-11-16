@@ -88,6 +88,7 @@ data class SiteData(
     var kondisiArester3: String = "",
     var jumlahBankNotAktif3: String = "",
     var statusBatteryNotAktif3: Boolean = false,
+    var remark3: String = "",
 
     // ===== RECTIFIER 4 =====
     var typeRectifier4: String = "",

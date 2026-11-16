@@ -606,7 +606,8 @@ class InputanActivity : AppCompatActivity() {
         if ((spBalting.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Battery Status #$rectiNum wajib dipilih!", isError = true); return false }
 
         if (switchNotAktif.isChecked) {
-            if ((spBankNotAktif.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Jumlah Bank Not Aktif Recti #$rectiNum wajib dipilih!", isError = true); return false }
+            val labelNotAktif = if (rectiNum <= 2) "Jumlah Battery Not Aktif" else "Jumlah Bank Not Aktif"
+            if ((spBankNotAktif.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("$labelNotAktif Recti #$rectiNum wajib dipilih!", isError = true); return false }
         }
 
         val mcbStr = etMcb.text.toString().trim()
@@ -662,7 +663,7 @@ class InputanActivity : AppCompatActivity() {
             4 -> if (!validasiStepGenset()) return
             5 -> if (!validasiRectiFull(1, binding.spTypeRectifier1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spJenisBaterai1, binding.spMerkBaterai1, binding.spJumlahBattery1, binding.spBatteryRecti1, binding.switchStatusBatteryNotAktif1, binding.spJumlahBankNotAktif1, binding.etMcbBatteryRecti1, binding.spKondisiArester1, binding.etBusVoltage1, binding.etLoadA1, binding.etPerangkat1, binding.etRemark1)) return
             6 -> if (adaRecti2 && !validasiRectiFull(2, binding.spTypeRectifier2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spJenisBaterai2, binding.spMerkBaterai2, binding.spJumlahBattery2, binding.spBatteryRecti2, binding.switchStatusBatteryNotAktif2, binding.spJumlahBankNotAktif2, binding.etMcbBatteryRecti2, binding.spKondisiArester2, binding.etBusVoltage2, binding.etLoadA2, binding.etPerangkat2, binding.etRemark2)) return
-            7 -> if (adaRecti3 && !validasiRectiFull(3, binding.spTypeRectifier3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spJenisBaterai3, binding.spMerkBaterai3, binding.spJumlahBattery3, binding.spBatteryRecti3, binding.switchStatusBatteryNotAktif3, binding.spJumlahBankNotAktif3, binding.etMcbBatteryRecti3, binding.spKondisiArester3, binding.etBusVoltage3, binding.etLoadA3, binding.etPerangkat3)) return
+            7 -> if (adaRecti3 && !validasiRectiFull(3, binding.spTypeRectifier3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spJenisBaterai3, binding.spMerkBaterai3, binding.spJumlahBattery3, binding.spBatteryRecti3, binding.switchStatusBatteryNotAktif3, binding.spJumlahBankNotAktif3, binding.etMcbBatteryRecti3, binding.spKondisiArester3, binding.etBusVoltage3, binding.etLoadA3, binding.etPerangkat3, binding.etRemark3)) return
             8 -> if (adaRecti4 && !validasiRectiFull(4, binding.spTypeRectifier4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJenisBaterai4, binding.spMerkBaterai4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.switchStatusBatteryNotAktif4, binding.spJumlahBankNotAktif4, binding.etMcbBatteryRecti4, binding.spKondisiArester4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkat4)) return
             9 -> if (adaRecti5 && !validasiRectiFull(5, binding.spTypeRectifier5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJenisBaterai5, binding.spMerkBaterai5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.switchStatusBatteryNotAktif5, binding.spJumlahBankNotAktif5, binding.etMcbBatteryRecti5, binding.spKondisiArester5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkat5)) return
             10 -> if (adaRecti6 && !validasiRectiFull(6, binding.spTypeRectifier6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.switchStatusBatteryNotAktif6, binding.spJumlahBankNotAktif6, binding.etMcbBatteryRecti6, binding.spKondisiArester6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkat6)) return
@@ -876,6 +877,7 @@ class InputanActivity : AppCompatActivity() {
 
             typeRectifier1 = binding.spTypeRectifier1.selectedItem?.toString() ?: "",
             statusRectifier1 = binding.spStatusRectifier1.selectedItem?.toString() ?: "",
+            backupTime1 = binding.spBackupTime1.selectedItem?.toString() ?: "",
             jumlahModul1 = binding.spJumlahModul1.selectedItem?.toString() ?: "",
             jumlahModulRusak1 = binding.spJumlahModulRusak1.selectedItem?.toString() ?: "",
             jenisBaterai1 = binding.spJenisBaterai1.selectedItem?.toString() ?: "",
@@ -893,6 +895,7 @@ class InputanActivity : AppCompatActivity() {
 
             typeRectifier2 = if (adaRecti2) binding.spTypeRectifier2.selectedItem?.toString() ?: "" else "",
             statusRectifier2 = if (adaRecti2) binding.spStatusRectifier2.selectedItem?.toString() ?: "" else "",
+            backupTime2 = if (adaRecti2) binding.spBackupTime2.selectedItem?.toString() ?: "" else "",
             jumlahModul2 = if (adaRecti2) binding.spJumlahModul2.selectedItem?.toString() ?: "" else "",
             jumlahModulRusak2 = if (adaRecti2) binding.spJumlahModulRusak2.selectedItem?.toString() ?: "" else "",
             jenisBaterai2 = if (adaRecti2) binding.spJenisBaterai2.selectedItem?.toString() ?: "" else "",
@@ -910,6 +913,7 @@ class InputanActivity : AppCompatActivity() {
 
             typeRectifier3 = if (adaRecti3) binding.spTypeRectifier3.selectedItem?.toString() ?: "" else "",
             statusRectifier3 = if (adaRecti3) binding.spStatusRectifier3.selectedItem?.toString() ?: "" else "",
+            backupTime3 = if (adaRecti3) binding.spBackupTime3.selectedItem?.toString() ?: "" else "",
             jumlahModul3 = if (adaRecti3) binding.spJumlahModul3.selectedItem?.toString() ?: "" else "",
             jumlahModulRusak3 = if (adaRecti3) binding.spJumlahModulRusak3.selectedItem?.toString() ?: "" else "",
             jenisBaterai3 = if (adaRecti3) binding.spJenisBaterai3.selectedItem?.toString() ?: "" else "",
@@ -923,9 +927,11 @@ class InputanActivity : AppCompatActivity() {
             busVoltage3 = if (adaRecti3) binding.etBusVoltage3.text.toString().trim() else "",
             loadA3 = if (adaRecti3) binding.etLoadA3.text.toString().trim() else "",
             perangkatTerhubung3 = if (adaRecti3) binding.etPerangkat3.text.toString().trim() else "",
+            remark3 = if (adaRecti3) binding.etRemark3.text.toString().trim() else "",
 
             typeRectifier4 = if (adaRecti4) binding.spTypeRectifier4.selectedItem?.toString() ?: "" else "",
             statusRectifier4 = if (adaRecti4) binding.spStatusRectifier4.selectedItem?.toString() ?: "" else "",
+            backupTime4 = if (adaRecti4) binding.spBackupTime4.selectedItem?.toString() ?: "" else "",
             jumlahModul4 = if (adaRecti4) binding.spJumlahModul4.selectedItem?.toString() ?: "" else "",
             jumlahModulRusak4 = if (adaRecti4) binding.spJumlahModulRusak4.selectedItem?.toString() ?: "" else "",
             jenisBaterai4 = if (adaRecti4) binding.spJenisBaterai4.selectedItem?.toString() ?: "" else "",
@@ -1122,10 +1128,11 @@ class InputanActivity : AppCompatActivity() {
         binding.switchAdaRecti6.isChecked = d.adaRecti6
         binding.switchAdaRecti7.isChecked = d.adaRecti7
 
-        fun populateRecti(idx: Int, type: String, modul: String, modulRusak: String, jenisBat: String, merkBat: String, jmlBat: String, statusBat: String, mcbBat: String, arester: String, voltage: String, load: String, perangkat: String, notAktif: Boolean, jmlNotAktif: String, remark: String? = null) {
+        fun populateRecti(idx: Int, type: String, backupTime: String, modul: String, modulRusak: String, jenisBat: String, merkBat: String, jmlBat: String, statusBat: String, mcbBat: String, arester: String, voltage: String, load: String, perangkat: String, notAktif: Boolean, jmlNotAktif: String, remark: String? = null) {
             when (idx) {
                 1 -> {
                     setSpinnerSelectionByValue(binding.spTypeRectifier1, type)
+                    setSpinnerSelectionByValue(binding.spBackupTime1, backupTime)
                     setSpinnerSelectionByValue(binding.spJumlahModul1, modul)
                     setSpinnerSelectionByValue(binding.spJumlahModulRusak1, modulRusak)
                     setSpinnerSelectionByValue(binding.spJenisBaterai1, jenisBat)
@@ -1144,6 +1151,7 @@ class InputanActivity : AppCompatActivity() {
                 }
                 2 -> {
                     setSpinnerSelectionByValue(binding.spTypeRectifier2, type)
+                    setSpinnerSelectionByValue(binding.spBackupTime2, backupTime)
                     setSpinnerSelectionByValue(binding.spJumlahModul2, modul)
                     setSpinnerSelectionByValue(binding.spJumlahModulRusak2, modulRusak)
                     setSpinnerSelectionByValue(binding.spJenisBaterai2, jenisBat)
@@ -1162,6 +1170,7 @@ class InputanActivity : AppCompatActivity() {
                 }
                 3 -> {
                     setSpinnerSelectionByValue(binding.spTypeRectifier3, type)
+                    setSpinnerSelectionByValue(binding.spBackupTime3, backupTime)
                     setSpinnerSelectionByValue(binding.spJumlahModul3, modul)
                     setSpinnerSelectionByValue(binding.spJumlahModulRusak3, modulRusak)
                     setSpinnerSelectionByValue(binding.spJenisBaterai3, jenisBat)
@@ -1176,9 +1185,11 @@ class InputanActivity : AppCompatActivity() {
                     binding.etBusVoltage3.setText(voltage)
                     binding.etLoadA3.setText(load)
                     binding.etPerangkat3.setText(perangkat)
+                    if (remark != null) binding.etRemark3.setText(remark)
                 }
                 4 -> {
                     setSpinnerSelectionByValue(binding.spTypeRectifier4, type)
+                    setSpinnerSelectionByValue(binding.spBackupTime4, backupTime)
                     setSpinnerSelectionByValue(binding.spJumlahModul4, modul)
                     setSpinnerSelectionByValue(binding.spJumlahModulRusak4, modulRusak)
                     setSpinnerSelectionByValue(binding.spJenisBaterai4, jenisBat)
@@ -1196,6 +1207,7 @@ class InputanActivity : AppCompatActivity() {
                 }
                 5 -> {
                     setSpinnerSelectionByValue(binding.spTypeRectifier5, type)
+                    setSpinnerSelectionByValue(binding.spBackupTime5, backupTime)
                     setSpinnerSelectionByValue(binding.spJumlahModul5, modul)
                     setSpinnerSelectionByValue(binding.spJumlahModulRusak5, modulRusak)
                     setSpinnerSelectionByValue(binding.spJenisBaterai5, jenisBat)
@@ -1213,6 +1225,7 @@ class InputanActivity : AppCompatActivity() {
                 }
                 6 -> {
                     setSpinnerSelectionByValue(binding.spTypeRectifier6, type)
+                    setSpinnerSelectionByValue(binding.spBackupTime6, backupTime)
                     setSpinnerSelectionByValue(binding.spJumlahModul6, modul)
                     setSpinnerSelectionByValue(binding.spJumlahModulRusak6, modulRusak)
                     setSpinnerSelectionByValue(binding.spJenisBaterai6, jenisBat)
@@ -1230,6 +1243,7 @@ class InputanActivity : AppCompatActivity() {
                 }
                 7 -> {
                     setSpinnerSelectionByValue(binding.spTypeRectifier7, type)
+                    setSpinnerSelectionByValue(binding.spBackupTime7, backupTime)
                     setSpinnerSelectionByValue(binding.spJumlahModul7, modul)
                     setSpinnerSelectionByValue(binding.spJumlahModulRusak7, modulRusak)
                     setSpinnerSelectionByValue(binding.spJenisBaterai7, jenisBat)
@@ -1248,13 +1262,13 @@ class InputanActivity : AppCompatActivity() {
             }
         }
 
-        populateRecti(1, d.typeRectifier1, d.jumlahModul1, d.jumlahModulRusak1, d.jenisBaterai1, d.merkBaterai1, d.jumlahBatteryP1, d.batteryRecti1, d.mcbBatteryRecti1, d.kondisiArester1, d.busVoltage1, d.loadA1, d.perangkatTerhubung1, d.statusBatteryNotAktif1, d.jumlahBankNotAktif1, d.remark1)
-        if (d.adaRecti2) populateRecti(2, d.typeRectifier2, d.jumlahModul2, d.jumlahModulRusak2, d.jenisBaterai2, d.merkBaterai2, d.jumlahBatteryP2, d.batteryRecti2, d.mcbBatteryRecti2, d.kondisiArester2, d.busVoltage2, d.loadA2, d.perangkatTerhubung2, d.statusBatteryNotAktif2, d.jumlahBankNotAktif2, d.remark2)
-        if (d.adaRecti3) populateRecti(3, d.typeRectifier3, d.jumlahModul3, d.jumlahModulRusak3, d.jenisBaterai3, d.merkBaterai3, d.jumlahBatteryP3, d.batteryRecti3, d.mcbBatteryRecti3, d.kondisiArester3, d.busVoltage3, d.loadA3, d.perangkatTerhubung3, d.statusBatteryNotAktif3, d.jumlahBankNotAktif3)
-        if (d.adaRecti4) populateRecti(4, d.typeRectifier4, d.jumlahModul4, d.jumlahModulRusak4, d.jenisBaterai4, d.merkBaterai4, d.jumlahBatteryP4, d.batteryRecti4, d.mcbBatteryRecti4, d.kondisiArester4, d.busVoltage4, d.loadA4, d.perangkatTerhubung4, d.statusBatteryNotAktif4, d.jumlahBankNotAktif4)
-        if (d.adaRecti5) populateRecti(5, d.typeRectifier5, d.jumlahModul5, d.jumlahModulRusak5, d.jenisBaterai5, d.merkBaterai5, d.jumlahBatteryP5, d.batteryRecti5, d.mcbBatteryRecti5, d.kondisiArester5, d.busVoltage5, d.loadA5, d.perangkatTerhubung5, d.statusBatteryNotAktif5, d.jumlahBankNotAktif5)
-        if (d.adaRecti6) populateRecti(6, d.typeRectifier6, d.jumlahModul6, d.jumlahModulRusak6, d.jenisBaterai6, d.merkBaterai6, d.jumlahBatteryP6, d.batteryRecti6, d.mcbBatteryRecti6, d.kondisiArester6, d.busVoltage6, d.loadA6, d.perangkatTerhubung6, d.statusBatteryNotAktif6, d.jumlahBankNotAktif6)
-        if (d.adaRecti7) populateRecti(7, d.typeRectifier7, d.jumlahModul7, d.jumlahModulRusak7, d.jenisBaterai7, d.merkBaterai7, d.jumlahBatteryP7, d.batteryRecti7, d.mcbBatteryRecti7, d.kondisiArester7, d.busVoltage7, d.loadA7, d.perangkatTerhubung7, d.statusBatteryNotAktif7, d.jumlahBankNotAktif7)
+        populateRecti(1, d.typeRectifier1, d.backupTime1, d.jumlahModul1, d.jumlahModulRusak1, d.jenisBaterai1, d.merkBaterai1, d.jumlahBatteryP1, d.batteryRecti1, d.mcbBatteryRecti1, d.kondisiArester1, d.busVoltage1, d.loadA1, d.perangkatTerhubung1, d.statusBatteryNotAktif1, d.jumlahBankNotAktif1, d.remark1)
+        if (d.adaRecti2) populateRecti(2, d.typeRectifier2, d.backupTime2, d.jumlahModul2, d.jumlahModulRusak2, d.jenisBaterai2, d.merkBaterai2, d.jumlahBatteryP2, d.batteryRecti2, d.mcbBatteryRecti2, d.kondisiArester2, d.busVoltage2, d.loadA2, d.perangkatTerhubung2, d.statusBatteryNotAktif2, d.jumlahBankNotAktif2, d.remark2)
+        if (d.adaRecti3) populateRecti(3, d.typeRectifier3, d.backupTime3, d.jumlahModul3, d.jumlahModulRusak3, d.jenisBaterai3, d.merkBaterai3, d.jumlahBatteryP3, d.batteryRecti3, d.mcbBatteryRecti3, d.kondisiArester3, d.busVoltage3, d.loadA3, d.perangkatTerhubung3, d.statusBatteryNotAktif3, d.jumlahBankNotAktif3, d.remark3)
+        if (d.adaRecti4) populateRecti(4, d.typeRectifier4, d.backupTime4, d.jumlahModul4, d.jumlahModulRusak4, d.jenisBaterai4, d.merkBaterai4, d.jumlahBatteryP4, d.batteryRecti4, d.mcbBatteryRecti4, d.kondisiArester4, d.busVoltage4, d.loadA4, d.perangkatTerhubung4, d.statusBatteryNotAktif4, d.jumlahBankNotAktif4)
+        if (d.adaRecti5) populateRecti(5, d.typeRectifier5, d.backupTime5, d.jumlahModul5, d.jumlahModulRusak5, d.jenisBaterai5, d.merkBaterai5, d.jumlahBatteryP5, d.batteryRecti5, d.mcbBatteryRecti5, d.kondisiArester5, d.busVoltage5, d.loadA5, d.perangkatTerhubung5, d.statusBatteryNotAktif5, d.jumlahBankNotAktif5)
+        if (d.adaRecti6) populateRecti(6, d.typeRectifier6, d.backupTime6, d.jumlahModul6, d.jumlahModulRusak6, d.jenisBaterai6, d.merkBaterai6, d.jumlahBatteryP6, d.batteryRecti6, d.mcbBatteryRecti6, d.kondisiArester6, d.busVoltage6, d.loadA6, d.perangkatTerhubung6, d.statusBatteryNotAktif6, d.jumlahBankNotAktif6)
+        if (d.adaRecti7) populateRecti(7, d.typeRectifier7, d.backupTime7, d.jumlahModul7, d.jumlahModulRusak7, d.jenisBaterai7, d.merkBaterai7, d.jumlahBatteryP7, d.batteryRecti7, d.mcbBatteryRecti7, d.kondisiArester7, d.busVoltage7, d.loadA7, d.perangkatTerhubung7, d.statusBatteryNotAktif7, d.jumlahBankNotAktif7)
 
         selectedImageUris.clear()
         d.imageUris.forEach { uriStr ->
@@ -1266,13 +1280,110 @@ class InputanActivity : AppCompatActivity() {
         tampilkanPratinjauRingkasan()
     }
 
+    private fun normalizeValueForSpinner(value: String): String {
+        val trimmed = value.trim()
+        if (trimmed.isBlank()) return ""
+
+        val lower = trimmed.lowercase()
+        val clean = lower.replace(" ", "")
+
+        if (lower == "0" || lower == "0.0" || lower == "0 jam" || lower == "no backup" || lower == "n/a" || lower == "-" || lower == "off") {
+            return "tidak backup"
+        }
+
+        if (clean.contains(">") || clean.contains("+")) {
+            if (clean.contains("2")) return "> 2 jam"
+            if (clean.contains("3")) return "> 3 jam"
+            if (clean.contains("4")) return "> 4 jam"
+        }
+
+        if (clean.contains("<")) {
+            if (clean.contains("10")) return "< 10 menit"
+            if (clean.contains("30")) return "< 30 menit"
+            if (clean.contains("1")) return "< 1 jam"
+            if (clean.contains("2")) return "< 2 jam"
+            if (clean.contains("3")) return "< 3 jam"
+            if (clean.contains("4")) return "< 4 jam"
+        }
+
+        val numMatch = Regex("^([0-9]+(?:\\.[0-9]+)?)\\s*(?:jam|j|h|min|menit)?$", RegexOption.IGNORE_CASE).find(trimmed)
+        if (numMatch != null) {
+            val numVal = numMatch.groupValues[1].toDoubleOrNull()
+            if (numVal != null) {
+                if (numVal == 10.0 || clean.contains("10m") || clean.contains("10min")) return "< 10 menit"
+                if (numVal == 30.0 || clean.contains("30m") || clean.contains("30min")) return "< 30 menit"
+                if (numVal == 1.0) return "< 1 jam"
+                if (numVal == 2.0) return "< 2 jam"
+                if (numVal == 3.0) return "< 3 jam"
+                if (numVal == 4.0) return "< 4 jam"
+            }
+        }
+
+        if (clean.contains("10m") || clean.contains("10menit")) return "< 10 menit"
+        if (clean.contains("30m") || clean.contains("30menit")) return "< 30 menit"
+        if (clean.contains("1jam") || clean.contains("1h")) return "< 1 jam"
+        if (clean.contains("2jam") || clean.contains("2h")) return "< 2 jam"
+        if (clean.contains("3jam") || clean.contains("3h")) return "< 3 jam"
+        if (clean.contains("4jam") || clean.contains("4h")) return "< 4 jam"
+
+        return trimmed
+    }
+
     private fun setSpinnerSelectionByValue(spinner: Spinner?, value: String) {
-        if (spinner == null || spinner.adapter == null) return
-        val adapter = spinner.adapter
+        if (spinner == null || value.isBlank()) return
+        val adapter = spinner.adapter ?: return
+        val valTrim = value.trim()
+        val valClean = valTrim.lowercase().replace(" ", "")
+
         for (i in 0 until adapter.count) {
-            if (adapter.getItem(i).toString().equals(value, ignoreCase = true)) {
+            val item = adapter.getItem(i).toString().trim()
+            if (item.equals(valTrim, ignoreCase = true)) {
                 spinner.setSelection(i)
-                break
+                return
+            }
+        }
+
+        val normalized = normalizeValueForSpinner(valTrim)
+        if (normalized.isNotBlank()) {
+            for (i in 0 until adapter.count) {
+                val item = adapter.getItem(i).toString().trim()
+                if (item.equals(normalized, ignoreCase = true)) {
+                    spinner.setSelection(i)
+                    return
+                }
+            }
+        }
+
+        val inputHasGreater = valClean.contains(">") || valClean.contains("+")
+        val inputHasLess = valClean.contains("<")
+
+        for (i in 0 until adapter.count) {
+            val item = adapter.getItem(i).toString().trim()
+            val itemClean = item.lowercase().replace(" ", "")
+
+            if (inputHasGreater && itemClean.contains("<")) continue
+            if (inputHasLess && itemClean.contains(">")) continue
+
+            if (item.isNotEmpty() && (item.contains(valTrim, ignoreCase = true) || valTrim.contains(item, ignoreCase = true))) {
+                spinner.setSelection(i)
+                return
+            }
+        }
+
+        val digitsInValue = valTrim.filter { it.isDigit() }
+        if (digitsInValue.isNotEmpty()) {
+            for (i in 0 until adapter.count) {
+                val item = adapter.getItem(i).toString().trim()
+                val itemClean = item.lowercase().replace(" ", "")
+
+                if (inputHasGreater && itemClean.contains("<")) continue
+                if (inputHasLess && itemClean.contains(">")) continue
+
+                val digitsInItem = item.filter { it.isDigit() }
+                if (digitsInItem == digitsInValue && digitsInItem.isNotEmpty()) {
+                    spinner.setSelection(i)
+                    return
+                }
             }
         }
     }

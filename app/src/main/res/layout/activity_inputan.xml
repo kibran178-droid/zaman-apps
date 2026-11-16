@@ -716,7 +716,7 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif" />
                             <Spinner android:id="@+id/spJumlahBankNotAktif1" style="@style/SpinnerFieldModern" />
                         </LinearLayout>
 
@@ -857,7 +857,7 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif" />
                             <Spinner android:id="@+id/spJumlahBankNotAktif2" style="@style/SpinnerFieldModern" />
                         </LinearLayout>
 
@@ -998,7 +998,7 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif" />
                             <Spinner android:id="@+id/spJumlahBankNotAktif3" style="@style/SpinnerFieldModern" />
                         </LinearLayout>
 
@@ -1022,6 +1022,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat3" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat Terhubung (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemark3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Catatan / Remark Recti 3" android:inputType="textMultiLine" android:minLines="2" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.switchmaterial.SwitchMaterial

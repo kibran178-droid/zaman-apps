@@ -847,7 +847,7 @@ class RingkasanActivity : AppCompatActivity() {
                     data.typeRectifier3, data.jumlahModul3, data.jumlahModulRusak3,
                     data.jenisBaterai3, data.merkBaterai3, data.jumlahBatteryP3, data.batteryRecti3,
                     data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3,
-                    data.perangkatTerhubung3, null, data.statusBatteryNotAktif3, data.jumlahBankNotAktif3
+                    data.perangkatTerhubung3, data.remark3, data.statusBatteryNotAktif3, data.jumlahBankNotAktif3
                 ),
                 section = "rectifier3"
             )
@@ -1315,7 +1315,7 @@ class RingkasanActivity : AppCompatActivity() {
                 setupPerangkatClick(editP2, 2)
                 view.findViewById<TextInputEditText>(R.id.editRemark2)?.setText(data.remark2)
             }
-            "rectifier3" -> populateRectiGeneric(view, 3, data.typeRectifier3, data.jumlahModul3, data.jumlahModulRusak3, data.jenisBaterai3, data.merkBaterai3, data.jumlahBatteryP3, data.batteryRecti3, data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3, data.perangkatTerhubung3, data.statusBatteryNotAktif3, data.jumlahBankNotAktif3)
+            "rectifier3" -> populateRectiGeneric(view, 3, data.typeRectifier3, data.jumlahModul3, data.jumlahModulRusak3, data.jenisBaterai3, data.merkBaterai3, data.jumlahBatteryP3, data.batteryRecti3, data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3, data.perangkatTerhubung3, data.statusBatteryNotAktif3, data.jumlahBankNotAktif3, data.remark3)
             "rectifier4" -> populateRectiGeneric(view, 4, data.typeRectifier4, data.jumlahModul4, data.jumlahModulRusak4, data.jenisBaterai4, data.merkBaterai4, data.jumlahBatteryP4, data.batteryRecti4, data.mcbBatteryRecti4, data.kondisiArester4, data.busVoltage4, data.loadA4, data.perangkatTerhubung4, data.statusBatteryNotAktif4, data.jumlahBankNotAktif4)
             "rectifier5" -> populateRectiGeneric(view, 5, data.typeRectifier5, data.jumlahModul5, data.jumlahModulRusak5, data.jenisBaterai5, data.merkBaterai5, data.jumlahBatteryP5, data.batteryRecti5, data.mcbBatteryRecti5, data.kondisiArester5, data.busVoltage5, data.loadA5, data.perangkatTerhubung5, data.statusBatteryNotAktif5, data.jumlahBankNotAktif5)
             "rectifier6" -> populateRectiGeneric(view, 6, data.typeRectifier6, data.jumlahModul6, data.jumlahModulRusak6, data.jenisBaterai6, data.merkBaterai6, data.jumlahBatteryP6, data.batteryRecti6, data.mcbBatteryRecti6, data.kondisiArester6, data.busVoltage6, data.loadA6, data.perangkatTerhubung6, data.statusBatteryNotAktif6, data.jumlahBankNotAktif6)
@@ -1327,7 +1327,7 @@ class RingkasanActivity : AppCompatActivity() {
         view: View, idx: Int, type: String, modul: String, modulRusak: String,
         jenisBat: String, merkBat: String, jmlBat: String, statusBat: String, mcbBat: String, arester: String,
         voltage: String, load: String, perangkat: String,
-        statusNotAktif: Boolean = false, jmlBankNotAktif: String = ""
+        statusNotAktif: Boolean = false, jmlBankNotAktif: String = "", remark: String = ""
     ) {
         val spJenis = view.findViewById<Spinner>(resources.getIdentifier("spJenisBaterai$idx", "id", packageName))
         val spMerk = view.findViewById<Spinner>(resources.getIdentifier("spMerkBaterai$idx", "id", packageName))
@@ -1368,6 +1368,7 @@ class RingkasanActivity : AppCompatActivity() {
         val editP = view.findViewById<TextInputEditText>(resources.getIdentifier("editPerangkat$idx", "id", packageName))
         editP?.setText(perangkat)
         setupPerangkatClick(editP, idx)
+        view.findViewById<TextInputEditText>(resources.getIdentifier("editRemark$idx", "id", packageName))?.setText(remark)
     }
 
     private fun setupPerangkatClick(editText: TextInputEditText?, rectiNum: Int) {
@@ -1493,7 +1494,7 @@ class RingkasanActivity : AppCompatActivity() {
                 data.perangkatTerhubung2 = formView.findViewById<TextInputEditText>(R.id.editPerangkat2)?.text.toString().trim()
                 data.remark2 = formView.findViewById<TextInputEditText>(R.id.editRemark2)?.text.toString().trim()
             }
-            "rectifier3" -> if (!saveRectiGeneric(formView, 3, { data.typeRectifier3 = it }, { data.jumlahModul3 = it }, { data.jumlahModulRusak3 = it }, { data.jenisBaterai3 = it }, { data.merkBaterai3 = it }, { data.jumlahBatteryP3 = it }, { data.batteryRecti3 = it }, { data.mcbBatteryRecti3 = it }, { data.kondisiArester3 = it }, { data.busVoltage3 = it }, { data.loadA3 = it }, { data.perangkatTerhubung3 = it }, { data.statusBatteryNotAktif3 = it }, { data.jumlahBankNotAktif3 = it })) return false
+            "rectifier3" -> if (!saveRectiGeneric(formView, 3, { data.typeRectifier3 = it }, { data.jumlahModul3 = it }, { data.jumlahModulRusak3 = it }, { data.jenisBaterai3 = it }, { data.merkBaterai3 = it }, { data.jumlahBatteryP3 = it }, { data.batteryRecti3 = it }, { data.mcbBatteryRecti3 = it }, { data.kondisiArester3 = it }, { data.busVoltage3 = it }, { data.loadA3 = it }, { data.perangkatTerhubung3 = it }, { data.statusBatteryNotAktif3 = it }, { data.jumlahBankNotAktif3 = it }, { data.remark3 = it })) return false
             "rectifier4" -> if (!saveRectiGeneric(formView, 4, { data.typeRectifier4 = it }, { data.jumlahModul4 = it }, { data.jumlahModulRusak4 = it }, { data.jenisBaterai4 = it }, { data.merkBaterai4 = it }, { data.jumlahBatteryP4 = it }, { data.batteryRecti4 = it }, { data.mcbBatteryRecti4 = it }, { data.kondisiArester4 = it }, { data.busVoltage4 = it }, { data.loadA4 = it }, { data.perangkatTerhubung4 = it }, { data.statusBatteryNotAktif4 = it }, { data.jumlahBankNotAktif4 = it })) return false
             "rectifier5" -> if (!saveRectiGeneric(formView, 5, { data.typeRectifier5 = it }, { data.jumlahModul5 = it }, { data.jumlahModulRusak5 = it }, { data.jenisBaterai5 = it }, { data.merkBaterai5 = it }, { data.jumlahBatteryP5 = it }, { data.batteryRecti5 = it }, { data.mcbBatteryRecti5 = it }, { data.kondisiArester5 = it }, { data.busVoltage5 = it }, { data.loadA5 = it }, { data.perangkatTerhubung5 = it }, { data.statusBatteryNotAktif5 = it }, { data.jumlahBankNotAktif5 = it })) return false
             "rectifier6" -> if (!saveRectiGeneric(formView, 6, { data.typeRectifier6 = it }, { data.jumlahModul6 = it }, { data.jumlahModulRusak6 = it }, { data.jenisBaterai6 = it }, { data.merkBaterai6 = it }, { data.jumlahBatteryP6 = it }, { data.batteryRecti6 = it }, { data.mcbBatteryRecti6 = it }, { data.kondisiArester6 = it }, { data.busVoltage6 = it }, { data.loadA6 = it }, { data.perangkatTerhubung6 = it }, { data.statusBatteryNotAktif6 = it }, { data.jumlahBankNotAktif6 = it })) return false
@@ -1508,7 +1509,8 @@ class RingkasanActivity : AppCompatActivity() {
         setJenisBat: (String) -> Unit, setMerkBat: (String) -> Unit,
         setJmlBat: (String) -> Unit, setStatusBat: (String) -> Unit, setMcb: (String) -> Unit,
         setArester: (String) -> Unit, setVolt: (String) -> Unit, setLoad: (String) -> Unit,
-        setPerangkat: (String) -> Unit, setStatusNotAktif: (Boolean) -> Unit, setJmlBankNotAktif: (String) -> Unit
+        setPerangkat: (String) -> Unit, setStatusNotAktif: (Boolean) -> Unit, setJmlBankNotAktif: (String) -> Unit,
+        setRemark: ((String) -> Unit)? = null
     ): Boolean {
         val volt = formView.findViewById<TextInputEditText>(resources.getIdentifier("editBusVoltage$idx", "id", packageName))?.text.toString().trim()
         val load = formView.findViewById<TextInputEditText>(resources.getIdentifier("editLoadA$idx", "id", packageName))?.text.toString().trim()
@@ -1534,16 +1536,114 @@ class RingkasanActivity : AppCompatActivity() {
         setVolt(volt)
         setLoad(load)
         setPerangkat(formView.findViewById<TextInputEditText>(resources.getIdentifier("editPerangkat$idx", "id", packageName))?.text.toString().trim())
+        setRemark?.invoke(formView.findViewById<TextInputEditText>(resources.getIdentifier("editRemark$idx", "id", packageName))?.text?.toString()?.trim() ?: "")
         return true
     }
 
+    private fun normalizeValueForSpinner(value: String): String {
+        val trimmed = value.trim()
+        if (trimmed.isBlank()) return ""
+
+        val lower = trimmed.lowercase()
+        val clean = lower.replace(" ", "")
+
+        if (lower == "0" || lower == "0.0" || lower == "0 jam" || lower == "no backup" || lower == "n/a" || lower == "-" || lower == "off") {
+            return "tidak backup"
+        }
+
+        if (clean.contains(">") || clean.contains("+")) {
+            if (clean.contains("2")) return "> 2 jam"
+            if (clean.contains("3")) return "> 3 jam"
+            if (clean.contains("4")) return "> 4 jam"
+        }
+
+        if (clean.contains("<")) {
+            if (clean.contains("10")) return "< 10 menit"
+            if (clean.contains("30")) return "< 30 menit"
+            if (clean.contains("1")) return "< 1 jam"
+            if (clean.contains("2")) return "< 2 jam"
+            if (clean.contains("3")) return "< 3 jam"
+            if (clean.contains("4")) return "< 4 jam"
+        }
+
+        val numMatch = Regex("^([0-9]+(?:\\.[0-9]+)?)\\s*(?:jam|j|h|min|menit)?$", RegexOption.IGNORE_CASE).find(trimmed)
+        if (numMatch != null) {
+            val numVal = numMatch.groupValues[1].toDoubleOrNull()
+            if (numVal != null) {
+                if (numVal == 10.0 || clean.contains("10m") || clean.contains("10min")) return "< 10 menit"
+                if (numVal == 30.0 || clean.contains("30m") || clean.contains("30min")) return "< 30 menit"
+                if (numVal == 1.0) return "< 1 jam"
+                if (numVal == 2.0) return "< 2 jam"
+                if (numVal == 3.0) return "< 3 jam"
+                if (numVal == 4.0) return "< 4 jam"
+            }
+        }
+
+        if (clean.contains("10m") || clean.contains("10menit")) return "< 10 menit"
+        if (clean.contains("30m") || clean.contains("30menit")) return "< 30 menit"
+        if (clean.contains("1jam") || clean.contains("1h")) return "< 1 jam"
+        if (clean.contains("2jam") || clean.contains("2h")) return "< 2 jam"
+        if (clean.contains("3jam") || clean.contains("3h")) return "< 3 jam"
+        if (clean.contains("4jam") || clean.contains("4h")) return "< 4 jam"
+
+        return trimmed
+    }
+
     private fun setSpinnerSelectionByValue(spinner: Spinner?, value: String) {
-        if (spinner == null || spinner.adapter == null) return
-        val adapter = spinner.adapter
+        if (spinner == null || value.isBlank()) return
+        val adapter = spinner.adapter ?: return
+        val valTrim = value.trim()
+        val valClean = valTrim.lowercase().replace(" ", "")
+
         for (i in 0 until adapter.count) {
-            if (adapter.getItem(i).toString().equals(value, ignoreCase = true)) {
+            val item = adapter.getItem(i).toString().trim()
+            if (item.equals(valTrim, ignoreCase = true)) {
                 spinner.setSelection(i)
-                break
+                return
+            }
+        }
+
+        val normalized = normalizeValueForSpinner(valTrim)
+        if (normalized.isNotBlank()) {
+            for (i in 0 until adapter.count) {
+                val item = adapter.getItem(i).toString().trim()
+                if (item.equals(normalized, ignoreCase = true)) {
+                    spinner.setSelection(i)
+                    return
+                }
+            }
+        }
+
+        val inputHasGreater = valClean.contains(">") || valClean.contains("+")
+        val inputHasLess = valClean.contains("<")
+
+        for (i in 0 until adapter.count) {
+            val item = adapter.getItem(i).toString().trim()
+            val itemClean = item.lowercase().replace(" ", "")
+
+            if (inputHasGreater && itemClean.contains("<")) continue
+            if (inputHasLess && itemClean.contains(">")) continue
+
+            if (item.isNotEmpty() && (item.contains(valTrim, ignoreCase = true) || valTrim.contains(item, ignoreCase = true))) {
+                spinner.setSelection(i)
+                return
+            }
+        }
+
+        val digitsInValue = valTrim.filter { it.isDigit() }
+        if (digitsInValue.isNotEmpty()) {
+            for (i in 0 until adapter.count) {
+                val item = adapter.getItem(i).toString().trim()
+                val itemClean = item.lowercase().replace(" ", "")
+
+                if (inputHasGreater && itemClean.contains("<")) continue
+                if (inputHasLess && itemClean.contains(">")) continue
+
+                val digitsInItem = item.filter { it.isDigit() }
+                if (digitsInItem == digitsInValue && digitsInItem.isNotEmpty()) {
+                    spinner.setSelection(i)
+                    return
+                }
             }
         }
     }
@@ -1714,7 +1814,9 @@ class RingkasanActivity : AppCompatActivity() {
         params["merk_baterai_1"] = data.merkBaterai1
         params["jumlah_battery_p"] = data.jumlahBatteryP1
         params["battery_recti_1"] = data.batteryRecti1
-        params["jumlah_bank_not_aktif_1"] = if (data.statusBatteryNotAktif1) data.jumlahBankNotAktif1 else ""
+        val valNotAktif1 = if (data.statusBatteryNotAktif1) data.jumlahBankNotAktif1 else ""
+        params["jumlah_bank_not_aktif_1"] = valNotAktif1
+        params["jumlah_battery_not_aktif_1"] = valNotAktif1
         params["mcb_battery_recti_1"] = data.mcbBatteryRecti1
         params["kondisi_arester_1"] = data.kondisiArester1
         params["bus_voltage_1"] = data.busVoltage1
@@ -1733,7 +1835,9 @@ class RingkasanActivity : AppCompatActivity() {
             params["merk_baterai_2"] = data.merkBaterai2
             params["jumlah_battery_p_2"] = data.jumlahBatteryP2
             params["battery_recti_2"] = data.batteryRecti2
-            params["jumlah_bank_not_aktif_2"] = if (data.statusBatteryNotAktif2) data.jumlahBankNotAktif2 else ""
+            val valNotAktif2 = if (data.statusBatteryNotAktif2) data.jumlahBankNotAktif2 else ""
+            params["jumlah_bank_not_aktif_2"] = valNotAktif2
+            params["jumlah_battery_not_aktif_2"] = valNotAktif2
             params["mcb_battery_recti_2"] = data.mcbBatteryRecti2
             params["kondisi_arester_2"] = data.kondisiArester2
             params["bus_voltage_2"] = data.busVoltage2
@@ -1742,7 +1846,7 @@ class RingkasanActivity : AppCompatActivity() {
             params["remark_2"] = data.remark2
         }
 
-        fun putRectiParams(idx: Int, enabled: Boolean, type: String, statusRecti: String, backupTime: String, modul: String, modulRusak: String, jenisBat: String, merkBat: String, jmlBat: String, statusBat: String, notAktif: Boolean, jmlNotAktif: String, mcbBat: String, arester: String, voltage: String, load: String, perangkat: String) {
+        fun putRectiParams(idx: Int, enabled: Boolean, type: String, statusRecti: String, backupTime: String, modul: String, modulRusak: String, jenisBat: String, merkBat: String, jmlBat: String, statusBat: String, notAktif: Boolean, jmlNotAktif: String, mcbBat: String, arester: String, voltage: String, load: String, perangkat: String, remark: String = "") {
             params["ada_recti_$idx"] = if (enabled) "1" else "0"
             if (enabled) {
                 params["type_rectifier_$idx"] = type
@@ -1754,16 +1858,19 @@ class RingkasanActivity : AppCompatActivity() {
                 params["merk_baterai_$idx"] = merkBat
                 params["jumlah_battery_p_$idx"] = jmlBat
                 params["battery_recti_$idx"] = statusBat
-                params["jumlah_bank_not_aktif_$idx"] = if (notAktif) jmlNotAktif else ""
+                val valNotAktif = if (notAktif) jmlNotAktif else ""
+                params["jumlah_bank_not_aktif_$idx"] = valNotAktif
+                params["jumlah_battery_not_aktif_$idx"] = valNotAktif
                 params["mcb_battery_recti_$idx"] = mcbBat
                 params["kondisi_arester_$idx"] = arester
                 params["bus_voltage_$idx"] = voltage
                 params["load_a_$idx"] = load
                 params["perangkat_terhubung_$idx"] = perangkat
+                if (remark.isNotBlank()) params["remark_$idx"] = remark
             }
         }
 
-        putRectiParams(3, data.adaRecti3, data.typeRectifier3, data.statusRectifier3, data.backupTime3, data.jumlahModul3, data.jumlahModulRusak3, data.jenisBaterai3, data.merkBaterai3, data.jumlahBatteryP3, data.batteryRecti3, data.statusBatteryNotAktif3, data.jumlahBankNotAktif3, data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3, data.perangkatTerhubung3)
+        putRectiParams(3, data.adaRecti3, data.typeRectifier3, data.statusRectifier3, data.backupTime3, data.jumlahModul3, data.jumlahModulRusak3, data.jenisBaterai3, data.merkBaterai3, data.jumlahBatteryP3, data.batteryRecti3, data.statusBatteryNotAktif3, data.jumlahBankNotAktif3, data.mcbBatteryRecti3, data.kondisiArester3, data.busVoltage3, data.loadA3, data.perangkatTerhubung3, data.remark3)
         putRectiParams(4, data.adaRecti4, data.typeRectifier4, data.statusRectifier4, data.backupTime4, data.jumlahModul4, data.jumlahModulRusak4, data.jenisBaterai4, data.merkBaterai4, data.jumlahBatteryP4, data.batteryRecti4, data.statusBatteryNotAktif4, data.jumlahBankNotAktif4, data.mcbBatteryRecti4, data.kondisiArester4, data.busVoltage4, data.loadA4, data.perangkatTerhubung4)
         putRectiParams(5, data.adaRecti5, data.typeRectifier5, data.statusRectifier5, data.backupTime5, data.jumlahModul5, data.jumlahModulRusak5, data.jenisBaterai5, data.merkBaterai5, data.jumlahBatteryP5, data.batteryRecti5, data.statusBatteryNotAktif5, data.jumlahBankNotAktif5, data.mcbBatteryRecti5, data.kondisiArester5, data.busVoltage5, data.loadA5, data.perangkatTerhubung5)
         putRectiParams(6, data.adaRecti6, data.typeRectifier6, data.statusRectifier6, data.backupTime6, data.jumlahModul6, data.jumlahModulRusak6, data.jenisBaterai6, data.merkBaterai6, data.jumlahBatteryP6, data.batteryRecti6, data.statusBatteryNotAktif6, data.jumlahBankNotAktif6, data.mcbBatteryRecti6, data.kondisiArester6, data.busVoltage6, data.loadA6, data.perangkatTerhubung6)
