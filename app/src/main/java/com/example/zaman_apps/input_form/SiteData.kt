@@ -107,6 +107,7 @@ data class SiteData(
     var kondisiArester4: String = "",
     var jumlahBankNotAktif4: String = "",
     var statusBatteryNotAktif4: Boolean = false,
+    var remark4: String = "",
 
     // ===== RECTIFIER 5 =====
     var typeRectifier5: String = "",
@@ -125,6 +126,7 @@ data class SiteData(
     var kondisiArester5: String = "",
     var jumlahBankNotAktif5: String = "",
     var statusBatteryNotAktif5: Boolean = false,
+    var remark5: String = "",
 
     // ===== RECTIFIER 6 =====
     var typeRectifier6: String = "",
@@ -143,6 +145,7 @@ data class SiteData(
     var kondisiArester6: String = "",
     var jumlahBankNotAktif6: String = "",
     var statusBatteryNotAktif6: Boolean = false,
+    var remark6: String = "",
 
     // ===== RECTIFIER 7 =====
     var typeRectifier7: String = "",
@@ -161,6 +164,7 @@ data class SiteData(
     var kondisiArester7: String = "",
     var jumlahBankNotAktif7: String = "",
     var statusBatteryNotAktif7: Boolean = false,
+    var remark7: String = "",
 
     // TOGGLE RECTIFIERS (2..7)
     var adaRecti2: Boolean = false,

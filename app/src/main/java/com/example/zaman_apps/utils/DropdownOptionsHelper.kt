@@ -167,24 +167,42 @@ object DropdownOptionsHelper {
     }
 
     fun getOptions(context: Context, key: String): List<String> {
+        val resId = getDefaultResId(key)
+        val defaultList = try {
+            context.resources.getStringArray(resId).toList()
+        } catch (_: Exception) {
+            emptyList()
+        }
+
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val jsonStr = prefs.getString(key, null)
 
-        if (!jsonStr.isNull_or_empty()) {
+        if (!jsonStr.isNullOrEmpty()) {
             try {
                 val jsonArray = JSONArray(jsonStr)
                 val list = mutableListOf<String>()
                 for (i in 0 until jsonArray.length()) {
                     list.add(jsonArray.getString(i))
                 }
-                if (list.isNotEmpty()) return list
+                if (list.isNotEmpty()) {
+                    var merged = false
+                    defaultList.forEach { defItem ->
+                        if (defItem.isNotBlank() && list.none { it.equals(defItem, ignoreCase = true) }) {
+                            list.add(defItem)
+                            merged = true
+                        }
+                    }
+                    if (merged) {
+                        saveOptions(context, key, list)
+                    }
+                    return list
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
 
-        val resId = getDefaultResId(key)
-        return context.resources.getStringArray(resId).toList()
+        return defaultList
     }
 
     fun saveOptions(context: Context, key: String, options: List<String>) {

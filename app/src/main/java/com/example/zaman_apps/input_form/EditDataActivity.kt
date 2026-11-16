@@ -2383,19 +2383,19 @@ class EditDataActivity : AppCompatActivity() {
             fillRectiFields(3, binding.spTypeRectifier3, binding.spStatusRectifier3, binding.spBackupTime3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spJenisBaterai3, binding.spMerkBaterai3, binding.spJumlahBattery3, binding.spBatteryRecti3, binding.spKondisiArester3, binding.switchStatusBatteryNotAktif3, binding.layoutJumlahBankNotAktif3, binding.spJumlahBankNotAktif3, binding.etMcbBatteryRecti3, binding.etBusVoltage3, binding.etLoadA3, binding.etPerangkatTerhubung3, binding.etRemark3)
             setSpinnerValueSafe(binding.spJenisBaterai4, data.optString("jenis_baterai_4", ""))
             setSpinnerValueSafe(binding.spMerkBaterai4, data.optString("merk_baterai_4", ""))
-            fillRectiFields(4, binding.spTypeRectifier4, binding.spStatusRectifier4, binding.spBackupTime4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJenisBaterai4, binding.spMerkBaterai4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.switchStatusBatteryNotAktif4, binding.layoutJumlahBankNotAktif4, binding.spJumlahBankNotAktif4, binding.etMcbBatteryRecti4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkatTerhubung4)
+            fillRectiFields(4, binding.spTypeRectifier4, binding.spStatusRectifier4, binding.spBackupTime4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJenisBaterai4, binding.spMerkBaterai4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.switchStatusBatteryNotAktif4, binding.layoutJumlahBankNotAktif4, binding.spJumlahBankNotAktif4, binding.etMcbBatteryRecti4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkatTerhubung4, binding.etRemark4)
 
             setSpinnerValueSafe(binding.spJenisBaterai5, data.optString("jenis_baterai_5", ""))
             setSpinnerValueSafe(binding.spMerkBaterai5, data.optString("merk_baterai_5", ""))
-            fillRectiFields(5, binding.spTypeRectifier5, binding.spStatusRectifier5, binding.spBackupTime5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJenisBaterai5, binding.spMerkBaterai5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.switchStatusBatteryNotAktif5, binding.layoutJumlahBankNotAktif5, binding.spJumlahBankNotAktif5, binding.etMcbBatteryRecti5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkatTerhubung5)
+            fillRectiFields(5, binding.spTypeRectifier5, binding.spStatusRectifier5, binding.spBackupTime5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJenisBaterai5, binding.spMerkBaterai5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.switchStatusBatteryNotAktif5, binding.layoutJumlahBankNotAktif5, binding.spJumlahBankNotAktif5, binding.etMcbBatteryRecti5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkatTerhubung5, binding.etRemark5)
 
             setSpinnerValueSafe(binding.spJenisBaterai6, data.optString("jenis_baterai_6", ""))
             setSpinnerValueSafe(binding.spMerkBaterai6, data.optString("merk_baterai_6", ""))
-            fillRectiFields(6, binding.spTypeRectifier6, binding.spStatusRectifier6, binding.spBackupTime6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.switchStatusBatteryNotAktif6, binding.layoutJumlahBankNotAktif6, binding.spJumlahBankNotAktif6, binding.etMcbBatteryRecti6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkatTerhubung6)
+            fillRectiFields(6, binding.spTypeRectifier6, binding.spStatusRectifier6, binding.spBackupTime6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.switchStatusBatteryNotAktif6, binding.layoutJumlahBankNotAktif6, binding.spJumlahBankNotAktif6, binding.etMcbBatteryRecti6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkatTerhubung6, binding.etRemark6)
 
             setSpinnerValueSafe(binding.spJenisBaterai7, data.optString("jenis_baterai_7", ""))
             setSpinnerValueSafe(binding.spMerkBaterai7, data.optString("merk_baterai_7", ""))
-            fillRectiFields(7, binding.spTypeRectifier7, binding.spStatusRectifier7, binding.spBackupTime7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spJenisBaterai7, binding.spMerkBaterai7, binding.spJumlahBattery7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.switchStatusBatteryNotAktif7, binding.layoutJumlahBankNotAktif7, binding.spJumlahBankNotAktif7, binding.etMcbBatteryRecti7, binding.etBusVoltage7, binding.etLoadA7, binding.etPerangkatTerhubung7)
+            fillRectiFields(7, binding.spTypeRectifier7, binding.spStatusRectifier7, binding.spBackupTime7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spJenisBaterai7, binding.spMerkBaterai7, binding.spJumlahBattery7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.switchStatusBatteryNotAktif7, binding.layoutJumlahBankNotAktif7, binding.spJumlahBankNotAktif7, binding.etMcbBatteryRecti7, binding.etBusVoltage7, binding.etLoadA7, binding.etPerangkatTerhubung7, binding.etRemark7)
 
             val rectiCards = listOf(
                 binding.cardRecti1,
@@ -2478,6 +2478,16 @@ class EditDataActivity : AppCompatActivity() {
             return "tidak backup"
         }
 
+        val isBlok = clean.contains("blok")
+        val isPack = clean.contains("pack")
+        if (isBlok || isPack) {
+            val digits = clean.filter { it.isDigit() }
+            if (digits.isNotEmpty()) {
+                val unit = if (isBlok) "Blok" else "Pack"
+                return "$digits $unit"
+            }
+        }
+
         if (clean.contains(">") || clean.contains("+")) {
             if (clean.contains("2")) return "> 2 jam"
             if (clean.contains("3")) return "> 3 jam"
@@ -2516,6 +2526,18 @@ class EditDataActivity : AppCompatActivity() {
         return trimmed
     }
 
+    private fun getBrand(text: String): String? {
+        val lower = text.lowercase()
+        return when {
+            lower.contains("emerson") -> "emerson"
+            lower.contains("vertiv") -> "vertiv"
+            lower.contains("zte") -> "zte"
+            lower.contains("eaton") -> "eaton"
+            lower.contains("sps") -> "sps"
+            else -> null
+        }
+    }
+
     private fun setSpinnerValueSafe(spinner: Spinner?, value: String) {
         if (spinner == null || value.isBlank()) return
         val adapter = spinner.adapter ?: return
@@ -2543,6 +2565,9 @@ class EditDataActivity : AppCompatActivity() {
 
         val inputHasGreater = valClean.contains(">") || valClean.contains("+")
         val inputHasLess = valClean.contains("<")
+        val inputHasBlok = valClean.contains("blok")
+        val inputHasPack = valClean.contains("pack")
+        val inputBrand = getBrand(valClean)
 
         for (i in 0 until adapter.count) {
             val item = adapter.getItem(i).toString().trim()
@@ -2550,6 +2575,11 @@ class EditDataActivity : AppCompatActivity() {
 
             if (inputHasGreater && itemClean.contains("<")) continue
             if (inputHasLess && itemClean.contains(">")) continue
+            if (inputHasBlok && itemClean.contains("pack")) continue
+            if (inputHasPack && itemClean.contains("blok")) continue
+
+            val itemBrand = getBrand(itemClean)
+            if (inputBrand != null && itemBrand != null && inputBrand != itemBrand) continue
 
             if (item.isNotEmpty() && (item.contains(valTrim, ignoreCase = true) || valTrim.contains(item, ignoreCase = true))) {
                 spinner.setSelection(i)
@@ -2565,9 +2595,26 @@ class EditDataActivity : AppCompatActivity() {
 
                 if (inputHasGreater && itemClean.contains("<")) continue
                 if (inputHasLess && itemClean.contains(">")) continue
+                if (inputHasBlok && itemClean.contains("pack")) continue
+                if (inputHasPack && itemClean.contains("blok")) continue
+
+                val itemBrand = getBrand(itemClean)
+                if (inputBrand != null && itemBrand != null && inputBrand != itemBrand) continue
 
                 val digitsInItem = item.filter { it.isDigit() }
                 if (digitsInItem == digitsInValue && digitsInItem.isNotEmpty()) {
+                    spinner.setSelection(i)
+                    return
+                }
+            }
+        }
+
+        if (inputBrand != null) {
+            for (i in 0 until adapter.count) {
+                val item = adapter.getItem(i).toString().trim()
+                val itemClean = item.lowercase().replace(" ", "")
+                val itemBrand = getBrand(itemClean)
+                if (itemBrand == inputBrand) {
                     spinner.setSelection(i)
                     return
                 }
@@ -2810,10 +2857,10 @@ class EditDataActivity : AppCompatActivity() {
                 putRectiParams(1, binding.cardRecti1, binding.spTypeRectifier1, binding.spStatusRectifier1, binding.spBackupTime1, binding.spJumlahModul1, binding.spJumlahModulRusak1, binding.spJenisBaterai1, binding.spMerkBaterai1, binding.spJumlahBattery1, binding.spBatteryRecti1, binding.spKondisiArester1, binding.switchStatusBatteryNotAktif1, binding.spJumlahBankNotAktif1, binding.etMcbBatteryRecti1, binding.etBusVoltage1, binding.etLoadA1, binding.etPerangkatTerhubung1, binding.etRemark1)
                 putRectiParams(2, binding.cardRecti2, binding.spTypeRectifier2, binding.spStatusRectifier2, binding.spBackupTime2, binding.spJumlahModul2, binding.spJumlahModulRusak2, binding.spJenisBaterai2, binding.spMerkBaterai2, binding.spJumlahBattery2, binding.spBatteryRecti2, binding.spKondisiArester2, binding.switchStatusBatteryNotAktif2, binding.spJumlahBankNotAktif2, binding.etMcbBatteryRecti2, binding.etBusVoltage2, binding.etLoadA2, binding.etPerangkatTerhubung2, binding.etRemark2)
                 putRectiParams(3, binding.cardRecti3, binding.spTypeRectifier3, binding.spStatusRectifier3, binding.spBackupTime3, binding.spJumlahModul3, binding.spJumlahModulRusak3, binding.spJenisBaterai3, binding.spMerkBaterai3, binding.spJumlahBattery3, binding.spBatteryRecti3, binding.spKondisiArester3, binding.switchStatusBatteryNotAktif3, binding.spJumlahBankNotAktif3, binding.etMcbBatteryRecti3, binding.etBusVoltage3, binding.etLoadA3, binding.etPerangkatTerhubung3, binding.etRemark3)
-                putRectiParams(4, binding.cardRecti4, binding.spTypeRectifier4, binding.spStatusRectifier4, binding.spBackupTime4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJenisBaterai4, binding.spMerkBaterai4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.switchStatusBatteryNotAktif4, binding.spJumlahBankNotAktif4, binding.etMcbBatteryRecti4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkatTerhubung4)
-                putRectiParams(5, binding.cardRecti5, binding.spTypeRectifier5, binding.spStatusRectifier5, binding.spBackupTime5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJenisBaterai5, binding.spMerkBaterai5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.switchStatusBatteryNotAktif5, binding.spJumlahBankNotAktif5, binding.etMcbBatteryRecti5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkatTerhubung5)
-                putRectiParams(6, binding.cardRecti6, binding.spTypeRectifier6, binding.spStatusRectifier6, binding.spBackupTime6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.switchStatusBatteryNotAktif6, binding.spJumlahBankNotAktif6, binding.etMcbBatteryRecti6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkatTerhubung6)
-                putRectiParams(7, binding.cardRecti7, binding.spTypeRectifier7, binding.spStatusRectifier7, binding.spBackupTime7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spJenisBaterai7, binding.spMerkBaterai7, binding.spJumlahBattery7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.switchStatusBatteryNotAktif7, binding.spJumlahBankNotAktif7, binding.etMcbBatteryRecti7, binding.etBusVoltage7, binding.etLoadA7, binding.etPerangkatTerhubung7)
+                putRectiParams(4, binding.cardRecti4, binding.spTypeRectifier4, binding.spStatusRectifier4, binding.spBackupTime4, binding.spJumlahModul4, binding.spJumlahModulRusak4, binding.spJenisBaterai4, binding.spMerkBaterai4, binding.spJumlahBattery4, binding.spBatteryRecti4, binding.spKondisiArester4, binding.switchStatusBatteryNotAktif4, binding.spJumlahBankNotAktif4, binding.etMcbBatteryRecti4, binding.etBusVoltage4, binding.etLoadA4, binding.etPerangkatTerhubung4, binding.etRemark4)
+                putRectiParams(5, binding.cardRecti5, binding.spTypeRectifier5, binding.spStatusRectifier5, binding.spBackupTime5, binding.spJumlahModul5, binding.spJumlahModulRusak5, binding.spJenisBaterai5, binding.spMerkBaterai5, binding.spJumlahBattery5, binding.spBatteryRecti5, binding.spKondisiArester5, binding.switchStatusBatteryNotAktif5, binding.spJumlahBankNotAktif5, binding.etMcbBatteryRecti5, binding.etBusVoltage5, binding.etLoadA5, binding.etPerangkatTerhubung5, binding.etRemark5)
+                putRectiParams(6, binding.cardRecti6, binding.spTypeRectifier6, binding.spStatusRectifier6, binding.spBackupTime6, binding.spJumlahModul6, binding.spJumlahModulRusak6, binding.spJenisBaterai6, binding.spMerkBaterai6, binding.spJumlahBattery6, binding.spBatteryRecti6, binding.spKondisiArester6, binding.switchStatusBatteryNotAktif6, binding.spJumlahBankNotAktif6, binding.etMcbBatteryRecti6, binding.etBusVoltage6, binding.etLoadA6, binding.etPerangkatTerhubung6, binding.etRemark6)
+                putRectiParams(7, binding.cardRecti7, binding.spTypeRectifier7, binding.spStatusRectifier7, binding.spBackupTime7, binding.spJumlahModul7, binding.spJumlahModulRusak7, binding.spJenisBaterai7, binding.spMerkBaterai7, binding.spJumlahBattery7, binding.spBatteryRecti7, binding.spKondisiArester7, binding.switchStatusBatteryNotAktif7, binding.spJumlahBankNotAktif7, binding.etMcbBatteryRecti7, binding.etBusVoltage7, binding.etLoadA7, binding.etPerangkatTerhubung7, binding.etRemark7)
 
                 return params
             }

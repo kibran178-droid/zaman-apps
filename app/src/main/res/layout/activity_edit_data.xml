@@ -1756,7 +1756,7 @@
                                 android:orientation="vertical"
                                 android:visibility="gone">
 
-                                <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                                <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif" />
                                 <Spinner android:id="@+id/spJumlahBankNotAktif4" style="@style/SpinnerFieldModern" />
                             </LinearLayout>
 
@@ -1855,6 +1855,30 @@
                                     android:clickable="true"
                                     android:focusable="false"
                                     android:hint="Pilih Perangkat (Multi-select)"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Remark" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="12dp"
+                                app:boxCornerRadiusBottomStart="12dp"
+                                app:boxCornerRadiusTopEnd="12dp"
+                                app:boxCornerRadiusTopStart="12dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etRemark4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Catatan / Remark 4"
+                                    android:inputType="textMultiLine"
+                                    android:minLines="2"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
@@ -2084,6 +2108,30 @@
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
 
+                            <TextView style="@style/FieldLabel" android:text="Remark" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="12dp"
+                                app:boxCornerRadiusBottomStart="12dp"
+                                app:boxCornerRadiusTopEnd="12dp"
+                                app:boxCornerRadiusTopStart="12dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etRemark5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Catatan / Remark 5"
+                                    android:inputType="textMultiLine"
+                                    android:minLines="2"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
                         </LinearLayout>
 
                     </LinearLayout>
@@ -2309,6 +2357,30 @@
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
 
+                            <TextView style="@style/FieldLabel" android:text="Remark" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="12dp"
+                                app:boxCornerRadiusBottomStart="12dp"
+                                app:boxCornerRadiusTopEnd="12dp"
+                                app:boxCornerRadiusTopStart="12dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etRemark6"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Catatan / Remark 6"
+                                    android:inputType="textMultiLine"
+                                    android:minLines="2"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
                         </LinearLayout>
 
                     </LinearLayout>
@@ -2530,6 +2602,30 @@
                                     android:clickable="true"
                                     android:focusable="false"
                                     android:hint="Pilih Perangkat (Multi-select)"
+                                    android:textColor="@color/text_primary"
+                                    android:textColorHint="@color/text_secondary" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView style="@style/FieldLabel" android:text="Remark" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                                app:boxStrokeColor="@color/brand_primary"
+                                app:boxBackgroundColor="@color/white"
+                                app:boxBackgroundMode="outline"
+                                app:boxCornerRadiusBottomEnd="12dp"
+                                app:boxCornerRadiusBottomStart="12dp"
+                                app:boxCornerRadiusTopEnd="12dp"
+                                app:boxCornerRadiusTopStart="12dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etRemark7"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Catatan / Remark 7"
+                                    android:inputType="textMultiLine"
+                                    android:minLines="2"
                                     android:textColor="@color/text_primary"
                                     android:textColorHint="@color/text_secondary" />
                             </com.google.android.material.textfield.TextInputLayout>
