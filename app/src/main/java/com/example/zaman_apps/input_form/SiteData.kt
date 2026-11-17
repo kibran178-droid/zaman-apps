@@ -8,6 +8,7 @@ data class SiteData(
     var siteId: String = "",
     var siteName: String = "",
     // ===== DATA PLN (SEBELUM EAS) =====
+    var power: String = "",
     var idPelanggan: String = "",
     var mcbKwh: String = "",
     var daya: String = "",

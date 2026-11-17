@@ -732,6 +732,7 @@ class RingkasanActivity : AppCompatActivity() {
             isi = """
                 Site ID: ${valOrDash(data.siteId)}
                 Site Name: ${valOrDash(data.siteName)}
+                Power: ${valOrDash(data.power)}
                 ID Pelanggan: ${valOrDash(data.idPelanggan)}
                 MCB kWh: ${valOrDash(data.mcbKwh)}
                 Daya: ${valOrDash(data.daya)}
@@ -1066,7 +1067,7 @@ class RingkasanActivity : AppCompatActivity() {
     private fun setupSpinnerAdapter(spinner: Spinner?, categoryKey: String) {
         if (spinner == null) return
         val options = DropdownOptionsHelper.getOptions(this, categoryKey)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, options)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, options.toMutableList())
         spinner.adapter = adapter
     }
 
@@ -1181,6 +1182,8 @@ class RingkasanActivity : AppCompatActivity() {
             "informasi_site" -> {
                 view.findViewById<TextInputEditText>(R.id.editSiteId)?.setText(data.siteId)
                 view.findViewById<TextInputEditText>(R.id.editSiteName)?.setText(data.siteName)
+                setupSpinnerAdapter(view.findViewById(R.id.spPower), DropdownOptionsHelper.KEY_POWER)
+                setSpinnerSelectionByValue(view.findViewById(R.id.spPower), data.power)
                 view.findViewById<TextInputEditText>(R.id.editIdPelanggan)?.setText(data.idPelanggan)
                 setupSpinnerAdapterFromRes(view.findViewById(R.id.spMcbKwh), R.array.mcb_kwh_options)
                 setSpinnerSelectionByValue(view.findViewById(R.id.spMcbKwh), data.mcbKwh)
@@ -1415,6 +1418,7 @@ class RingkasanActivity : AppCompatActivity() {
             "informasi_site" -> {
                 data.siteId = formView.findViewById<TextInputEditText>(R.id.editSiteId)?.text.toString().trim()
                 data.siteName = formView.findViewById<TextInputEditText>(R.id.editSiteName)?.text.toString().trim()
+                data.power = formView.findViewById<Spinner>(R.id.spPower)?.selectedItem?.toString() ?: ""
                 data.idPelanggan = formView.findViewById<TextInputEditText>(R.id.editIdPelanggan)?.text.toString().trim()
                 data.mcbKwh = formView.findViewById<Spinner>(R.id.spMcbKwh)?.selectedItem?.toString() ?: ""
                 data.daya = formView.findViewById<TextInputEditText>(R.id.editDaya)?.text.toString().trim()
@@ -1693,6 +1697,17 @@ class RingkasanActivity : AppCompatActivity() {
                 }
             }
         }
+
+        if (adapter is ArrayAdapter<*>) {
+            try {
+                @Suppress("UNCHECKED_CAST")
+                val arrayAdapter = adapter as ArrayAdapter<String>
+                arrayAdapter.add(valTrim)
+                arrayAdapter.notifyDataSetChanged()
+                spinner.setSelection(arrayAdapter.count - 1)
+                return
+            } catch (_: Exception) { }
+        }
     }
 
     private fun konfirmasiSubmit() {
@@ -1824,6 +1839,7 @@ class RingkasanActivity : AppCompatActivity() {
 
         params["site_id"] = data.siteId
         params["site_name"] = data.siteName
+        params["power"] = data.power
         params["id_pelanggan"] = data.idPelanggan
         params["mcb_kwh"] = data.mcbKwh
         params["daya"] = data.daya

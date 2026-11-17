@@ -606,7 +606,7 @@ class InputanActivity : AppCompatActivity() {
         if ((spBalting.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("Battery Status #$rectiNum wajib dipilih!", isError = true); return false }
 
         if (switchNotAktif.isChecked) {
-            val labelNotAktif = if (rectiNum <= 2) "Jumlah Battery Not Aktif" else "Jumlah Bank Not Aktif"
+            val labelNotAktif = "Jumlah Battery Not Aktif"
             if ((spBankNotAktif.selectedItem?.toString() ?: "").isBlank()) { showSnackbar("$labelNotAktif Recti #$rectiNum wajib dipilih!", isError = true); return false }
         }
 
@@ -761,6 +761,10 @@ class InputanActivity : AppCompatActivity() {
         binding.spLowBatt.adapter = adapterStatus
         binding.spEngRun.adapter = adapterStatus
 
+        val optionsPower = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_POWER)
+        val adapterPower = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsPower.toMutableList())
+        binding.spPower.adapter = adapterPower
+
         val optionsMcbKwh = ArrayAdapter.createFromResource(this, R.array.mcb_kwh_options, android.R.layout.simple_spinner_dropdown_item)
         binding.spMcbKwh.adapter = optionsMcbKwh
 
@@ -851,6 +855,7 @@ class InputanActivity : AppCompatActivity() {
         return SiteData(
             siteId = binding.etSiteId.text.toString().trim(),
             siteName = binding.etSiteName.text.toString().trim(),
+            power = binding.spPower.selectedItem?.toString() ?: "",
             idPelanggan = binding.etIdPelanggan.text.toString().trim(),
             mcbKwh = binding.spMcbKwh.selectedItem?.toString() ?: "",
             daya = binding.etDaya.text.toString().trim(),
@@ -1088,6 +1093,7 @@ class InputanActivity : AppCompatActivity() {
     private fun populateFromSiteData(d: SiteData) {
         binding.etSiteId.setText(d.siteId)
         binding.etSiteName.setText(d.siteName)
+        setSpinnerSelectionByValue(binding.spPower, d.power)
         binding.etIdPelanggan.setText(d.idPelanggan)
         setSpinnerSelectionByValue(binding.spMcbKwh, d.mcbKwh)
         binding.etDaya.setText(d.daya)
@@ -1440,6 +1446,17 @@ class InputanActivity : AppCompatActivity() {
                     return
                 }
             }
+        }
+
+        if (adapter is ArrayAdapter<*>) {
+            try {
+                @Suppress("UNCHECKED_CAST")
+                val arrayAdapter = adapter as ArrayAdapter<String>
+                arrayAdapter.add(valTrim)
+                arrayAdapter.notifyDataSetChanged()
+                spinner.setSelection(arrayAdapter.count - 1)
+                return
+            } catch (_: Exception) { }
         }
     }
 

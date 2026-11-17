@@ -12,6 +12,7 @@ object DropdownOptionsHelper {
     private const val PREF_NAME = "dropdown_options_prefs"
     private val URL_SHEET = ServerConfig.SCRIPT_URL
 
+    const val KEY_POWER = "key_power"
     const val KEY_EAS = "key_eas"
     const val KEY_MERK_GENSET = "key_merk_genset"
     const val KEY_STATUS_GENSET = "key_status_genset"
@@ -31,6 +32,7 @@ object DropdownOptionsHelper {
 
     fun getDefaultResId(key: String): Int {
         return when (key) {
+            KEY_POWER -> R.array.power_options
             KEY_EAS -> R.array.status_options
             KEY_MERK_GENSET -> R.array.merk_genset_options
             KEY_STATUS_GENSET -> R.array.status_genset_options
@@ -48,6 +50,7 @@ object DropdownOptionsHelper {
 
     fun getCategoryName(key: String): String {
         return when (key) {
+            KEY_POWER -> "Power (Status / Sumber Power)"
             KEY_EAS -> "EAS (MainsFail, RectyFail, Stolen, LowBatt, EngRun)"
             KEY_MERK_GENSET -> "Merk Genset (Genset 1 & 2)"
             KEY_STATUS_GENSET -> "Status Genset (Genset 1 & 2)"

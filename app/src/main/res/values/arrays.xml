@@ -16,6 +16,12 @@
         <item>10</item>
     </string-array>
 
+    <!-- Power Options -->
+    <string-array name="power_options">
+        <item></item>
+        <item>PLN</item>
+    </string-array>
+
     <!-- MCB kWh Options (1 Phase, 3 Phase) -->
     <string-array name="mcb_kwh_options">
         <item></item>

@@ -175,6 +175,11 @@
                                 android:textColorHint="@color/text_secondary" />
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <TextView style="@style/FieldLabel" android:text="Power" />
+                        <Spinner
+                            android:id="@+id/spPower"
+                            style="@style/SpinnerFieldModern" />
+
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
@@ -698,12 +703,16 @@
                         <TextView style="@style/FieldLabel" android:text="Status Belting #1" />
                         <Spinner android:id="@+id/spBatteryRecti1" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti1" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchStatusBatteryNotAktif1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Status Battery Not Aktif?"
+                            android:text="Status Battery Not Aktif #1?"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -716,16 +725,9 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif" />
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif #1" />
                             <Spinner android:id="@+id/spJumlahBankNotAktif1" style="@style/SpinnerFieldModern" />
                         </LinearLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti1" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #1" />
-                        <Spinner android:id="@+id/spKondisiArester1" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <TextView style="@style/FieldLabel" android:text="Backup Time #1" />
                         <Spinner android:id="@+id/spBackupTime1" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
@@ -741,6 +743,9 @@
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat1" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat Terhubung (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                         </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #1" />
+                        <Spinner android:id="@+id/spKondisiArester1" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemark1" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Catatan / Remark Recti 1" android:inputType="textMultiLine" android:minLines="2" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -839,12 +844,16 @@
                         <TextView style="@style/FieldLabel" android:text="Status Belting #2" />
                         <Spinner android:id="@+id/spBatteryRecti2" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchStatusBatteryNotAktif2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Status Battery Not Aktif?"
+                            android:text="Status Battery Not Aktif #2?"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -857,16 +866,9 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif" />
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif #2" />
                             <Spinner android:id="@+id/spJumlahBankNotAktif2" style="@style/SpinnerFieldModern" />
                         </LinearLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #2" />
-                        <Spinner android:id="@+id/spKondisiArester2" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <TextView style="@style/FieldLabel" android:text="Backup Time #2" />
                         <Spinner android:id="@+id/spBackupTime2" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
@@ -882,6 +884,9 @@
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat2" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat Terhubung (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                         </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #2" />
+                        <Spinner android:id="@+id/spKondisiArester2" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemark2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Catatan / Remark Recti 2" android:inputType="textMultiLine" android:minLines="2" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -980,12 +985,16 @@
                         <TextView style="@style/FieldLabel" android:text="Status Belting #3" />
                         <Spinner android:id="@+id/spBatteryRecti3" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchStatusBatteryNotAktif3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Status Battery Not Aktif?"
+                            android:text="Status Battery Not Aktif #3?"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -998,16 +1007,9 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif" />
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif #3" />
                             <Spinner android:id="@+id/spJumlahBankNotAktif3" style="@style/SpinnerFieldModern" />
                         </LinearLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #3" />
-                        <Spinner android:id="@+id/spKondisiArester3" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <TextView style="@style/FieldLabel" android:text="Backup Time #3" />
                         <Spinner android:id="@+id/spBackupTime3" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
@@ -1023,6 +1025,9 @@
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat3" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat Terhubung (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                         </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #3" />
+                        <Spinner android:id="@+id/spKondisiArester3" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemark3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Catatan / Remark Recti 3" android:inputType="textMultiLine" android:minLines="2" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -1121,12 +1126,16 @@
                         <TextView style="@style/FieldLabel" android:text="Status Belting #4" />
                         <Spinner android:id="@+id/spBatteryRecti4" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchStatusBatteryNotAktif4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Status Battery Not Aktif?"
+                            android:text="Status Battery Not Aktif #4?"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -1139,16 +1148,9 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif" />
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif #4" />
                             <Spinner android:id="@+id/spJumlahBankNotAktif4" style="@style/SpinnerFieldModern" />
                         </LinearLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #4" />
-                        <Spinner android:id="@+id/spKondisiArester4" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <TextView style="@style/FieldLabel" android:text="Backup Time #4" />
                         <Spinner android:id="@+id/spBackupTime4" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
@@ -1164,6 +1166,9 @@
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat4" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat Terhubung (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                         </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #4" />
+                        <Spinner android:id="@+id/spKondisiArester4" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemark4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Catatan / Remark Recti 4" android:inputType="textMultiLine" android:minLines="2" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -1262,12 +1267,16 @@
                         <TextView style="@style/FieldLabel" android:text="Status Belting #5" />
                         <Spinner android:id="@+id/spBatteryRecti5" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchStatusBatteryNotAktif5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Status Battery Not Aktif?"
+                            android:text="Status Battery Not Aktif #5?"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -1280,16 +1289,9 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif #5" />
                             <Spinner android:id="@+id/spJumlahBankNotAktif5" style="@style/SpinnerFieldModern" />
                         </LinearLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #5" />
-                        <Spinner android:id="@+id/spKondisiArester5" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <TextView style="@style/FieldLabel" android:text="Backup Time #5" />
                         <Spinner android:id="@+id/spBackupTime5" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
@@ -1305,6 +1307,9 @@
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat5" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat Terhubung (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                         </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #5" />
+                        <Spinner android:id="@+id/spKondisiArester5" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemark5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Catatan / Remark Recti 5" android:inputType="textMultiLine" android:minLines="2" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -1403,12 +1408,16 @@
                         <TextView style="@style/FieldLabel" android:text="Status Belting #6" />
                         <Spinner android:id="@+id/spBatteryRecti6" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti6" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchStatusBatteryNotAktif6"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Status Battery Not Aktif?"
+                            android:text="Status Battery Not Aktif #6?"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -1421,16 +1430,9 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif #6" />
                             <Spinner android:id="@+id/spJumlahBankNotAktif6" style="@style/SpinnerFieldModern" />
                         </LinearLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti6" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #6" />
-                        <Spinner android:id="@+id/spKondisiArester6" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <TextView style="@style/FieldLabel" android:text="Backup Time #6" />
                         <Spinner android:id="@+id/spBackupTime6" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
@@ -1446,6 +1448,9 @@
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat6" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat Terhubung (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                         </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #6" />
+                        <Spinner android:id="@+id/spKondisiArester6" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemark6" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Catatan / Remark Recti 6" android:inputType="textMultiLine" android:minLines="2" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
@@ -1544,12 +1549,16 @@
                         <TextView style="@style/FieldLabel" android:text="Status Belting #7" />
                         <Spinner android:id="@+id/spBatteryRecti7" style="@style/SpinnerFieldModern" android:entries="@array/balting_options" />
 
+                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
                         <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchStatusBatteryNotAktif7"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Status Battery Not Aktif?"
+                            android:text="Status Battery Not Aktif #7?"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -1562,16 +1571,9 @@
                             android:orientation="vertical"
                             android:visibility="gone">
 
-                            <TextView style="@style/FieldLabel" android:text="Jumlah Bank Not Aktif" />
+                            <TextView style="@style/FieldLabel" android:text="Jumlah Battery Not Aktif #7" />
                             <Spinner android:id="@+id/spJumlahBankNotAktif7" style="@style/SpinnerFieldModern" />
                         </LinearLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
-                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etMcbBatteryRecti7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="MCB Battery Recty" android:inputType="numberDecimal" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #7" />
-                        <Spinner android:id="@+id/spKondisiArester7" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <TextView style="@style/FieldLabel" android:text="Backup Time #7" />
                         <Spinner android:id="@+id/spBackupTime7" style="@style/SpinnerFieldModern" android:entries="@array/backup_time_options" />
@@ -1587,6 +1589,9 @@
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etPerangkat7" android:layout_width="match_parent" android:layout_height="wrap_content" android:focusable="false" android:clickable="true" android:hint="Pilih Perangkat Terhubung (Multi-select)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />
                         </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView style="@style/FieldLabel" android:text="Kondisi Arester #7" />
+                        <Spinner android:id="@+id/spKondisiArester7" style="@style/SpinnerFieldModern" android:entries="@array/arester_options" />
 
                         <com.google.android.material.textfield.TextInputLayout style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:theme="@style/ThemeOverlay.AppCompat.Light" app:boxStrokeColor="@color/brand_primary" app:boxBackgroundColor="@color/white" app:boxBackgroundMode="outline" app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp" app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp">
                             <com.google.android.material.textfield.TextInputEditText android:id="@+id/etRemark7" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Catatan / Remark Recti 7" android:inputType="textMultiLine" android:minLines="2" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" />

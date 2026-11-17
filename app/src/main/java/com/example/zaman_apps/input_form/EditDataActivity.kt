@@ -265,6 +265,10 @@ class EditDataActivity : AppCompatActivity() {
         binding.spLowBatt.adapter = adapterStatus
         binding.spEngRun.adapter = adapterStatus
 
+        val optionsPower = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_POWER)
+        val adapterPower = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsPower.toMutableList())
+        binding.spPower.adapter = adapterPower
+
         val optionsMcbKwh = ArrayAdapter.createFromResource(this, R.array.mcb_kwh_options, android.R.layout.simple_spinner_dropdown_item)
         binding.spMcbKwh.adapter = optionsMcbKwh
 
@@ -2272,6 +2276,9 @@ class EditDataActivity : AppCompatActivity() {
             Log.d(TAG, "=== FILLING FORM ===")
             binding.actvSiteIdList.setText(data.optString("site_id"))
             binding.etSiteName.setText(data.optString("site_name", ""))
+            val optionsPower = DropdownOptionsHelper.getOptions(this, DropdownOptionsHelper.KEY_POWER)
+            binding.spPower.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, optionsPower.toMutableList())
+            setSpinnerValueSafe(binding.spPower, data.optString("power", ""))
             binding.etIdPelanggan.setText(parseNumberFromSheet(data.optString("id_pelanggan", "")))
             setSpinnerValueSafe(binding.spMcbKwh, data.optString("mcb_kwh", ""))
             binding.etDaya.setText(parseNumberFromSheet(data.optString("daya", "")))
@@ -2620,6 +2627,17 @@ class EditDataActivity : AppCompatActivity() {
                 }
             }
         }
+
+        if (adapter is ArrayAdapter<*>) {
+            try {
+                @Suppress("UNCHECKED_CAST")
+                val arrayAdapter = adapter as ArrayAdapter<String>
+                arrayAdapter.add(valTrim)
+                arrayAdapter.notifyDataSetChanged()
+                spinner.setSelection(arrayAdapter.count - 1)
+                return
+            } catch (_: Exception) { }
+        }
     }
 
     private fun validasiRecti(rectiNum: Int, voltStr: String, loadStr: String): Boolean {
@@ -2766,6 +2784,7 @@ class EditDataActivity : AppCompatActivity() {
                 params["username"] = SessionHelper.getUsername(this@EditDataActivity)
                 params["site_id"] = siteId
                 params["site_name"] = binding.etSiteName.text.toString().trim()
+                params["power"] = binding.spPower.selectedItem?.toString() ?: ""
                 params["id_pelanggan"] = binding.etIdPelanggan.text.toString().trim()
                 params["mcb_kwh"] = binding.spMcbKwh.selectedItem?.toString() ?: ""
                 params["daya"] = binding.etDaya.text.toString().trim()

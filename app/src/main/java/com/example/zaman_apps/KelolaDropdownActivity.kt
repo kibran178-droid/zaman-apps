@@ -30,6 +30,7 @@ class KelolaDropdownActivity : AppCompatActivity() {
     private lateinit var binding: ActivityKelolaDropdownBinding
 
     private val categoryKeys = listOf(
+        DropdownOptionsHelper.KEY_POWER,
         DropdownOptionsHelper.KEY_EAS,
         DropdownOptionsHelper.KEY_MERK_GENSET,
         DropdownOptionsHelper.KEY_STATUS_GENSET,
