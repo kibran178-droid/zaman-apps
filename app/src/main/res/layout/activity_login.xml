@@ -176,7 +176,7 @@
                         android:insetTop="0dp"
                         android:insetBottom="0dp"
                         android:paddingVertical="0dp"
-                        android:text="MASUK SEKARANG"
+                        android:text="LOGIN"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -201,7 +201,7 @@
                 android:layout_marginBottom="16dp"
                 android:alpha="0.75"
                 android:fontFamily="sans-serif-medium"
-                android:text="PT ZAMAN TEKNINDO • v4"
+                android:text="PT ZAMAN TEKNINDO • v6"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
