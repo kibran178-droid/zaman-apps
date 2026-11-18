@@ -50,6 +50,8 @@ import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.example.zaman_apps.R
 import com.example.zaman_apps.databinding.ActivityEditDataBinding
+import androidx.viewpager2.widget.ViewPager2
+import com.example.zaman_apps.utils.GalleryAdapter
 import com.example.zaman_apps.utils.DropdownOptionsHelper
 import com.example.zaman_apps.utils.ImageCaptureHelper
 import com.example.zaman_apps.utils.ImageHelper
@@ -1383,179 +1385,89 @@ class EditDataActivity : AppCompatActivity() {
 
         currentPopupEditDialog?.dismiss()
 
-        val dialog = Dialog(this, R.style.DialogEditTheme)
+        val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         currentPopupEditDialog = dialog
 
         dialog.window?.apply {
+            setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            statusBarColor = ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary_dark)
+            statusBarColor = Color.BLACK
+            navigationBarColor = Color.BLACK
             setWindowAnimations(R.style.CustomDialogAnimation)
         }
 
-        val density = resources.displayMetrics.density
-        val itemStr = photoItemsEdit[index]
+        val dialogView = layoutInflater.inflate(R.layout.dialog_gallery_viewer, null)
+        dialog.setContentView(dialogView)
 
-        val root = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setBackgroundColor(ContextCompat.getColor(this@EditDataActivity, R.color.card_bg))
-        }
+        val vpGallery = dialogView.findViewById<ViewPager2>(R.id.vpGallery)
+        val tvGalleryCount = dialogView.findViewById<TextView>(R.id.tvGalleryCount)
+        val btnCloseGallery = dialogView.findViewById<MaterialButton>(R.id.btnCloseGallery)
+        val btnEditGallery = dialogView.findViewById<MaterialButton>(R.id.btnEditGallery)
+        val btnDeleteGallery = dialogView.findViewById<MaterialButton>(R.id.btnDeleteGallery)
 
-        // Header Bar dengan Gradient Hijau Brand ZAMAN
-        val headerRow = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            background = ContextCompat.getDrawable(this@EditDataActivity, R.drawable.toolbar_gradient)
-            setPadding((16 * density).toInt(), (14 * density).toInt(), (16 * density).toInt(), (14 * density).toInt())
-        }
+        var currentIndex = index
 
-        val tvTitle = TextView(this).apply {
-            text = "Foto Dokumentasi #${index + 1} (${index + 1} / ${photoItemsEdit.size})"
-            textSize = 16f
-            setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.WHITE)
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-        }
-        headerRow.addView(tvTitle)
-
-        val btnClose = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
-            text = "✕ Tutup"
-            textSize = 12f
-            setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.WHITE)
-            minWidth = 0
-            minHeight = 0
-            minimumWidth = 0
-            minimumHeight = 0
-            setPadding((8 * density).toInt(), 0, (8 * density).toInt(), 0)
-            setOnClickListener {
-                dialog.dismiss()
-            }
-        }
-        headerRow.addView(btnClose)
-        root.addView(headerRow)
-
-        // Body Container (Padding)
-        val bodyContainer = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding((16 * density).toInt(), (16 * density).toInt(), (16 * density).toInt(), (16 * density).toInt())
-        }
-
-        // Large Photo Preview Container (Card)
-        val previewCard = MaterialCardView(this).apply {
-            radius = 16 * density
-            cardElevation = 2 * density
-            strokeWidth = (1 * density).toInt()
-            strokeColor = ContextCompat.getColor(this@EditDataActivity, R.color.divider)
-            setCardBackgroundColor(Color.BLACK)
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, (360 * density).toInt()
-            ).apply {
-                bottomMargin = (16 * density).toInt()
+        fun updateCountText(pos: Int) {
+            if (photoItemsEdit.isNotEmpty() && pos in photoItemsEdit.indices) {
+                tvGalleryCount.text = "Foto ${pos + 1} dari ${photoItemsEdit.size}"
             }
         }
 
-        val ivLarge = ImageView(this).apply {
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
-            )
-            scaleType = ImageView.ScaleType.FIT_CENTER
-        }
-
-        val progressSpinner = CircularProgressDrawable(this).apply {
-            strokeWidth = 6f
-            centerRadius = 36f
-            setColorSchemeColors(ContextCompat.getColor(this@EditDataActivity, R.color.brand_primary))
-            start()
-        }
-
-        if (itemStr.startsWith("http")) {
-            val fileIdMatch = Regex("/d/([a-zA-Z0-9_-]+)").find(itemStr)
-            val directUrl = if (fileIdMatch != null) {
-                "https://drive.google.com/uc?export=view&id=${fileIdMatch.groupValues[1]}"
-            } else {
-                itemStr
+        val adapter = GalleryAdapter(
+            items = photoItemsEdit,
+            onZoomStateChanged = { isZoomed ->
+                vpGallery.isUserInputEnabled = !isZoomed
             }
-            Glide.with(this)
-                .load(directUrl)
-                .placeholder(progressSpinner)
-                .error(android.R.drawable.ic_menu_report_image)
-                .into(ivLarge)
-        } else {
-            try {
-                val uri = Uri.parse(itemStr)
-                val thumb = ImageHelper.decodeThumbnailFromUri(this, uri, 1080, 1080)
-                if (thumb != null) {
-                    ivLarge.setImageBitmap(thumb)
-                } else {
-                    ivLarge.setImageURI(uri)
-                }
-            } catch (_: Exception) {
-                ivLarge.setImageResource(android.R.drawable.ic_menu_gallery)
-            }
-        }
-        previewCard.addView(ivLarge)
-        bodyContainer.addView(previewCard)
+        )
 
-        // Action Buttons Row (Edit Foto & Hapus)
-        val actionRow = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-            )
+        vpGallery.adapter = adapter
+        vpGallery.setCurrentItem(index, false)
+        updateCountText(index)
+
+        vpGallery.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                currentIndex = position
+                updateCountText(position)
+            }
+        })
+
+        btnCloseGallery.setOnClickListener {
+            dialog.dismiss()
         }
 
-        // Button Edit Foto
-        val btnEdit = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonStyle).apply {
-            text = "✏️ Edit Foto"
-            textSize = 13f
-            setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.WHITE)
-            backgroundTintList = ContextCompat.getColorStateList(this@EditDataActivity, R.color.brand_primary)
-            cornerRadius = (12 * density).toInt()
-            layoutParams = LinearLayout.LayoutParams(
-                0, (48 * density).toInt(), 1f
-            ).apply {
-                marginEnd = (8 * density).toInt()
-            }
-            setOnClickListener {
-                pendingPhotoSlotEdit = index
+        btnEditGallery.setOnClickListener {
+            if (currentIndex in photoItemsEdit.indices) {
+                pendingPhotoSlotEdit = currentIndex
                 showDialogOpsiTambahFotoEdit()
             }
         }
-        actionRow.addView(btnEdit)
 
-        // Button Hapus Foto
-        val btnDelete = MaterialButton(this, null, com.google.android.material.R.attr.borderlessButtonStyle).apply {
-            text = "🗑️ Hapus"
-            textSize = 13f
-            setTypeface(null, Typeface.BOLD)
-            setTextColor(ContextCompat.getColor(this@EditDataActivity, R.color.error))
-            val deleteBg = GradientDrawable().apply {
-                cornerRadius = 12 * density
-                setColor(Color.parseColor("#FEE2E2"))
-            }
-            background = deleteBg
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, (48 * density).toInt()
-            )
-            setOnClickListener {
-                showKonfirmasiHapusFotoEdit(index) {
-                    if (index in 0 until photoItemsEdit.size) {
-                        photoItemsEdit.removeAt(index)
-                        base64CacheEdit.remove(index)
+        btnDeleteGallery.setOnClickListener {
+            if (currentIndex in photoItemsEdit.indices) {
+                val indexToDelete = currentIndex
+                showKonfirmasiHapusFotoEdit(indexToDelete) {
+                    if (indexToDelete in photoItemsEdit.indices) {
+                        photoItemsEdit.removeAt(indexToDelete)
+                        base64CacheEdit.remove(indexToDelete)
                         updatePhotoCountBadge()
-                        dialog.dismiss()
-                        showSnackbar("Foto #${index + 1} berhasil dihapus")
+
+                        if (photoItemsEdit.isEmpty()) {
+                            dialog.dismiss()
+                            showSnackbar("Foto #${indexToDelete + 1} berhasil dihapus")
+                        } else {
+                            val nextPos = indexToDelete.coerceAtMost(photoItemsEdit.size - 1)
+                            adapter.updateItems(photoItemsEdit)
+                            vpGallery.setCurrentItem(nextPos, false)
+                            currentIndex = nextPos
+                            updateCountText(nextPos)
+                            showSnackbar("Foto #${indexToDelete + 1} berhasil dihapus")
+                        }
                     }
                 }
             }
         }
-        actionRow.addView(btnDelete)
 
-        bodyContainer.addView(actionRow)
-        root.addView(bodyContainer)
-        dialog.setContentView(root)
         dialog.show()
     }
 
@@ -1774,6 +1686,9 @@ class EditDataActivity : AppCompatActivity() {
                     } catch (_: Exception) {
                         iv.setImageResource(android.R.drawable.ic_menu_gallery)
                     }
+                }
+                ivCard.setOnClickListener {
+                    showPreviewFotoDialog(index)
                 }
                 ivCard.addView(iv)
                 cardContent.addView(ivCard)

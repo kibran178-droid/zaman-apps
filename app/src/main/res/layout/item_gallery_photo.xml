@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <com.example.zaman_apps.utils.ZoomableImageView
+        android:id="@+id/ivZoomablePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="Foto Galeri" />
+
+    <ProgressBar
+        android:id="@+id/pbPhotoLoading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/brand_primary"
+        android:visibility="gone" />
+
+</FrameLayout>

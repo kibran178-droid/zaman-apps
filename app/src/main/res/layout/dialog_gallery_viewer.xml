@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <!-- ViewPager2 Foto Utama -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpGallery"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Top Bar Header Overlay -->
+    <LinearLayout
+        android:id="@+id/layoutGalleryHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="#B0000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
+
+        <!-- Button Tutup / Close -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCloseGallery"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="✕ Tutup"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <!-- Indikator Posisi Foto -->
+        <TextView
+            android:id="@+id/tvGalleryCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Foto 1 dari 5" />
+
+        <!-- Placeholder sejajar agar indikator tetap di tengah -->
+        <View
+            android:layout_width="60dp"
+            android:layout_height="1dp" />
+    </LinearLayout>
+
+    <!-- Bottom Bar Footer Overlay (Action Buttons) -->
+    <LinearLayout
+        android:id="@+id/layoutGalleryFooter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#B0000000"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="14dp">
+
+        <!-- Button Edit Foto -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditGallery"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            app:backgroundTint="@color/brand_primary"
+            app:cornerRadius="12dp"
+            android:text="✏️ Edit Foto"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <!-- Button Hapus Foto -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDeleteGallery"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            app:backgroundTint="@color/error_soft"
+            app:cornerRadius="12dp"
+            android:text="🗑️ Hapus Foto"
+            android:textColor="@color/error"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>
