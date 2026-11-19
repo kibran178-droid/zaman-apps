@@ -7,11 +7,11 @@
     android:background="@color/section_bg"
     tools:context=".LoginActivity">
 
-    <!-- TOP GRADIENT BACKGROUND -->
+    <!-- TOP GRADIENT HERO BACKGROUND -->
     <View
         android:id="@+id/viewHeader"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="290dp"
         android:background="@drawable/toolbar_gradient"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,15 +27,15 @@
             android:layout_height="wrap_content"
             android:padding="20dp">
 
-            <!-- LOGO SECTION -->
+            <!-- FLOATING LOGO SECTION -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardLogo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="36dp"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:layout_marginTop="28dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="8dp"
+                app:cardCornerRadius="26dp"
+                app:cardElevation="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -44,7 +44,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:padding="12dp"
+                    android:contentDescription="Logo PT Zaman Teknindo"
+                    android:padding="14dp"
                     android:src="@drawable/freesample_vectorizer_io_ic_logo_pt" />
             </androidx.cardview.widget.CardView>
 
@@ -52,7 +53,7 @@
                 android:id="@+id/tvAppTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="14dp"
                 android:text="ZT-Dapot Power"
                 android:textColor="@color/white"
                 android:textSize="26sp"
@@ -65,49 +66,66 @@
                 android:id="@+id/tvAppSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:alpha="0.85"
-                android:letterSpacing="0.1"
-                android:text="SISTEM MONITORING DAPOT POWER"
-                android:textColor="@color/white"
-                android:textSize="11sp"
-                android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvAppTitle" />
 
-            <!-- LOGIN CARD -->
+            <!-- FORM CARD LOGIN (MATERIAL 3 FLOATING EXECUTIVE STYLE) -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardLogin"
                 style="@style/ZamanCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="6dp"
-                app:layout_constraintTop_toBottomOf="@id/tvAppSubtitle">
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="8dp"
+                app:strokeColor="@color/brand_primary_light"
+                app:strokeWidth="1.5dp"
+                app:layout_constraintTop_toBottomOf="@id/tvAppTitle">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="24dp">
+                    android:padding="26dp">
+
+                    <!-- Pill Tag Subheader -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_stat_item"
+                        android:letterSpacing="0.08"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="4dp"
+                        android:text="DAPOT POWER SYSTEM MANAGEMENT"
+                        android:textColor="@color/brand_primary"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:text="Selamat Datang"
-                        android:textColor="@color/brand_primary"
-                        android:textSize="20sp"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Silakan masuk dengan akun teknisi Anda"
+                        android:text="Masukan kredensial akun Anda untuk melanjutkan"
                         android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="6dp"
+                        android:background="@color/divider" />
 
                     <!-- USERNAME INPUT -->
                     <com.google.android.material.textfield.TextInputLayout
@@ -115,15 +133,15 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="14dp"
                         android:theme="@style/ThemeOverlay.AppCompat.Light"
-                        app:boxStrokeColor="@color/brand_primary"
-                        app:boxBackgroundColor="@color/white"
+                        app:boxBackgroundColor="#F8FAFC"
                         app:boxBackgroundMode="outline"
-                        app:boxCornerRadiusBottomEnd="12dp"
-                        app:boxCornerRadiusBottomStart="12dp"
-                        app:boxCornerRadiusTopEnd="12dp"
-                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxStrokeColor="@color/brand_primary"
                         app:startIconDrawable="@drawable/ic_person"
                         app:startIconTint="@color/brand_primary">
 
@@ -131,7 +149,7 @@
                             android:id="@+id/etUsername"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Username / UserID"
+                            android:hint="Username"
                             android:inputType="text"
                             android:textColor="@color/text_primary"
                             android:textColorHint="@color/text_secondary" />
@@ -145,13 +163,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
                         android:theme="@style/ThemeOverlay.AppCompat.Light"
-                        app:boxStrokeColor="@color/brand_primary"
-                        app:boxBackgroundColor="@color/white"
+                        app:boxBackgroundColor="#F8FAFC"
                         app:boxBackgroundMode="outline"
-                        app:boxCornerRadiusBottomEnd="12dp"
-                        app:boxCornerRadiusBottomStart="12dp"
-                        app:boxCornerRadiusTopEnd="12dp"
-                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxStrokeColor="@color/brand_primary"
                         app:passwordToggleEnabled="true"
                         app:startIconDrawable="@drawable/ic_lock"
                         app:startIconTint="@color/brand_primary">
@@ -166,19 +184,25 @@
                             android:textColorHint="@color/text_secondary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- LOGIN BUTTON -->
+                    <!-- LOGIN BUTTON WITH ARROW ICON -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnLogin"
-                        style="@style/ZamanButton"
+                        style="@style/Widget.MaterialComponents.Button"
                         android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:layout_marginTop="28dp"
+                        android:layout_height="54dp"
+                        android:layout_marginTop="26dp"
                         android:insetTop="0dp"
                         android:insetBottom="0dp"
                         android:paddingVertical="0dp"
                         android:text="LOGIN"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/brand_primary"
+                        app:cornerRadius="16dp"
+                        app:iconGravity="textEnd"
+                        app:iconPadding="10dp"
+                        app:iconTint="@color/white" />
 
                     <ProgressBar
                         android:id="@+id/progressLogin"
@@ -189,10 +213,21 @@
                         android:indeterminateTint="@color/brand_primary"
                         android:visibility="gone" />
 
+                    <!-- SECURITY NOTE FOOTER INSIDE CARD -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="16dp"
+                        android:alpha="0.8"
+                        android:text="Sesi Terenkripsi &amp; Aman • PT Zaman Teknindo"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="11sp" />
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- FOOTER WITH VERSION v4 -->
+            <!-- FOOTER VERSION -->
             <TextView
                 android:id="@+id/tvFooter"
                 android:layout_width="wrap_content"

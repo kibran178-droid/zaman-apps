@@ -162,8 +162,13 @@ class KelolaDropdownActivity : AppCompatActivity() {
         if (totalPages > 1) {
             binding.cardPagination.visibility = View.VISIBLE
             binding.tvPageIndicator.text = "Halaman $currentPage dari $totalPages"
+            // Tombol Previous (Pudar 40% jika di Halaman 1)
             binding.btnPrevPage.isEnabled = (currentPage > 1)
+            binding.btnPrevPage.alpha = if (currentPage > 1) 1.0f else 0.4f
+
+            // Tombol Next (Pudar 40% jika di Halaman Terakhir)
             binding.btnNextPage.isEnabled = (currentPage < totalPages)
+            binding.btnNextPage.alpha = if (currentPage < totalPages) 1.0f else 0.4f
         } else {
             binding.cardPagination.visibility = View.GONE
         }
@@ -208,7 +213,10 @@ class KelolaDropdownActivity : AppCompatActivity() {
             binding.cardPagination.visibility = View.VISIBLE
             binding.tvPageIndicator.text = "Halaman $currentPage dari $totalPages"
             binding.btnPrevPage.isEnabled = (currentPage > 1)
+            binding.btnPrevPage.alpha = if (currentPage > 1) 1.0f else 0.4f
+
             binding.btnNextPage.isEnabled = (currentPage < totalPages)
+            binding.btnNextPage.alpha = if (currentPage < totalPages) 1.0f else 0.4f
         } else {
             binding.cardPagination.visibility = View.GONE
         }

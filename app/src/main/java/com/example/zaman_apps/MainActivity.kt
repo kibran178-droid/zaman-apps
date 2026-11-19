@@ -279,18 +279,39 @@ class MainActivity : AppCompatActivity() {
         } }
 
         binding.btnLogout.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Keluar Sesi")
-                .setMessage("Yakin ingin keluar dari aplikasi?")
-                .setPositiveButton("Ya") { _, _ ->
-                    SessionHelper.logout(this)
-                    startActivity(Intent(this, LoginActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    })
-                }
-                .setNegativeButton("Batal", null)
-                .show()
+            animateClick(it) {
+                showLogoutConfirmationDialog()
+            }
         }
+    }
+
+    private fun showLogoutConfirmationDialog() {
+        val dialog = Dialog(this)
+        val view = layoutInflater.inflate(R.layout.dialog_logout_confirmation, null)
+        dialog.setContentView(view)
+
+        dialog.window?.apply {
+            setBackgroundDrawableResource(android.R.color.transparent)
+            setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+            setWindowAnimations(R.style.CustomDialogAnimation)
+        }
+
+        val btnCancel = view.findViewById<MaterialButton>(R.id.btnCancelLogout)
+        val btnConfirm = view.findViewById<MaterialButton>(R.id.btnConfirmLogout)
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnConfirm.setOnClickListener {
+            dialog.dismiss()
+            SessionHelper.logout(this)
+            startActivity(Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            })
+        }
+
+        dialog.show()
     }
 
     private fun showMyActivityHistoryBottomSheet() {

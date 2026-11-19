@@ -742,7 +742,7 @@
                     android:layout_marginBottom="24dp"
                     android:alpha="0.7"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Zaman Apps • v6"
+                    android:text="PT ZAMAN TEKNINDO • v6"
                     android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
